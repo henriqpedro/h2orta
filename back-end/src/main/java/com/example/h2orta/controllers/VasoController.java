@@ -5,6 +5,7 @@ import com.example.h2orta.models.Vaso;
 import com.example.h2orta.services.VasoService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -44,7 +45,7 @@ public class VasoController {
     }
 
     @PostMapping
-    public ResponseEntity<VasoDto> create(@RequestBody VasoDto dto) throws Exception {
+    public ResponseEntity<VasoDto> create(@Valid @RequestBody VasoDto dto) throws Exception {
         var mapper = new ObjectMapper();
 
         var vaso = mapper.convertValue(dto, Vaso.class);
@@ -55,7 +56,7 @@ public class VasoController {
     }
 
     @PutMapping
-    public ResponseEntity<VasoDto> update(@RequestBody VasoDto dto) throws Exception {
+    public ResponseEntity<VasoDto> update(@Valid @RequestBody VasoDto dto) throws Exception {
         var mapper = new ObjectMapper();
 
         var vaso = mapper.convertValue(dto, Vaso.class);

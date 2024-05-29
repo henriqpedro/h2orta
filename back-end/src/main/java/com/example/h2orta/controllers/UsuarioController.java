@@ -4,6 +4,7 @@ import com.example.h2orta.controllers.dtos.Usuario.UsuarioDto;
 import com.example.h2orta.models.Usuario;
 import com.example.h2orta.services.UsuarioService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +30,7 @@ public class UsuarioController {
     }
 
     @PostMapping
-    public ResponseEntity<UsuarioDto> create(@RequestBody UsuarioDto dto) throws Exception {
+    public ResponseEntity<UsuarioDto> create(@Valid @RequestBody UsuarioDto dto) throws Exception {
         var mapper = new ObjectMapper();
 
         var usuario = mapper.convertValue(dto, Usuario.class);
@@ -40,7 +41,7 @@ public class UsuarioController {
     }
 
     @PutMapping
-    public ResponseEntity<UsuarioDto> update(@RequestBody UsuarioDto dto) throws Exception {
+    public ResponseEntity<UsuarioDto> update(@Valid @RequestBody UsuarioDto dto) throws Exception {
         var mapper = new ObjectMapper();
 
         var usuario = mapper.convertValue(dto, Usuario.class);

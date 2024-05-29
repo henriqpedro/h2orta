@@ -14,7 +14,6 @@ import okhttp3.Response;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.IOException;
 import java.util.*;
 
 @Service
@@ -87,7 +86,7 @@ public class PlantaService {
                     });
                 }
             return new TreflePlantaDto();
-        } catch (IOException ex) {
+        } catch (Exception ex) {
             throw new Exception("Erro ao obter dados de TrafleAPI: " + ex.getMessage());
         }
     }
