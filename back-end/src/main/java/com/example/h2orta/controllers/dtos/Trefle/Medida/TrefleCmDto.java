@@ -1,4 +1,4 @@
-package com.example.h2orta.controllers.dtos.Trafle.Medida;
+package com.example.h2orta.controllers.dtos.Trefle.Medida;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
