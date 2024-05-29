@@ -1,6 +1,7 @@
 package com.example.h2orta.services;
 
-import com.example.h2orta.controllers.dtos.Trafle.TraflePlantaDto;
+import com.example.h2orta.controllers.dtos.Trafle.TrefleEspeciesDto;
+import com.example.h2orta.controllers.dtos.Trafle.TreflePlantaDto;
 import com.example.h2orta.models.Planta;
 import com.example.h2orta.repositories.PlantaRepository;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -36,7 +37,7 @@ public class PlantaService {
         return repository.save(planta);
     }
 
-    public List<TraflePlantaDto> getTraflePlants(String search, int page) throws Exception {
+    public List<TrefleEspeciesDto> getTraflePlants(String search, int page) throws Exception {
         var baseURL = "https://trefle.io/api/v1";
         var trafleToken = "eNiq4MLgqoXBpdIiGb73SopX1nAvpf9FTVw2KNArutI";
 
@@ -55,7 +56,7 @@ public class PlantaService {
             if (response.isSuccessful())
                 if (response.body() != null) {
                     var objectMapper = new ObjectMapper();
-                    var arrayDto = objectMapper.readValue(response.body().string(), TraflePlantaDto[].class);
+                    var arrayDto = objectMapper.readValue(response.body().string(), TrefleEspeciesDto[].class);
                     return Arrays.stream(arrayDto).toList();
                 }
             return new ArrayList<>();
@@ -64,7 +65,7 @@ public class PlantaService {
         }
     }
 
-    public TraflePlantaDto getTraflePlantBySlug(String slug) throws Exception {
+    public TreflePlantaDto getTraflePlantBySlug(String slug) throws Exception {
         var baseURL = "https://trefle.io/api/v1";
         var trafleToken = "eNiq4MLgqoXBpdIiGb73SopX1nAvpf9FTVw2KNArutI";
 
@@ -85,7 +86,7 @@ public class PlantaService {
                     return objectMapper.readValue(response.body().string(), new TypeReference<>() {
                     });
                 }
-            return new TraflePlantaDto();
+            return new TreflePlantaDto();
         } catch (IOException ex) {
             throw new Exception("Erro ao obter dados de TrafleAPI: " + ex.getMessage());
         }

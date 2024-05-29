@@ -1,7 +1,8 @@
 package com.example.h2orta.controllers;
 
 import com.example.h2orta.controllers.dtos.Planta.PlantaDto;
-import com.example.h2orta.controllers.dtos.Trafle.TraflePlantaDto;
+import com.example.h2orta.controllers.dtos.Trafle.TrefleEspeciesDto;
+import com.example.h2orta.controllers.dtos.Trafle.TreflePlantaDto;
 import com.example.h2orta.services.PlantaService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
@@ -30,13 +31,13 @@ public class PlantaController {
     }
 
     @GetMapping("/{search}/{page}")
-    public ResponseEntity<List<TraflePlantaDto>> getTraflePlants(@PathVariable String search, @PathVariable int page) throws Exception {
+    public ResponseEntity<List<TrefleEspeciesDto>> getTraflePlants(@PathVariable String search, @PathVariable int page) throws Exception {
         var dtoList = service.getTraflePlants(search, page);
         return new ResponseEntity<>(dtoList, HttpStatus.OK);
     }
 
     @GetMapping("/{slug}")
-    public ResponseEntity<TraflePlantaDto> getTraflePlantBySlug(@PathVariable String slug) throws Exception {
+    public ResponseEntity<TreflePlantaDto> getTraflePlantBySlug(@PathVariable String slug) throws Exception {
         var dto = service.getTraflePlantBySlug(slug);
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
