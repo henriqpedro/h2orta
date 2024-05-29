@@ -26,7 +26,7 @@ public class VasoController {
 
     private VasoService service;
 
-    @GetMapping("/{id}")
+    @GetMapping("/id/{id}")
     public ResponseEntity<VasoDto> findById(@PathVariable Long id) throws Exception {
         var mapper = new ModelMapper();
 
@@ -36,7 +36,7 @@ public class VasoController {
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
-    @GetMapping("/{codigo}")
+    @GetMapping("/codigo/{codigo}")
     public ResponseEntity<List<VasoDto>> findAllByCodigoCompartilhado(@PathVariable UUID codigo) throws Exception {
         var mapper = new ModelMapper();
 
@@ -69,7 +69,7 @@ public class VasoController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity delete(@PathVariable Long id) throws Exception {
+    public ResponseEntity<Void> delete(@PathVariable Long id) throws Exception {
         service.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
