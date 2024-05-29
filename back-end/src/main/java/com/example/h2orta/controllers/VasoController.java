@@ -47,7 +47,7 @@ public class VasoController {
     }
 
     @PostMapping
-    public ResponseEntity<VasoDto> create(@Valid @RequestBody VasoDto dto) throws Exception {
+    public ResponseEntity<VasoDto> create(@Valid @RequestBody VasoDto dto) {
         var mapper = new ModelMapper();
 
         var vaso = mapper.map(dto, Vaso.class);
