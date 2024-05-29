@@ -27,11 +27,11 @@ public class Vaso {
     private String arduino;
 
     @ManyToOne
-    @JoinColumn(name = "usuario_id", nullable = false, updatable = false)
+    @JoinColumn(name = "usuario_id", nullable = false, insertable = false, updatable = false)
     private Usuario usuario;
 
     @OneToOne
-    @JoinColumn(name = "planta_id", nullable = false, updatable = false)
+    @JoinColumn(name = "planta_id", nullable = false, insertable = false, updatable = false)
     private Planta planta;
 
     @Column(nullable = false)

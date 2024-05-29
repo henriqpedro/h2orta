@@ -27,7 +27,7 @@ public class VasoService {
         var usuario = usuarioService.findByCodigoCompartilhado(codigoCompartilhado);
         return usuario.getVasos()
                 .stream()
-                .filter(vaso -> vaso.getCompartilhado())
+                .filter(Vaso::getCompartilhado)
                 .collect(Collectors.toList());
     }
 
