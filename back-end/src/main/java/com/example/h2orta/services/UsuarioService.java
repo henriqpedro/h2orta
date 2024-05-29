@@ -2,12 +2,14 @@ package com.example.h2orta.services;
 
 import com.example.h2orta.models.Usuario;
 import com.example.h2orta.repositories.UsuarioRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
 @Service
+@AllArgsConstructor
 public class UsuarioService {
     private UsuarioRepository repository;
 
@@ -24,6 +26,7 @@ public class UsuarioService {
     @Transactional
     public Usuario create(Usuario usuario) {
         usuario.setId(null);
+        usuario.setCodigoCompartilhado(UUID.randomUUID());
         return repository.save(usuario);
     }
 

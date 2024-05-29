@@ -1,24 +1,23 @@
 package com.example.h2orta.controllers;
 
 import com.example.h2orta.controllers.dtos.Planta.PlantaDto;
-import com.example.h2orta.controllers.dtos.Trefle.TrefleEspeciesDto;
-import com.example.h2orta.controllers.dtos.Trefle.TreflePlantaDto;
+import com.example.h2orta.controllers.dtos.Trefle.TrefleDto;
 import com.example.h2orta.services.PlantaService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.validation.Valid;
-import kotlin.jvm.internal.TypeReference;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import okhttp3.ResponseBody;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Objects;
 
 @RestController
@@ -29,18 +28,18 @@ public class PlantaController {
 
     private PlantaService service;
 
-    @GetMapping("/{id}")
+    @GetMapping("/id/{id}")
     public ResponseEntity<PlantaDto> findById(@PathVariable Long id) throws Exception {
-        var mapper = new ObjectMapper();
+        var mapper = new ModelMapper();
 
         var planta = service.findById(id);
-        var dto = mapper.convertValue(planta, PlantaDto.class);
+        var dto = mapper.map(planta, PlantaDto.class);
 
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
-    @GetMapping("/{search}/{page}")
-    public Response getTraflePlants(@PathVariable String search, @PathVariable int page) throws Exception {
+    @GetMapping("/search/{search}/{page}")
+    public ResponseEntity<String> findAllTreflePlant(@NotNull @PathVariable String search, @NotNull @PathVariable int page) throws Exception {
         var baseURL = "https://trefle.io/api/v1";
         var trafleToken = "eNiq4MLgqoXBpdIiGb73SopX1nAvpf9FTVw2KNArutI";
 
@@ -56,23 +55,22 @@ public class PlantaController {
 
         var client = new OkHttpClient();
         try (Response response = client.newCall(request).execute()) {
-            return response;
+            return ResponseEntity.ok(response.body().string());
         } catch (Exception ex) {
-            throw new Exception("Erro ao obter dados de TrafleAPI: " + ex.getMessage());
+            throw new Exception("Erro ao obter dados de TrefleAPI: " + ex.getMessage());
         }
 
 //        var dtoList = service.getTraflePlants(search, page);
 //        return new ResponseEntity<>(dtoList, HttpStatus.OK);
     }
 
-    @GetMapping("/{slug}")
-    public Response getTraflePlantBySlug(@PathVariable String slug) throws Exception {
+    @GetMapping("/slug/{slug}")
+    public ResponseEntity<String> findTreflePlantBySlug(@NotNull @PathVariable String slug) throws Exception {
         var baseURL = "https://trefle.io/api/v1";
         var trafleToken = "eNiq4MLgqoXBpdIiGb73SopX1nAvpf9FTVw2KNArutI";
 
-        HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(baseURL + "/plants/search")).newBuilder();
+        HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(baseURL + "/plants/" + slug)).newBuilder();
         urlBuilder.addQueryParameter("token", trafleToken);
-        urlBuilder.addQueryParameter("id", slug);
 
         var request = new Request.Builder()
                 .url(urlBuilder.build())
@@ -81,12 +79,12 @@ public class PlantaController {
 
         var client = new OkHttpClient();
         try (Response response = client.newCall(request).execute()) {
-            return response;
+            return ResponseEntity.ok(response.body().string());
         } catch (Exception ex) {
-            throw new Exception("Erro ao obter dados de TrafleAPI: " + ex.getMessage());
+            throw new Exception("Erro ao obter dados de TrefleAPI: " + ex.getMessage());
         }
-        
-//        var dto = service.getTraflePlantBySlug(slug);
-//        return new ResponseEntity<>(dto, HttpStatus.OK);
+
+        //var dto = service.findTreflePlantBySlug(slug);
+       //return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 }
