@@ -1,7 +1,7 @@
 package com.example.h2orta.services;
 
-import com.example.h2orta.controllers.dtos.Trafle.TrefleEspeciesDto;
-import com.example.h2orta.controllers.dtos.Trafle.TreflePlantaDto;
+import com.example.h2orta.controllers.dtos.Trefle.TrefleEspeciesDto;
+import com.example.h2orta.controllers.dtos.Trefle.TreflePlantaDto;
 import com.example.h2orta.models.Planta;
 import com.example.h2orta.repositories.PlantaRepository;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -24,17 +24,17 @@ public class PlantaService {
     public PlantaRepository repository;
 
     public Planta findById(long id) throws Exception {
-        Optional<Planta> planta = repository.findById(id);
-        return planta.orElseThrow(() -> new Exception("Planta não encontrada!"));
+        return repository.findById(id)
+                .orElseThrow(() -> new Exception("Planta não encontrada!"));
     }
 
     @Transactional
-    public Planta create(Planta planta) {
-        var alreadyExists = repository.existsByTraffleSlug(planta.getTraffleSlug());
-        if (alreadyExists)
-            return planta;
-        planta.setId(null);
-        return repository.save(planta);
+    public Planta getByTrefleSlugOrCreate(Planta planta) {
+        return repository.findByTrefleSlug(planta.getTrefleSlug())
+                .orElseGet(() -> {
+                    planta.setId(null);
+                    return repository.save(planta);
+                });
     }
 
     public List<TrefleEspeciesDto> getTraflePlants(String search, int page) throws Exception {

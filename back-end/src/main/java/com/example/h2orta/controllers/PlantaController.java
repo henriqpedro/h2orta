@@ -1,8 +1,8 @@
 package com.example.h2orta.controllers;
 
 import com.example.h2orta.controllers.dtos.Planta.PlantaDto;
-import com.example.h2orta.controllers.dtos.Trafle.TrefleEspeciesDto;
-import com.example.h2orta.controllers.dtos.Trafle.TreflePlantaDto;
+import com.example.h2orta.controllers.dtos.Trefle.TrefleEspeciesDto;
+import com.example.h2orta.controllers.dtos.Trefle.TreflePlantaDto;
 import com.example.h2orta.services.PlantaService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
@@ -24,9 +24,11 @@ public class PlantaController {
 
     @GetMapping("/{id}")
     public ResponseEntity<PlantaDto> findById(@PathVariable Long id) throws Exception {
-        var planta = service.findById(id);
         var mapper = new ObjectMapper();
+
+        var planta = service.findById(id);
         var dto = mapper.convertValue(planta, PlantaDto.class);
+
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 

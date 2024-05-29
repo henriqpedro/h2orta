@@ -1,6 +1,6 @@
-package com.example.h2orta.controllers.dtos.Trafle;
-import com.example.h2orta.controllers.dtos.Trafle.Links.TrefleLinksPlantaDto;
-import com.example.h2orta.controllers.dtos.Trafle.Links.TrefleSource;
+package com.example.h2orta.controllers.dtos.Trefle;
+import com.example.h2orta.controllers.dtos.Trefle.Links.TrefleLinksPlantaDto;
+import com.example.h2orta.controllers.dtos.Trefle.Links.TrefleSource;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

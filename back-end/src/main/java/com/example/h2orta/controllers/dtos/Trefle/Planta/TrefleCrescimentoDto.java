@@ -1,8 +1,8 @@
-package com.example.h2orta.controllers.dtos.Trafle.Planta;
+package com.example.h2orta.controllers.dtos.Trefle.Planta;
 
-import com.example.h2orta.controllers.dtos.Trafle.Medida.TrefleCmDto;
-import com.example.h2orta.controllers.dtos.Trafle.Medida.TrefleMmDto;
-import com.example.h2orta.controllers.dtos.Trafle.Medida.TrefleDegDto;
+import com.example.h2orta.controllers.dtos.Trefle.Medida.TrefleCmDto;
+import com.example.h2orta.controllers.dtos.Trefle.Medida.TrefleMmDto;
+import com.example.h2orta.controllers.dtos.Trefle.Medida.TrefleDegDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

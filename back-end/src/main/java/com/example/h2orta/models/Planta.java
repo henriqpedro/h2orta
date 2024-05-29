@@ -23,18 +23,18 @@ public class Planta {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 256, unique = true)
+    @Column(nullable = false, unique = true)
     @Size(min = 2, max = 1024)
     @NotBlank
-    private String traffleSlug;
+    private String trefleSlug;
 
-    @Column(nullable = false, length = 256, unique = true)
-    @Size(min = 2, max = 256)
+    @Column(nullable = false, unique = true)
+    @Size(min = 2, max = 255)
     @NotBlank
     private String nome;
 
-    @Column(nullable = false, length = 256)
-    @Size(min = 2, max = 256)
+    @Column(nullable = false)
+    @Size(min = 2, max = 255)
     @NotBlank
     private String familia;
 
@@ -43,8 +43,7 @@ public class Planta {
     @NotBlank
     private String descricao;
 
-    @Column(length = 256)
-    @Size(max = 1024)
+    @Size(max = 255)
     private String imagemUrl;
 
     @Column(nullable = false)
@@ -57,5 +56,7 @@ public class Planta {
     @NotNull
     private Integer maxTemperatura;
 
+    @Column(nullable = false)
+    @NotNull
     private Boolean deletado = Boolean.FALSE;
 }
