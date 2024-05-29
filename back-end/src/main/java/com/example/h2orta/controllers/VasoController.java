@@ -7,11 +7,13 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -26,43 +28,43 @@ public class VasoController {
 
     @GetMapping("/{id}")
     public ResponseEntity<VasoDto> findById(@PathVariable Long id) throws Exception {
-        var mapper = new ObjectMapper();
+        var mapper = new ModelMapper();
 
         var vaso = service.findById(id);
-        var dto = mapper.convertValue(vaso, VasoDto.class);
+        var dto = mapper.map(vaso, VasoDto.class);
 
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
     @GetMapping("/{codigo}")
     public ResponseEntity<List<VasoDto>> findAllByCodigoCompartilhado(@PathVariable UUID codigo) throws Exception {
-        var mapper = new ObjectMapper();
+        var mapper = new ModelMapper();
 
         var vasos = service.findAllByCodigoCompartilhado(codigo);
-        var dtoList = mapper.convertValue(vasos, new TypeReference<List<VasoDto>>() {});
+        ArrayList<VasoDto> dtoList = mapper.map(vasos, ArrayList.class);
 
         return new ResponseEntity<>(dtoList, HttpStatus.OK);
     }
 
     @PostMapping
     public ResponseEntity<VasoDto> create(@Valid @RequestBody VasoDto dto) throws Exception {
-        var mapper = new ObjectMapper();
+        var mapper = new ModelMapper();
 
-        var vaso = mapper.convertValue(dto, Vaso.class);
+        var vaso = mapper.map(dto, Vaso.class);
         vaso = service.create(vaso);
 
-        dto = mapper.convertValue(vaso, VasoDto.class);
+        dto = mapper.map(vaso, VasoDto.class);
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
     @PutMapping
     public ResponseEntity<VasoDto> update(@Valid @RequestBody VasoDto dto) throws Exception {
-        var mapper = new ObjectMapper();
+        var mapper = new ModelMapper();
 
-        var vaso = mapper.convertValue(dto, Vaso.class);
+        var vaso = mapper.map(dto, Vaso.class);
         vaso = service.update(vaso);
 
-        dto = mapper.convertValue(vaso, VasoDto.class);
+        dto = mapper.map(vaso, VasoDto.class);
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 

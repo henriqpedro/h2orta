@@ -1,11 +1,13 @@
 package com.example.h2orta.controllers;
 
+import com.example.h2orta.controllers.dtos.Usuario.UsuarioCreateInput;
 import com.example.h2orta.controllers.dtos.Usuario.UsuarioDto;
 import com.example.h2orta.models.Usuario;
 import com.example.h2orta.services.UsuarioService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -30,24 +32,24 @@ public class UsuarioController {
     }
 
     @PostMapping
-    public ResponseEntity<UsuarioDto> create(@Valid @RequestBody UsuarioDto dto) throws Exception {
-        var mapper = new ObjectMapper();
+    public ResponseEntity<UsuarioDto> create(@Valid @RequestBody UsuarioCreateInput input) {
+        var mapper = new ModelMapper();
 
-        var usuario = mapper.convertValue(dto, Usuario.class);
+        var usuario = mapper.map(input, Usuario.class);
         usuario = service.create(usuario);
 
-        dto = mapper.convertValue(usuario, UsuarioDto.class);
+        var dto = mapper.map(usuario, UsuarioDto.class);
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
     @PutMapping
     public ResponseEntity<UsuarioDto> update(@Valid @RequestBody UsuarioDto dto) throws Exception {
-        var mapper = new ObjectMapper();
+        var mapper = new ModelMapper();
 
-        var usuario = mapper.convertValue(dto, Usuario.class);
+        var usuario = mapper.map(dto, Usuario.class);
         usuario = service.update(usuario);
 
-        dto = mapper.convertValue(usuario, UsuarioDto.class);
+        dto = mapper.map(usuario, UsuarioDto.class);
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 

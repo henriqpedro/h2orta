@@ -16,7 +16,7 @@ public class PlantaDto  {
 
     @Size(min = 2, max = 1024)
     @NotBlank
-    private String traffleSlug;
+    private String trefleSlug;
 
     @Size(min = 2, max = 256)
     @NotBlank

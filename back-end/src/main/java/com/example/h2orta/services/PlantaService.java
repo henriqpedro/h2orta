@@ -1,10 +1,9 @@
 package com.example.h2orta.services;
 
+import com.example.h2orta.controllers.dtos.Trefle.TrefleDto;
 import com.example.h2orta.controllers.dtos.Trefle.TrefleEspeciesDto;
-import com.example.h2orta.controllers.dtos.Trefle.TreflePlantaDto;
 import com.example.h2orta.models.Planta;
 import com.example.h2orta.repositories.PlantaRepository;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import okhttp3.HttpUrl;
@@ -28,7 +27,7 @@ public class PlantaService {
     }
 
     @Transactional
-    public Planta getByTrefleSlugOrCreate(Planta planta) {
+    public Planta findByTrefleSlugOrCreate(Planta planta) {
         return repository.findByTrefleSlug(planta.getTrefleSlug())
                 .orElseGet(() -> {
                     planta.setId(null);
@@ -36,7 +35,7 @@ public class PlantaService {
                 });
     }
 
-    public List<TrefleEspeciesDto> getTraflePlants(String search, int page) throws Exception {
+    public List<TrefleEspeciesDto> findAllTreflePlant(String search, int page) throws Exception {
         var baseURL = "https://trefle.io/api/v1";
         var trafleToken = "eNiq4MLgqoXBpdIiGb73SopX1nAvpf9FTVw2KNArutI";
 
@@ -64,13 +63,12 @@ public class PlantaService {
         }
     }
 
-    public TreflePlantaDto getTraflePlantBySlug(String slug) throws Exception {
+    public TrefleDto findTreflePlantBySlug(String slug) throws Exception {
         var baseURL = "https://trefle.io/api/v1";
         var trafleToken = "eNiq4MLgqoXBpdIiGb73SopX1nAvpf9FTVw2KNArutI";
 
-        HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(baseURL + "/plants/search")).newBuilder();
+        HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(baseURL + "/plants/" + slug)).newBuilder();
         urlBuilder.addQueryParameter("token", trafleToken);
-        urlBuilder.addQueryParameter("id", slug);
 
         var request = new Request.Builder()
                 .url(urlBuilder.build())
@@ -82,12 +80,11 @@ public class PlantaService {
             if (response.isSuccessful())
                 if (response.body() != null) {
                     var objectMapper = new ObjectMapper();
-                    return objectMapper.readValue(response.body().string(), new TypeReference<>() {
-                    });
+                    return objectMapper.readValue(response.body().string(), TrefleDto.class);
                 }
-            return new TreflePlantaDto();
+            return new TrefleDto();
         } catch (Exception ex) {
-            throw new Exception("Erro ao obter dados de TrafleAPI: " + ex.getMessage());
+            throw new Exception("Erro ao obter dados de TrefleAPI: " + ex.getMessage());
         }
     }
 }

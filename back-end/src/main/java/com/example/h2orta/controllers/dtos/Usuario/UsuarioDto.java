@@ -25,13 +25,17 @@ public class UsuarioDto {
     @NotBlank
     private String nome;
 
+    @Size(min = 2, max = 16)
+    @NotBlank
+    private String usuario;
+
     @Size(min = 2, max = 255)
     @NotBlank
     private String email;
 
     @Column(nullable = false, unique = true)
     @NotNull
-    private UUID codigoCompartilhamento;
+    private UUID codigoCompartilhado;
 
     @Column(nullable = false)
     @NotNull

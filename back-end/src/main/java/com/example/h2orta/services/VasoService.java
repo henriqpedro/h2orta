@@ -33,7 +33,7 @@ public class VasoService {
 
     @Transactional
     public Vaso create(Vaso vaso) {
-        var planta = plantaService.getByTrefleSlugOrCreate(vaso.getPlanta());
+        var planta = plantaService.findByTrefleSlugOrCreate(vaso.getPlanta());
         vaso.setPlanta(planta);
 
         vaso.setId(null);
@@ -44,7 +44,7 @@ public class VasoService {
     public Vaso update(Vaso vaso) throws Exception {
         var existingVaso = findById(vaso.getId());
 
-        var planta = plantaService.getByTrefleSlugOrCreate(existingVaso.getPlanta());
+        var planta = plantaService.findByTrefleSlugOrCreate(existingVaso.getPlanta());
         existingVaso.setPlanta(planta);
 
         return repository.save(existingVaso);
