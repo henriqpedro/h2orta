@@ -32,12 +32,12 @@ public class UsuarioService {
 
     @Transactional
     public Usuario update(Usuario usuario) throws Exception {
-        var existingUsuario = findById(usuario.getId());
+        findById(usuario.getId());
         return repository.save(usuario);
     }
 
     public void delete(Long id) throws Exception {
-        var vaso = findById(id);
-        repository.delete(vaso);
+        var usuario = findById(id);
+        repository.delete(usuario);
     }
 }

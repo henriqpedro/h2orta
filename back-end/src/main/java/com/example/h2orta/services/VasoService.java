@@ -23,6 +23,11 @@ public class VasoService {
                 .orElseThrow(() -> new Exception("Vaso não encontrado!"));
     }
 
+    public List<Vaso> findAllByUsuario(Long usuarioId) throws Exception {
+        var usuario = usuarioService.findById(usuarioId);
+        return repository.findAllByUsuario(usuario);
+    }
+
     public List<Vaso> findAllByCodigoCompartilhado(UUID codigoCompartilhado) throws Exception {
         var usuario = usuarioService.findByCodigoCompartilhado(codigoCompartilhado);
         return usuario.getVasos()

@@ -6,6 +6,7 @@ import com.example.h2orta.services.VasoService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
@@ -34,6 +35,18 @@ public class VasoController {
         var dto = mapper.map(vaso, VasoDto.class);
 
         return new ResponseEntity<>(dto, HttpStatus.OK);
+    }
+
+    @GetMapping("/user/{usuarioId}")
+    public ResponseEntity<List<VasoDto>> findAllByUsuario(@PathVariable Long usuarioId) throws Exception {
+        var mapper = new ModelMapper();
+
+        var vasos = service.findAllByUsuario(usuarioId);
+        var dtoList = vasos.stream()
+                .map(vaso -> mapper.map(vaso, VasoDto.class))
+                .collect(Collectors.toList());
+
+        return new ResponseEntity<>(dtoList, HttpStatus.OK);
     }
 
     @GetMapping("/codigo/{codigo}")
