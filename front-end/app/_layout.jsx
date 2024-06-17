@@ -2,24 +2,24 @@ import { useFonts } from 'expo-font';
 import { SplashScreen, Stack } from 'expo-router';
 import { useEffect } from 'react';
 
-SplashScreen.preventAutoHideAsync();
+//SplashScreen.preventAutoHideAsync();
 
 const RootLayout = () => {
 
-    const { loaded, error } = useFonts({
-        "Nunito-Bold": require("../assets/fonts/Nunito-Bold.ttf"),
-        "Nunito-Regular": require("../assets/fonts/Nunito-Regular.ttf")
-    });
+    // const { fontsLoaded, error } = useFonts({
+    //     "Nunito-Bold": require("../assets/fonts/Nunito-Bold.ttf"),
+    //     "Nunito-Regular": require("../assets/fonts/Nunito-Regular.ttf")
+    // });
 
-    useEffect(() => {
-        if (error)
-            throw error;
-        if (loaded)
-            SplashScreen.hideAsync();
-    }, [loaded, error]);
+    // useEffect(() => {
+    //     if (error)
+    //         throw error;
+    //     if (fontsLoaded)
+    //         SplashScreen.hideAsync();
+    // }, [fontsLoaded, error]);
 
-    if (!loaded && !error)
-        return null;
+    // if (!fontsLoaded && !error)
+    //     return null;
 
     return (
         <Stack>
