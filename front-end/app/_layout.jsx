@@ -1,6 +1,4 @@
-import { useFonts } from 'expo-font';
-import { SplashScreen, Stack } from 'expo-router';
-import { useEffect } from 'react';
+import { Stack } from 'expo-router';
 
 //SplashScreen.preventAutoHideAsync();
 
