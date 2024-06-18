@@ -1,11 +1,10 @@
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { Image, ScrollView, View, Text, ToastAndroid } from 'react-native';
-import CustomButton from '../components/CustomButton';
-import CustomCard from '../components/CustomCard';
 import { StatusBar } from 'expo-status-bar';
-import { router } from 'expo-router';
 import * as Paho from 'paho-mqtt';
 import { useEffect, useState } from 'react';
+import { Image, ScrollView, ToastAndroid, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import CustomButton from '../components/CustomButton';
+import CustomCard from '../components/CustomCard';
 
 const data = [
   {
@@ -18,32 +17,38 @@ const data = [
 export default function App() {
 
   const [plantData, setPlantData] = useState({ humidity: 0, tank: 0 });
-  const [connected, setConnected] = useState(false);
-  
-  const client = new Paho.Client('h2orta.zapto.org', 8083, 'pedro')
+  const [watering, setWatering] = useState(true);
 
-  const attemptConnection = () => {
-    client.connect({
-      userName: 'pedro',
-      password: 'pedro',
-      onSuccess() {
-        ToastAndroid.show("MQTT conectado", ToastAndroid.SHORT)
-        client.subscribe('h2orta/planta')
-        setConnected(true)
-      },
-      onFailure(error) {
-        ToastAndroid.show("Erro ao conectar MQTT: " + error.errorMessage, ToastAndroid.LONG)
-        setConnected(false)
-        setTimeout(attemptConnection, 1000);
-      }
-    })
+  const client = new Paho.Client('h2orta.zapto.org', 8083, `client-${Math.random() * 1000}`)
+
+  const attemptConnection = (mensagem) => {
+    try {
+      client.connect({
+        onSuccess() {
+          client.subscribe('h2orta/planta')
+          if (mensagem)
+            client.send(mensagem)
+        },
+        onFailure(error) {
+          errorConnecting(error)
+        },
+      })
+    } catch (error) {
+      ToastAndroid.show("Erro ao comunicar com broker", ToastAndroid.SHORT)
+    }
+  }
+
+  const errorConnecting = (error) => {
+    ToastAndroid.show("Erro ao conectar MQTT: " + error.errorMessage, ToastAndroid.SHORT)
+    setTimeout(attemptConnection, 1000)
   }
 
   useEffect(() => {
     attemptConnection()
 
+    client.onConnectionLost = errorConnecting
+
     client.onMessageArrived = (message) => {
-      console.log('readdddddddddddddddd!!!!!!')
       let data = message.payloadString.split(' ')
       setPlantData({
         humidity: data[0],
@@ -53,6 +58,13 @@ export default function App() {
 
     return () => client.disconnect()
   }, [])
+
+  sendMessage = (message) => {
+    let mensagem = new Paho.Message(message)
+    mensagem.qos = 2
+    mensagem.destinationName = 'h2orta/irrigar'
+    attemptConnection(mensagem)
+  }
 
   return (
     <SafeAreaView className="bg-primary h-full">
@@ -64,7 +76,6 @@ export default function App() {
             <Image className="w-[100px] top-12" source={require("../assets/adaptive-icon.png")} resizeMode='contain' />
           </View>
           <View className="relative bottom-5 justify-center items-center">
-            <Text className='text-lg'>{connected ? 'Connected' : 'Not connected'}</Text>
             <CustomCard
               imageSource={data[0].imageSource}
               name={data[0].name}
@@ -74,9 +85,8 @@ export default function App() {
               index={0}
             />
             <CustomButton
-              title="Cadastrar planta"
-              handlePress={() => client.send('')}
-              constainerStyles="w-3/5 mt-10" />
+              title='Cadastrar planta'
+              constainerStyles={`w-3/5 mt-10`} />
           </View>
         </View>
       </ScrollView>
