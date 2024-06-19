@@ -66,7 +66,7 @@ const CustomCard = ({ item, index }) => {
                 })
             }
             return () => client.disconnect()
-        } else 
+        } else
             setPlantData({ humidity: 0, tank: 0 })
     }, [item])
 
@@ -94,21 +94,18 @@ const CustomCard = ({ item, index }) => {
                     <Entypo name="dots-three-horizontal" size={24} color="black" />
                     {
                         showMenu ?
-                            <View className="absolute top-10">
-                                <CustomButton
-                                    isLoading={watering}
-                                    handlePress={() => {
-                                        if (item.id > 0) {
-                                            sendMessage('1')
-                                            setWatering(true)
-                                        } else {
-                                            ToastAndroid.show("Cadastre uma planta para continuar", ToastAndroid.SHORT)
-                                        }
-                                    }}
-                                    constainerStyles='bg-primary rounded-none'
-                                    textStyles='text-black text-sm'
-                                    title='Irrigar planta' />
-                            </View>
+                            <CustomButton
+                                isLoading={watering}
+                                handlePress={() => {
+                                    if (item.id > 0) {
+                                        sendMessage('1')
+                                        setWatering(true)
+                                    } else
+                                        ToastAndroid.show("Cadastre uma planta para irrigar", ToastAndroid.SHORT)
+                                }}
+                                constainerStyles='absolute top-10 bg-primary rounded-none'
+                                textStyles='text-black text-sm'
+                                title='Irrigar planta' />
                             : <></>
                     }
                 </TouchableOpacity>
