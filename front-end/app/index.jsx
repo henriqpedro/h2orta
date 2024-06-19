@@ -25,13 +25,13 @@ export default function App() {
         <ScrollView contentContainerStyle={{
           height: "100%"
         }}>
-          <View className="absolute w-full items-center min-h-[85vh] px-4">
-            <View className="relative bottom-[10vh] w-[100vw] h-[26vh] bg-dark z-10 rounded-full items-center justify-center">
-              <Image className="w-[100px] top-[5vh]" source={require("../assets/adaptive-icon.png")} resizeMode='contain' />
-            </View>
-            <View className="relative bottom-[3vh] justify-center items-center">
+          <View className="w-[100vw] h-[15vh] rounded-b-[40px] bg-dark items-center justify-center">
+            <Image className="w-[13vh]" source={require("../assets/adaptive-icon.png")} resizeMode='contain' />
+          </View>
+          <View className="w-full items-center justify-center min-h-[80vh] px-6">
+            <View className="justify-center items-center">
               <CustomCard item={data[0]} index={0} />
-              <CustomButton title='Cadastrar planta' constainerStyles={`w-3/5 mt-10`} />
+              <CustomButton title='Cadastrar planta' constainerStyles={`w-56 mt-10`} />
             </View>
           </View>
         </ScrollView>
