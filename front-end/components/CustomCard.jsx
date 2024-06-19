@@ -90,7 +90,7 @@ const CustomCard = ({ item, index }) => {
                     <Entypo name="dots-three-horizontal" size={24} color="black" />
                     {
                         showMenu ?
-                            <View className="absolute top-10 z-2">
+                            <View className="absolute top-10">
                                 <CustomButton
                                     isLoading={watering}
                                     handlePress={() => {
