@@ -24,7 +24,7 @@ const CustomCardShort = ({ item, index, selected, onSelected }) => {
 const CustomCardList = ({ data, onSelected }) => {
     const [selectedItem, setSelectedItem] = useState({})
     return (
-        <SafeAreaView className="justify-center items-center max-h-[50vh]">
+        <SafeAreaView className="justify-center items-center max-h-[56vh]">
             <FlatList
                 numColumns={2}
                 extraData={data}
