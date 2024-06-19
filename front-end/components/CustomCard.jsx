@@ -56,6 +56,8 @@ const CustomCard = ({ item, index }) => {
 
     useEffect(() => {
         if (item.id > 0) {
+            setPlantData({ humidity: 0, tank: 0 })
+
             attemptConnection()
             client.onConnectionLost = errorConnecting
             client.onMessageArrived = (message) => {
@@ -66,8 +68,7 @@ const CustomCard = ({ item, index }) => {
                 })
             }
             return () => client.disconnect()
-        } else
-            setPlantData({ humidity: 0, tank: 0 })
+        }            
     }, [item])
 
     sendMessage = (message) => {
