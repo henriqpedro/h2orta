@@ -111,7 +111,7 @@ const CustomCard = ({ item, index }) => {
                     }
                 </TouchableOpacity>
                 <Image className="w-[150px] h-[150px]" source={item.imageSource} resizeMode='contain' />
-                <Text className="text-dark font-bold text-2xl">{item.name}</Text>
+                <Text className="text-dark font-semibold text-2xl">{item.name}</Text>
                 <Text className="text-center px-10 mt-2">{item.description}</Text>
             </View>
             <View>
