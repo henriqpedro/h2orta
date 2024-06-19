@@ -6,9 +6,10 @@ import CustomButton from './CustomButton';
 import CustomTextIcon from './CustomTextIcon';
 
 const CustomIndicator = ({ value }) => {
-    let color = value < 50 ? 'bg-danger' : 'bg-light';
+    let color = value < 50 ? 'bg-danger text-primary' : 'bg-light text-primary'
+    color = value < 0 ? 'bg-secondary text-black' : color
     return (
-        <Text className={`${color} text-primary rounded-md px-3`}>{value}%</Text>
+        <Text className={`${color} rounded-md px-3`}>{value >= 0 ? value : ''}%</Text>
     )
 }
 
@@ -24,7 +25,7 @@ const CustomCardField = ({ iconSource, title, value, containerStyles }) => {
 const CustomCard = ({ item, index }) => {
     const [watering, setWatering] = useState(false)
     const [showMenu, setShowMenu] = useState(false)
-    const [plantData, setPlantData] = useState({ humidity: 0, tank: 0 })
+    const [plantData, setPlantData] = useState({ humidity: -1, tank: -1 })
 
     const client = new Paho.Client('h2orta.zapto.org', 8083, `client-${Math.random() * 1000}`)
 
@@ -41,7 +42,7 @@ const CustomCard = ({ item, index }) => {
                 },
                 onFailure(error) {
                     errorConnecting(error)
-                },
+                }
             })
         } catch (error) {
             ToastAndroid.show("Erro ao comunicar com broker", ToastAndroid.SHORT)
@@ -49,22 +50,25 @@ const CustomCard = ({ item, index }) => {
     }
 
     const errorConnecting = (error) => {
-        ToastAndroid.show("Erro ao conectar MQTT: " + error.errorMessage, ToastAndroid.SHORT)
+        //ToastAndroid.show("Erro ao conectar MQTT: " + error.errorMessage, ToastAndroid.SHORT)
         setTimeout(attemptConnection, 1000)
     }
 
     useEffect(() => {
-        attemptConnection()
-        client.onConnectionLost = errorConnecting
-        client.onMessageArrived = (message) => {
-            let data = message.payloadString.split(' ')
-            setPlantData({
-                humidity: data[0],
-                tank: data[1]
-            })
-        }
-        return () => client.disconnect()
-    }, [])
+        if (item.id > 0) {
+            attemptConnection()
+            client.onConnectionLost = errorConnecting
+            client.onMessageArrived = (message) => {
+                let data = message.payloadString.split(' ')
+                setPlantData({
+                    humidity: data[0],
+                    tank: data[1]
+                })
+            }
+            return () => client.disconnect()
+        } else 
+            setPlantData({ humidity: 0, tank: 0 })
+    }, [item])
 
     sendMessage = (message) => {
         let mensagem = new Paho.Message(message)
@@ -94,8 +98,12 @@ const CustomCard = ({ item, index }) => {
                                 <CustomButton
                                     isLoading={watering}
                                     handlePress={() => {
-                                        sendMessage('1')
-                                        setWatering(true)
+                                        if (item.id > 0) {
+                                            sendMessage('1')
+                                            setWatering(true)
+                                        } else {
+                                            ToastAndroid.show("Cadastre uma planta para continuar", ToastAndroid.SHORT)
+                                        }
                                     }}
                                     constainerStyles='bg-primary rounded-none'
                                     textStyles='text-black text-sm'
@@ -105,7 +113,7 @@ const CustomCard = ({ item, index }) => {
                     }
                 </TouchableOpacity>
                 <Image className="w-[150px] h-[150px]" source={item.imageSource} resizeMode='contain' />
-                <Text className="text-dark text-xl">{item.name}</Text>
+                <Text className="text-dark text-2xl">{item.name}</Text>
                 <Text className="text-center px-10 mt-2">{item.description}</Text>
             </View>
             <View>
