@@ -9,7 +9,7 @@ import CustomSelectModal from '../components/CustomSelectModal';
 
 const prototype = {
   id: 0,
-  name: '[Nome da planta]',
+  name: 'Nome da planta',
   description: 'Texto descrevendo a planta, indicando a rega correta para espécie e outras informações relevantes.',
   imageSource: require("../assets/images/prototype-plant.png")
 }

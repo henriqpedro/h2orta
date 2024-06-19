@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
 import { Modal, Portal } from 'react-native-paper';
 import CustomCardList from '../components/CustomCardList';
 import CustomButton from './CustomButton';
@@ -52,7 +52,6 @@ const CustomSelectModal = ({ visible, onClose, onSelect }) => {
                 visible={visible}
                 onDismiss={() => onClose()}>
                 <View className="justify-center rounded-2xl items-center h-[80vh] w-[94vw] bg-primary">
-                    <Text className="text-2xl mt-2 text-dark">Selecionando planta</Text>
                     <CustomCardList
                         data={data}
                         onSelected={(item) => setSelectedItem(item)} />
