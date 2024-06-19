@@ -30,7 +30,10 @@ export default function App() {
           <View className="w-full items-center justify-center min-h-[80vh] px-6">
             <View className="justify-center items-center">
               <CustomCard item={viewingPlant} index={0} />
-              <CustomButton handlePress={() => setVisible(true)} title='Cadastrar planta' constainerStyles={`w-56 mt-10`} />
+              <CustomButton 
+              handlePress={() => setVisible(true)}
+              title='Cadastrar planta'
+              constainerStyles='w-56 mt-10' />
             </View>
             <CustomSelectModal visible={visible} onClose={() => setVisible(false)} onSelect={(item) => setViewingPlant(item)} />
           </View>
