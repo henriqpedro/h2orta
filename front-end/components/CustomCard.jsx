@@ -37,7 +37,7 @@ const CustomCard = ({ item, index }) => {
                     client.subscribe('h2orta/planta')
                     if (mensagem) {
                         client.send(mensagem)
-                        ToastAndroid.show("Regando planta", ToastAndroid.SHORT)
+                        ToastAndroid.show("Irrigando planta", ToastAndroid.SHORT)
                     }
                 },
                 onFailure(error) {
