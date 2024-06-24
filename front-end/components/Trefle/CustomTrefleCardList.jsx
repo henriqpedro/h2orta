@@ -14,14 +14,14 @@ const CustomCardShort = ({ item, index, selected, onSelected }) => {
                 activeOpacity={0.7}
                 className={`rounded-xl py-10 min-w-[40vw] max-h-[24vh] justify-center items-center m-2
                 ${selected ? 'bg-light' : 'bg-secondary'}`}>
-                <Image className="w-[100px] h-[100px]" source={item.imageSource} resizeMode='contain' />
-                <Text numberOfLines={1} ellipsizeMode='tail' className={`font-semibold max-w-[35vw] px-3 ${selected ? 'text-primary' : 'text-black'}`}>{item.name}</Text>
+                <Image className="w-[100px] h-[100px] mb-2 rounded-xl" source={{uri: item.image_url}} resizeMode='cover' />
+                <Text numberOfLines={1} ellipsizeMode='tail' className={`font-semibold max-w-[35vw] px-3 ${selected ? 'text-primary' : 'text-black'}`}>{item.common_name}</Text>
             </TouchableOpacity>
         </View>
     )
 }
 
-const CustomCardList = ({ data, fetchMore, onSelected }) => {
+const CustomCardTrefle = ({ data, fetchMore, onSelected }) => {
     const [selectedItem, setSelectedItem] = useState({})
     return (
         <SafeAreaView className="justify-center items-center max-h-[62vh]">
@@ -29,8 +29,8 @@ const CustomCardList = ({ data, fetchMore, onSelected }) => {
                 numColumns={2}
                 extraData={data}
                 data={data}
-                onEndReachedThreshold={0.2}
                 onEndReached={fetchMore}
+                onEndReachedThreshold={0.3}
                 keyExtractor={(item, index) => index}
                 renderItem={({ item, index }) =>
                     <CustomCardShort
@@ -45,4 +45,4 @@ const CustomCardList = ({ data, fetchMore, onSelected }) => {
     )
 }
 
-export default CustomCardList
+export default CustomCardTrefle
