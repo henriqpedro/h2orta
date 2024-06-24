@@ -4,8 +4,8 @@ import { Image, ScrollView, View } from 'react-native';
 import { PaperProvider } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import CustomButton from '../components/CustomButton';
-import CustomCard from '../components/CustomCard';
-import CustomSelectModal from '../components/CustomSelectModal';
+import CustomTrefleCard from '../components/Trefle/CustomTrefleCard';
+import CustomTrefleSelectModal from '../components/Trefle/CustomTrefleSelectModal';
 
 export default function App() {
   const [visible, setVisible] = useState(false)
@@ -22,13 +22,16 @@ export default function App() {
           </View>
           <View className="w-full items-center justify-center min-h-[80vh] px-6">
             <View className="justify-center items-center">
-              <CustomCard item={viewingPlant} index={0} />
-              <CustomButton 
-              handlePress={() => setVisible(true)}
-              title='Cadastrar planta'
-              constainerStyles='w-56 mt-10' />
+              <CustomTrefleCard item={viewingPlant} index={0} />
+              <CustomButton
+                handlePress={() => setVisible(true)}
+                title='Cadastrar planta'
+                constainerStyles='w-56 mt-10' />
             </View>
-            <CustomSelectModal visible={visible} onClose={() => setVisible(false)} onSelect={(item) => setViewingPlant(item)} />
+            <CustomTrefleSelectModal
+              visible={visible}
+              onClose={() => setVisible(false)}
+              onSelect={(item) => setViewingPlant(item)} />
           </View>
         </ScrollView>
         <StatusBar backgroundColor="#F9F9F9" />
