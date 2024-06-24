@@ -7,16 +7,9 @@ import CustomButton from '../components/CustomButton';
 import CustomCard from '../components/CustomCard';
 import CustomSelectModal from '../components/CustomSelectModal';
 
-const prototype = {
-  id: 0,
-  name: 'Nome da planta',
-  description: 'Texto descrevendo a planta, indicando a rega correta para espécie e outras informações relevantes.',
-  imageSource: require("../assets/images/prototype-plant.png")
-}
-
 export default function App() {
   const [visible, setVisible] = useState(false)
-  const [viewingPlant, setViewingPlant] = useState(prototype)
+  const [viewingPlant, setViewingPlant] = useState()
 
   return (
     <PaperProvider>
