@@ -21,7 +21,7 @@ const CustomCardShort = ({ item, index, selected, onSelected }) => {
     )
 }
 
-const CustomCardList = ({ data, fetchMore, onSelected }) => {
+const CustomCardList = ({ data, onSelected }) => {
     const [selectedItem, setSelectedItem] = useState({})
     return (
         <SafeAreaView className="justify-center items-center max-h-[62vh]">
@@ -29,8 +29,6 @@ const CustomCardList = ({ data, fetchMore, onSelected }) => {
                 numColumns={2}
                 extraData={data}
                 data={data}
-                onEndReachedThreshold={0.2}
-                onEndReached={fetchMore}
                 keyExtractor={(item, index) => index}
                 renderItem={({ item, index }) =>
                     <CustomCardShort

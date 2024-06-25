@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { Image, Text, ToastAndroid, TouchableOpacity, View } from 'react-native';
 import CustomButton from '../CustomButton';
 import CustomTextIcon from '../CustomTextIcon';
+import { ActivityIndicator } from 'react-native-paper';
 
 const CustomIndicator = ({ value }) => {
     let color = value < 50 ? 'bg-danger text-primary' : 'bg-light text-primary'
@@ -25,6 +26,7 @@ const CustomCardField = ({ iconSource, title, value, containerStyles }) => {
 const CustomTrefleCard = ({ item, index }) => {
     const [watering, setWatering] = useState(false)
     const [showMenu, setShowMenu] = useState(false)
+    const [imageLoading, setImageLoading] = useState(true)
     const [plantData, setPlantData] = useState({ humidity: -1, tank: -1 })
 
     const client = new Paho.Client('h2orta.zapto.org', 8083, `client-${Math.random() * 1000}`)
@@ -57,7 +59,6 @@ const CustomTrefleCard = ({ item, index }) => {
     useEffect(() => {
         if (item) {
             setPlantData({ humidity: 0, tank: 0 })
-
             attemptConnection()
             client.onConnectionLost = errorConnecting
             client.onMessageArrived = (message) => {
@@ -85,6 +86,9 @@ const CustomTrefleCard = ({ item, index }) => {
         }
     }, [watering])
 
+    const onLoadStart = () => setImageLoading(true)
+    const onLoadEnd = () => setImageLoading(false)
+
     return (
         <View className="bg-secondary min-h-[50vh] min-w-[80vw] rounded-xl px-5 pt-2 pb-12 justify-center items-center" key={index}>
             {item ?
@@ -109,13 +113,21 @@ const CustomTrefleCard = ({ item, index }) => {
                                     : <></>
                             }
                         </TouchableOpacity>
-                        <Image className="w-[150px] h-[150px] rounded-xl mb-2" source={{ uri: item.image_url }} resizeMode='cover' />
+                        <Image
+                            className={`${!imageLoading ? 'w-[150px] h-[150px]' : 'max-w-none'} rounded-xl mb-2`}
+                            source={{ uri: item.image_url }}
+                            resizeMode='cover'
+                            onLoadStart={onLoadStart}
+                            onLoadEnd={onLoadEnd} />
+                        {imageLoading && <ActivityIndicator className="w-[150px] h-[150px]" color='#000000' />}
                         <Text className="text-dark font-semibold text-2xl">{item.common_name}</Text>
-                        <Text className="text-center px-10 mt-2">{item.description}</Text>
+                        <Text className="text-center px-10 mt-2">
+                            {`${item.common_name}, de nome científico ${item.scientific_name}, pertence à família ${item.family}`}
+                        </Text>
                     </View>
                     <View>
                         <CustomCardField
-                            containerStyles="mt-2"
+                            containerStyles="mt-3"
                             iconSource={require('../../assets/icons/tank.png')}
                             title="Nível do reservatório"
                             value={plantData.tank} />
@@ -127,7 +139,7 @@ const CustomTrefleCard = ({ item, index }) => {
                     </View>
                 </> :
                 <View className="justify-center items-center">
-                    <Image className="w-[52vw] h-[32vh]" source={require('../../assets/icons/not-found.png')} resizeMode='contain' />
+                    <Image className="w-[38vw] h-[33vh]" source={require('../../assets/icons/add.png')} resizeMode='contain' />
                     <Text>Cadastre uma planta para continuar.</Text>
                 </View>
             }
