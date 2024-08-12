@@ -27,7 +27,7 @@ const CustomCard = ({ item, index }) => {
     const [showMenu, setShowMenu] = useState(false)
     const [plantData, setPlantData] = useState({ humidity: -1, tank: -1 })
 
-    const client = new Paho.Client('h2orta.zapto.org', 8083, `client-${Math.random() * 1000}`)
+    const client = new Paho.Client('h2orta.hopto.org', 8083, `client-${Math.random() * 1000}`)
 
     const attemptConnection = (mensagem) => {
         try {
