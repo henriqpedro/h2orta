@@ -24,7 +24,7 @@ public class VasoController {
 
     private VasoService service;
 
-    @GetMapping("/id/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<VasoDto> findById(@PathVariable Long id) throws Exception {
         var mapper = new ModelMapper();
 
@@ -51,7 +51,9 @@ public class VasoController {
         var mapper = new ModelMapper();
 
         var vasos = service.findAllByCodigoCompartilhado(codigo);
-        ArrayList<VasoDto> dtoList = mapper.map(vasos, ArrayList.class);
+        var dtoList = vasos.stream()
+                .map(vaso -> mapper.map(vaso, VasoDto.class))
+                .collect(Collectors.toList());
 
         return new ResponseEntity<>(dtoList, HttpStatus.OK);
     }
