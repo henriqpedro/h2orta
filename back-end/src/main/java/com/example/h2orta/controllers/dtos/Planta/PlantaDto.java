@@ -14,31 +14,40 @@ public class PlantaDto  {
 
     private Long id;
 
-    @Size(min = 2, max = 1024)
-    @NotBlank
-    private String trefleSlug;
-
-    @Size(min = 2, max = 256)
+    @Size(min = 2, max = 255)
     @NotBlank
     private String nome;
 
-    @Size(min = 2, max = 256)
+    @Size(min = 2, max = 255)
     @NotBlank
     private String familia;
+
+    @Size(min = 2, max = 255)
+    @NotBlank
+    private String habitat;
 
     @Size(min = 2, max = 1024)
     @NotBlank
     private String descricao;
 
-    @Size(max = 1024)
-    private String imagemUrl;
+    @Size(max = 255)
+    private String imagem;
 
     @NotNull
-    private Integer umidade;
+    private Integer minUmidade;
+
+    @NotNull
+    private Integer maxUmidade;
 
     @NotNull
     private Integer minTemperatura;
 
     @NotNull
     private Integer maxTemperatura;
+
+    @NotNull
+    private Integer minAltura;
+
+    @NotNull
+    private Integer maxAltura;
 }
