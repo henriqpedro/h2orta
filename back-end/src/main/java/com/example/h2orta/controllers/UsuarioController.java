@@ -1,5 +1,6 @@
 package com.example.h2orta.controllers;
 
+import com.example.h2orta.controllers.dtos.Usuario.LoginInput;
 import com.example.h2orta.controllers.dtos.Usuario.UsuarioCreateInput;
 import com.example.h2orta.controllers.dtos.Usuario.UsuarioDto;
 import com.example.h2orta.models.Usuario;
@@ -28,6 +29,12 @@ public class UsuarioController {
         var dto = mapper.map(usuario, UsuarioDto.class);
 
         return new ResponseEntity<>(dto, HttpStatus.OK);
+    }
+
+    @PostMapping("login")
+    public ResponseEntity<String> login(@Valid @RequestBody LoginInput input) throws Exception {
+        var token = service.login(input.usuario, input.senha);
+        return new ResponseEntity<>(token, HttpStatus.OK);
     }
 
     @PostMapping
