@@ -23,7 +23,10 @@ export default function App() {
     <PaperProvider>
       <SafeAreaView className="bg-primary h-full">
         <ScrollView contentContainerStyle={{
-          height: "100%"
+          height: "100%",
+          flex: 1,
+          alignItems: 'center',
+          justifyContent: 'center'
         }}>
           <View className="w-[100vw] h-[15vh] rounded-b-[50px] bg-dark items-center justify-center">
             <Image className="w-[13vh]" source={require("../assets/adaptive-icon.png")} resizeMode='contain' />
