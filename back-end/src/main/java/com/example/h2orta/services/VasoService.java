@@ -1,5 +1,6 @@
 package com.example.h2orta.services;
 
+import com.example.h2orta.models.Usuario;
 import com.example.h2orta.models.Vaso;
 import com.example.h2orta.repositories.VasoRepository;
 import lombok.AllArgsConstructor;
@@ -19,13 +20,19 @@ public class VasoService {
     private UsuarioService usuarioService;
 
     public Vaso findById(long id) throws Exception {
-        return repository.findById(id)
+        var loggedUser = UsuarioService.getAuthenticated()
+                .orElseThrow(() -> new Exception("Acesso negado: usuário sem login!"));
+        var vaso = repository.findById(id)
                 .orElseThrow(() -> new Exception("Vaso não encontrado!"));
+        if (vaso.getUsuario().getId() != loggedUser.getId())
+            throw new Exception("Acesso negado: usuário sem permissão!");
+        return vaso;
     }
 
-    public List<Vaso> findAllByUsuario(Long usuarioId) throws Exception {
-        var usuario = usuarioService.findById(usuarioId);
-        return repository.findAllByUsuario(usuario);
+    public List<Vaso> findAllByUsuario() throws Exception {
+        var loggedUser = UsuarioService.getAuthenticated()
+                .orElseThrow(() -> new Exception("Acesso negado: usuário sem login!"));
+        return repository.findAllByUsuarioId(loggedUser.getId());
     }
 
     public List<Vaso> findAllByCodigoCompartilhado(UUID codigoCompartilhado) throws Exception {
@@ -38,6 +45,12 @@ public class VasoService {
 
     @Transactional
     public Vaso create(Vaso vaso) throws Exception {
+        var loggedUser = UsuarioService.getAuthenticated()
+                .orElseThrow(() -> new Exception("Acesso negado: usuário sem login!"));
+                
+        var usuario = usuarioService.findById(loggedUser.getId());
+        vaso.setUsuario(usuario);
+
         var planta = plantaService.findById(vaso.getPlanta().getId());
         vaso.setPlanta(planta);
 

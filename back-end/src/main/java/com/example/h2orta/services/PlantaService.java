@@ -15,11 +15,15 @@ public class PlantaService {
     public PlantaRepository repository;
 
     public Planta findById(long id) throws Exception {
+        UsuarioService.getAuthenticated()
+                .orElseThrow(() -> new Exception("Acesso negado: usuário sem login!"));
         return repository.findById(id)
                 .orElseThrow(() -> new Exception("Planta não encontrada!"));
     }
 
-    public List<Planta> findAll() {
+    public List<Planta> findAll() throws Exception {
+        UsuarioService.getAuthenticated()
+                .orElseThrow(() -> new Exception("Acesso negado: usuário sem login!"));
         return repository.findAll();
     }
 }

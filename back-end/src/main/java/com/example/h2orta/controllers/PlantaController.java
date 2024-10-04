@@ -32,7 +32,7 @@ public class PlantaController {
     }
 
     @GetMapping
-    public ResponseEntity<List<PlantaDto>> findAll() {
+    public ResponseEntity<List<PlantaDto>> findAll() throws Exception {
         var mapper = new ModelMapper();
 
         var plantas = service.findAll();

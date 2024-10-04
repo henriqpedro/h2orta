@@ -11,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -34,11 +33,11 @@ public class VasoController {
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
-    @GetMapping("/user/{usuarioId}")
-    public ResponseEntity<List<VasoDto>> findAllByUsuario(@PathVariable Long usuarioId) throws Exception {
+    @GetMapping
+    public ResponseEntity<List<VasoDto>> findAllByUsuario() throws Exception {
         var mapper = new ModelMapper();
 
-        var vasos = service.findAllByUsuario(usuarioId);
+        var vasos = service.findAllByUsuario();
         var dtoList = vasos.stream()
                 .map(vaso -> mapper.map(vaso, VasoDto.class))
                 .collect(Collectors.toList());
