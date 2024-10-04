@@ -21,6 +21,12 @@ public class UsuarioController {
 
     private UsuarioService service;
 
+    @PostMapping("login")
+    public ResponseEntity<String> login(@Valid @RequestBody LoginInput input) throws Exception {
+        var token = service.login(input.usuario, input.senha);
+        return new ResponseEntity<>(token, HttpStatus.OK);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<UsuarioDto> findById(@PathVariable Long id) throws Exception {
         var mapper = new ModelMapper();
@@ -29,12 +35,6 @@ public class UsuarioController {
         var dto = mapper.map(usuario, UsuarioDto.class);
 
         return new ResponseEntity<>(dto, HttpStatus.OK);
-    }
-
-    @PostMapping("login")
-    public ResponseEntity<String> login(@Valid @RequestBody LoginInput input) throws Exception {
-        var token = service.login(input.usuario, input.senha);
-        return new ResponseEntity<>(token, HttpStatus.OK);
     }
 
     @PostMapping

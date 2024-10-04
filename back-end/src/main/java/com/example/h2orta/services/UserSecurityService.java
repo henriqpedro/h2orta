@@ -8,7 +8,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.example.h2orta.models.Usuario;
 import com.example.h2orta.repositories.UsuarioRepository;
 import com.example.h2orta.security.UserSecurity;
 
