@@ -1,6 +1,5 @@
 package com.example.h2orta.services;
 
-import com.example.h2orta.models.Usuario;
 import com.example.h2orta.models.Vaso;
 import com.example.h2orta.repositories.VasoRepository;
 import lombok.AllArgsConstructor;
