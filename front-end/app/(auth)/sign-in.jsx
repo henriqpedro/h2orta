@@ -1,26 +1,44 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Image, SafeAreaView, ScrollView, StatusBar, View } from 'react-native';
 import CustomButton from '../../components/CustomButton';
 import CustomInput from '../../components/CustomInput';
-import { Link } from 'expo-router';
+import { Link, router } from 'expo-router';
+import { useAuthContext } from '../../context/AuthContext';
 
 const SignIn = () => {
+    const { login } = useAuthContext();
+    const [formData, setFormData] = useState({
+        usuario: '',
+        senha: ''
+    });
+
+    const signIn = async () => {
+        login(formData).then(() => {
+            router.navigate("/index");
+        });
+    }
+
     return (
         <SafeAreaView className="bg-dark h-full">
-            <ScrollView contentContainerStyle={{
-                height: "100%",
-                flex: 1,
-                alignItems: 'center',
-                justifyContent: 'center'
-            }}>
-                <View className="items-center justify-center">
-                    <Image className="w-[50vw] h-[7vh] mb-8" source={require("../../assets/logo.png")} resizeMode="contain" />
-                    <CustomInput inputStyles="bg-primary" title="E-mail:" placeholder="Digite seu e-mail" />
-                    <CustomInput inputStyles="bg-primary" hideText={true} title="Senha:" placeholder="Digite sua senha" />
+            <ScrollView>
+                <View className="w-full min-h-[105vh] items-center justify-center">
+                    <Image className="h-[7vh] my-3" source={require("../../assets/logo.png")} resizeMode="contain" />
+                    <CustomInput inputStyles="bg-primary"
+                        value={formData.usuario}
+                        handleChange={(usuario) => setFormData({ ...formData, usuario: usuario })}
+                        title="Usuário:"
+                        placeholder="Digite seu usuário." />
+                    <CustomInput inputStyles="bg-primary"
+                        value={formData.senha}
+                        handleChange={(senha) => setFormData({ ...formData, senha: senha })}
+                        hide={true}
+                        title="Senha:"
+                        placeholder="Digite sua senha." />
                     <CustomButton
                         title='Entrar'
-                        constainerStyles='w-56 mt-10 mb-5' />
-                    <Link href="/sign-up" className="font-bold underline">Criar nova conta</Link>
+                        handlePress={signIn}
+                        constainerStyles='w-56 mt-7' />
+                    <Link href="/sign-up" className="font-bold underline py-5">Criar nova conta.</Link>
                 </View>
             </ScrollView>
             <StatusBar backgroundColor="#F9F9F9" />

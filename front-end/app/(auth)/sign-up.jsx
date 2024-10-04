@@ -1,30 +1,53 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Image, SafeAreaView, ScrollView, StatusBar, View } from 'react-native';
 import CustomButton from '../../components/CustomButton';
 import CustomInput from '../../components/CustomInput';
 import { Link } from 'expo-router';
-import CustomDatePicker from '../../components/CustomDatePicker';
 
 const SignUp = () => {
+    const [formData, setFormData] = useState({
+        dataDeNascimento: undefined,
+        nome: '',
+        usuario: '',
+        email: '',
+        senha: ''
+    });
     return (
         <SafeAreaView className="bg-dark h-full">
-            <ScrollView contentContainerStyle={{
-                height: "100%",
-                flex: 1,
-                alignItems: 'center',
-                justifyContent: 'center'
-            }}>
-                <View className="items-center justify-center">
-                    <Image className="w-[50vw] h-[7vh] mb-8" source={require("../../assets/logo.png")} resizeMode="contain" />
-                    <CustomInput inputStyles="bg-primary" title="Nome:" placeholder="Digite seu nome" />
-                    <CustomInput inputStyles="bg-primary" title="Usuário:" placeholder="Digite seu usuário" />
-                    <CustomDatePicker />
-                    <CustomInput inputStyles="bg-primary" title="E-mail:" placeholder="Digite seu e-mail" />
-                    <CustomInput inputStyles="bg-primary" hideText={true} title="Senha:" placeholder="Digite sua senha" />
+            <ScrollView>
+                <View className="w-full min-h-[105vh] items-center justify-center">
+                    <Image className="h-[6vh] my-3" source={require("../../assets/logo.png")} resizeMode="contain" />
+                    <CustomInput inputStyles="bg-primary"
+                        value={formData.nome}
+                        handleChange={(nome) => setFormData({ ...formData, nome: nome })}
+                        title="Nome:"
+                        placeholder="Digite seu nome." />
+                    <CustomInput inputStyles="bg-primary"
+                        value={formData.usuario}
+                        handleChange={(usuario) => setFormData({ ...formData, usuario: usuario })}
+                        title="Usuário:"
+                        placeholder="Digite seu usuário." />
+                    <CustomInput inputStyles="bg-primary"
+                        value={formData.dataDeNascimento}
+                        handleChange={(dataDeNascimento) => setFormData({ ...formData, dataDeNascimento: dataDeNascimento })}
+                        date={true}
+                        title="Data de nascimento:"
+                        placeholder="Selecione uma data." />
+                    <CustomInput inputStyles="bg-primary"
+                        value={formData.email}
+                        handleChange={(email) => setFormData({ ...formData, email: email })}
+                        title="E-mail:"
+                        placeholder="Digite seu e-mail." />
+                    <CustomInput inputStyles="bg-primary"
+                        value={formData.senha}
+                        handleChange={(senha) => setFormData({ ...formData, senha: senha })}
+                        hide={true}
+                        title="Senha:"
+                        placeholder="Digite sua senha." />
                     <CustomButton
                         title='Cadastrar'
-                        constainerStyles='w-56 mt-10 mb-5' />
-                    <Link href="/sign-in" className="font-bold underline">Fazer login</Link>
+                        constainerStyles='w-56 mt-7' />
+                    <Link href="/sign-in" className="font-bold underline py-5">Já possuo cadastro.</Link>
                 </View>
             </ScrollView>
             <StatusBar backgroundColor="#F9F9F9" />

@@ -22,28 +22,25 @@ export default function App() {
   return (
     <PaperProvider>
       <SafeAreaView className="bg-primary h-full">
-        <ScrollView contentContainerStyle={{
-          height: "100%",
-          flex: 1,
-          alignItems: 'center',
-          justifyContent: 'center'
-        }}>
-          <View className="w-[100vw] h-[15vh] rounded-b-[50px] bg-dark items-center justify-center">
-            <Image className="w-[13vh]" source={require("../assets/adaptive-icon.png")} resizeMode='contain' />
-          </View>
-          <View className="w-full items-center justify-center min-h-[80vh] px-6">
-            <View className="justify-center items-center">
-              <CustomCard item={viewingPlant} index={0} />
-              <CustomButton
-                handlePress={() => setVisible(true)}
-                title='Cadastrar planta'
-                constainerStyles='w-56 mt-10' />
-              <CustomButton
-                handlePress={() => router.push('/sign-in')}
-                title='Cadastrar planta'
-                constainerStyles='w-56 mt-10' />
+        <ScrollView>
+          <View className="w-full min-h-[100vh]">
+            <View className="w-[100vw] h-[15vh] rounded-b-[50px] bg-dark items-center justify-center">
+              <Image className="w-[13vh]" source={require("../assets/adaptive-icon.png")} resizeMode='contain' />
             </View>
-            <CustomSelectModal visible={visible} onClose={() => setVisible(false)} onSelect={(item) => setViewingPlant(item)} />
+            <View className="w-full items-center justify-center min-h-[80vh] px-6">
+              <View className="justify-center items-center">
+                <CustomCard item={viewingPlant} index={0} />
+                <CustomButton
+                  handlePress={() => setVisible(true)}
+                  title='Cadastrar planta'
+                  constainerStyles='w-56 mt-10' />
+                <CustomButton
+                  handlePress={() => router.push('/sign-in')}
+                  title='Cadastrar planta'
+                  constainerStyles='w-56 mt-10' />
+              </View>
+              <CustomSelectModal visible={visible} onClose={() => setVisible(false)} onSelect={(item) => setViewingPlant(item)} />
+            </View>
           </View>
         </ScrollView>
         <StatusBar backgroundColor="#F9F9F9" />
