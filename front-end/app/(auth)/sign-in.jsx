@@ -2,20 +2,25 @@ import React from 'react';
 import { Image, SafeAreaView, ScrollView, StatusBar, View } from 'react-native';
 import CustomButton from '../../components/CustomButton';
 import CustomInput from '../../components/CustomInput';
+import { Link } from 'expo-router';
 
 const SignIn = () => {
     return (
         <SafeAreaView className="bg-dark h-full">
             <ScrollView contentContainerStyle={{
-                height: "100%"
+                height: "100%",
+                flex: 1,
+                alignItems: 'center',
+                justifyContent: 'center'
             }}>
-                <View className="w-[100vw] h-[100vh] items-center justify-center">
-                    <Image className="w-[50vw] h-[8vh] mb-8" source={require("../../assets/logo.png")} />
-                    <CustomInput title="E-mail:" placeholder="Digite seu e-mail" />
-                    <CustomInput title="Senha:" placeholder="Digite sua senha" />
+                <View className="items-center justify-center">
+                    <Image className="w-[50vw] h-[7vh] mb-8" source={require("../../assets/logo.png")} resizeMode="contain" />
+                    <CustomInput inputStyles="bg-primary" title="E-mail:" placeholder="Digite seu e-mail" />
+                    <CustomInput inputStyles="bg-primary" hideText={true} title="Senha:" placeholder="Digite sua senha" />
                     <CustomButton
                         title='Entrar'
-                        constainerStyles='w-56 mt-10' />
+                        constainerStyles='w-56 mt-10 mb-5' />
+                    <Link href="/sign-up" className="font-bold underline">Criar nova conta</Link>
                 </View>
             </ScrollView>
             <StatusBar backgroundColor="#F9F9F9" />
