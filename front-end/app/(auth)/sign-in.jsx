@@ -2,22 +2,21 @@ import React, { useState } from 'react';
 import { Image, SafeAreaView, ScrollView, StatusBar, View } from 'react-native';
 import CustomButton from '../../components/CustomButton';
 import CustomInput from '../../components/CustomInput';
-import { Link, router } from 'expo-router';
+import { Link, Redirect } from 'expo-router';
 import { useAuthContext } from '../../context/AuthContext';
 
 const SignIn = () => {
-    const { login } = useAuthContext();
+    const { authState, login } = useAuthContext();
     const [formData, setFormData] = useState({
         usuario: '',
         senha: ''
     });
 
     const signIn = async () => {
-        login(formData).then(() => {
-            router.navigate("/index");
-        });
+        await login(formData);
     }
 
+    if (authState.authenticated) return <Redirect href="home" />
     return (
         <SafeAreaView className="bg-dark h-full">
             <ScrollView>
