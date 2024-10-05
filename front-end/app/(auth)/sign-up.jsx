@@ -15,6 +15,10 @@ const SignUp = () => {
         senha: ''
     });
 
+    const signUp = async () => {
+        await register(formData);
+    }
+
     if (authState.authenticated) return <Redirect href="home" />
     return (
         <SafeAreaView className="bg-dark h-full">
@@ -50,6 +54,7 @@ const SignUp = () => {
                         placeholder="Digite sua senha." />
                     <CustomButton
                         title='Cadastrar'
+                        handlePress={signUp}
                         constainerStyles='w-56 mt-7' />
                     <Link href="/sign-in" className="font-bold underline py-5">Já possuo cadastro.</Link>
                 </View>
