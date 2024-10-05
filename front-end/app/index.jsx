@@ -1,12 +1,16 @@
 import { useAuthContext } from '../context/AuthContext';
 import Home from './home';
-import SignUp from './(auth)/sign-up';
+import SignIn from './(auth)/sign-in';
+import { PaperProvider } from 'react-native-paper';
 
 export default function App() {
   const { authState } = useAuthContext();
 
-  return (authState.autenticated ?
-    <Home></Home> :
-    <SignUp></SignUp>
+  return (
+    <PaperProvider>
+      {authState.autenticated ?
+        <Home></Home> :
+        <SignIn></SignIn>}
+    </PaperProvider>
   );
 }
