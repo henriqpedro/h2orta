@@ -2,9 +2,11 @@ import React, { useState } from 'react';
 import { Image, SafeAreaView, ScrollView, StatusBar, View } from 'react-native';
 import CustomButton from '../../components/CustomButton';
 import CustomInput from '../../components/CustomInput';
-import { Link } from 'expo-router';
+import { Link, Redirect } from 'expo-router';
+import { useAuthContext } from '../../context/AuthContext';
 
 const SignUp = () => {
+    const { authState, register } = useAuthContext();
     const [formData, setFormData] = useState({
         dataDeNascimento: undefined,
         nome: '',
@@ -12,6 +14,8 @@ const SignUp = () => {
         email: '',
         senha: ''
     });
+
+    if (authState.authenticated) return <Redirect href="home" />
     return (
         <SafeAreaView className="bg-dark h-full">
             <ScrollView>

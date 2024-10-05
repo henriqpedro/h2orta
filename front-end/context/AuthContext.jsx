@@ -1,14 +1,14 @@
 import axios from "axios";
 import { createContext, useContext, useEffect, useState } from "react";
-import SecureStore from "expo-secure-store";
+import * as SecureStore from "expo-secure-store";
 
-const API_URL = "http://localhost:8080";
+const API_URL = "http://192.168.0.115:8080";
 const TOKEN_KEY = "my-jwt";
 
 const AuthContext = createContext();
 export const useAuthContext = () => useContext(AuthContext);
 
-const AuthProvider = ({ children }) => {
+export const AuthProvider = ({ children }) => {
     const [authState, setAuthState] = useState({
         token: '',
         user: undefined,
@@ -33,26 +33,24 @@ const AuthProvider = ({ children }) => {
         try {
             return await axios.post(`${API_URL}/usuario`, input);
         } catch (e) {
-            //throw Error;
+            throw Error;
         }
     }
 
     const login = async (input) => {
         try {
             const result = await axios.post(`${API_URL}/usuario/login`, input);
-            console.log(result)
-
             setAuthState({
-                token: result,
+                token: result.data,
                 authenticated: true
             });
 
-            axios.defaults.headers.common['Authorization'] = `Bearer ${result}`;
-            await SecureStore.setItemAsync(TOKEN_KEY, result);
+            axios.defaults.headers.common['Authorization'] = `Bearer ${result.data}`;
+            await SecureStore.setItemAsync(TOKEN_KEY, result.data);
 
             return result;
         } catch (e) {
-           // throw Error;
+            throw Error;
         }
     }
 
@@ -78,5 +76,3 @@ const AuthProvider = ({ children }) => {
         </AuthContext.Provider>
     );
 }
-
-export default AuthProvider;
