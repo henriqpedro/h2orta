@@ -1,10 +1,11 @@
 import { StatusBar } from 'expo-status-bar';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Image, ScrollView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import CustomButton from '../components/CustomButton';
 import CustomCard from '../components/CustomCard';
 import CustomSelectModal from '../components/CustomSelectModal';
+import { router } from 'expo-router';
 
 const prototype = {
     id: 0,
@@ -15,7 +16,6 @@ const prototype = {
 
 const Home = () => {
 
-    const [visible, setVisible] = useState(false);
     const [viewingPlant, setViewingPlant] = useState(prototype);
 
     return (
@@ -29,11 +29,11 @@ const Home = () => {
                         <View className="justify-center items-center">
                             <CustomCard item={viewingPlant} index={0} />
                             <CustomButton
-                                handlePress={() => setVisible(true)}
+                                handlePress={() => router.navigate('/plants/newPlant')}
                                 title='Cadastrar planta'
                                 constainerStyles='w-56 mt-10' />
                         </View>
-                        <CustomSelectModal visible={visible} onClose={() => setVisible(false)} onSelect={(item) => setViewingPlant(item)} />
+                       
                     </View>
                 </View>
             </ScrollView>
