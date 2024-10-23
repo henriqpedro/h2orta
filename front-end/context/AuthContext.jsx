@@ -3,7 +3,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import * as SecureStore from "expo-secure-store";
 import { ToastAndroid } from "react-native";
 
-const API_URL = "http://192.168.0.115:8080";
+const API_URL = "http://192.168.1.6:8080";
 const TOKEN_KEY = "my-jwt";
 
 const AuthContext = createContext();

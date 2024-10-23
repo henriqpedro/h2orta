@@ -8,7 +8,7 @@ export default function App() {
 
   return (
     <PaperProvider>
-      {authState.autenticated ?
+      {authState.authenticated ?
         <Home></Home> :
         <SignIn></SignIn>}
     </PaperProvider>

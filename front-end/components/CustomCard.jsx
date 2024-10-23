@@ -25,7 +25,7 @@ const CustomCardField = ({ iconSource, title, value, containerStyles }) => {
 const CustomCard = ({ item, index }) => {
     const [watering, setWatering] = useState(false)
     const [showMenu, setShowMenu] = useState(false)
-    const [plantData, setPlantData] = useState({ humidity: -1, tank: -1 })
+    const [plantData, setPlantData] = useState({ humidity: -1, airHumidity: -1, temperature: -1 ,tank: -1 })
 
     const client = new Paho.Client('177.71.154.67', 8083, `client-${Math.random() * 1000}`)
 
@@ -56,7 +56,7 @@ const CustomCard = ({ item, index }) => {
 
     useEffect(() => {
         if (item.id > 0) {
-            setPlantData({ humidity: 0, tank: 0 })
+            setPlantData({ humidity: 0, tank: 0, airHumidity: 0, temperature: 0 })
 
             attemptConnection()
             client.onConnectionLost = errorConnecting
@@ -64,7 +64,9 @@ const CustomCard = ({ item, index }) => {
                 let data = message.payloadString.split(' ')
                 setPlantData({
                     humidity: data[0],
-                    tank: data[1]
+                    airHumidity: data[1],
+                    temperature: data[2],
+                    tank: data[3]
                 })
             }
             return () => client.disconnect()
@@ -117,14 +119,24 @@ const CustomCard = ({ item, index }) => {
             <View>
                 <CustomCardField
                     containerStyles="mt-5"
-                    iconSource={require('../assets/icons/tank.png')}
-                    title="Nível do reservatório"
-                    value={plantData.tank} />
-                <CustomCardField
-                    containerStyles="mt-2"
                     iconSource={require('../assets/icons/humidity.png')}
                     title="Umidade"
                     value={plantData.humidity} />
+                <CustomCardField
+                    containerStyles="mt-2"
+                    iconSource={require('../assets/icons/temperature.png')}
+                    title="Temperatura"
+                    value={plantData.temperature} />
+                <CustomCardField
+                    containerStyles="mt-2"
+                    iconSource={require('../assets/icons/air_humidity.png')}
+                    title="Umidade do ar"
+                    value={plantData.airHumidity} />
+                <CustomCardField
+                    containerStyles="mt-2"
+                    iconSource={require('../assets/icons/tank.png')}
+                    title="Nível do reservatório"
+                    value={plantData.tank} />
             </View>
         </View>
     )
