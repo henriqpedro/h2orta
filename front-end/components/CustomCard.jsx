@@ -88,7 +88,7 @@ const CustomCard = ({ item, index }) => {
     }, [watering])
 
     return (
-        <View className="bg-secondary min-h-[50vh] min-w-[80vw] rounded-xl px-5 pt-2 pb-12 justify-center items-center" key={index}>
+        <View className="bg-secondary min-h-[50vh] min-w-[85vw] rounded-xl px-5 pt-2 pb-12 justify-center items-center" key={index}>
             <View className="justify-center items-center">
                 <TouchableOpacity
                     activeOpacity={0.7}
