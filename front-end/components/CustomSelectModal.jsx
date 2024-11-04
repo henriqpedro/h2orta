@@ -1,13 +1,16 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { View } from 'react-native';
 import { Modal, Portal } from 'react-native-paper';
 import CustomCardList from '../components/CustomCardList';
 import CustomButton from './CustomButton';
-import { plantsData } from '../utils/plants';
+import { PlantContext } from '../context/PlantContext';
 
 
 const CustomSelectModal = ({ visible, onClose, onSelect }) => {
     const [selectedItem, setSelectedItem] = useState({})
+
+    const {plants} = useContext(PlantContext)
+
     return (
         <Portal>
             <Modal
@@ -16,7 +19,7 @@ const CustomSelectModal = ({ visible, onClose, onSelect }) => {
                 onDismiss={() => onClose()}>
                 <View className="justify-center rounded-2xl items-center h-[80vh] w-[94vw] bg-primary">
                     <CustomCardList
-                        data={plantsData}
+                        data={plants}
                         onSelected={(item) => setSelectedItem(item)} />
                     <View className="self-end flex-row justify-end">
                         <CustomButton

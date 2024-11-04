@@ -3,6 +3,7 @@ import { FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 const CustomCardShort = ({ item, index, selected, onSelected }) => {
+    console.log(item)
     return (
         <View key={index}>
             <TouchableOpacity
@@ -14,8 +15,10 @@ const CustomCardShort = ({ item, index, selected, onSelected }) => {
                 activeOpacity={0.7}
                 className={`rounded-xl py-10 min-w-[40vw] max-h-[24vh] justify-center items-center m-2
                 ${selected ? 'bg-light' : 'bg-secondary'}`}>
-                <Image className="w-[100px] h-[100px]" source={item.imageSource} resizeMode='contain' />
-                <Text numberOfLines={1} ellipsizeMode='tail' className={`font-semibold max-w-[35vw] px-3 ${selected ? 'text-primary' : 'text-black'}`}>{item.name}</Text>
+                <Image className="w-[100px] h-[100px]" source={{
+                    uri: item.imagem
+                }} resizeMode='contain' />
+                <Text numberOfLines={2} ellipsizeMode='tail' className={`font-semibold max-w-[35vw] text-center px-3 ${selected ? 'text-primary' : 'text-black'}`}>{item.nome}</Text>
             </TouchableOpacity>
         </View>
     )
