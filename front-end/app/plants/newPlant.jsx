@@ -3,14 +3,16 @@ import { Image, ScrollView, Text, TouchableOpacity, View } from 'react-native'
 import { AntDesign, MaterialIcons } from '@expo/vector-icons'
 import CustomInput from "../../components/CustomInput";
 import { TextInput } from "react-native";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import CustomSelectModal from "../../components/CustomSelectModal";
 import { PaperProvider } from "react-native-paper";
 import CustomButton from "../../components/CustomButton";
-import { plantsData } from "../../utils/plants";
 import CustomListItem from "../../components/CustomListItem";
+import { PlantContext } from "../../context/PlantContext";
 
 export default function NewPlant(){
+
+    const {plants} = useContext(PlantContext)
 
     const [newPlantData, setNewPlantData] = useState({
         nickname: "Apelido",
@@ -53,7 +55,7 @@ export default function NewPlant(){
                         (
                             <Image 
                                 className="h-full w-full"
-                                source={plantsData.filter((plant) => plant.name === newPlantData.plantSpecie)[0].imageSource}
+                                source={{uri: plants.filter((plant) => plant.nome === newPlantData.plantSpecie)[0].imagem}}
                             />
                         )}
                     </View>
@@ -106,7 +108,7 @@ export default function NewPlant(){
             <CustomSelectModal 
                 visible={visible} 
                 onClose={() => setVisible(false)}
-                onSelect={(item) => setNewPlantData({...newPlantData, plantSpecie: item.name})}
+                onSelect={(item) => setNewPlantData({...newPlantData, plantSpecie: item.nome})}
             />
 
         </PaperProvider>

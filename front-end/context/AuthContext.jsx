@@ -2,9 +2,8 @@ import axios from "axios";
 import { createContext, useContext, useEffect, useState } from "react";
 import * as SecureStore from "expo-secure-store";
 import { ToastAndroid } from "react-native";
+import { TOKEN_KEY, API_URL } from "../utils/api_config";
 
-const API_URL = "http://192.168.1.6:8080";
-const TOKEN_KEY = "my-jwt";
 
 const AuthContext = createContext();
 export const useAuthContext = () => useContext(AuthContext);
@@ -21,6 +20,7 @@ export const AuthProvider = ({ children }) => {
             const token = await SecureStore.getItemAsync(TOKEN_KEY);
             if (token) {
                 axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+                console.log("Auth", axios.defaults.headers)
                 setAuthState({
                     token: token,
                     authenticated: true

@@ -1,5 +1,6 @@
 import { Stack } from 'expo-router';
 import { AuthProvider } from '../context/AuthContext';
+import { PlantProvider } from '../context/PlantContext';
 
 export const RootStack = () => {
     return (
@@ -23,7 +24,9 @@ export const RootStack = () => {
 const RootLayout = () => {
     return (
         <AuthProvider>
-            <RootStack></RootStack>
+            <PlantProvider>
+                <RootStack></RootStack>
+            </PlantProvider>
         </AuthProvider>
     );
 }

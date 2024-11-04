@@ -1,11 +1,12 @@
 import { StatusBar } from 'expo-status-bar';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Image, ScrollView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import CustomButton from '../components/CustomButton';
 import CustomCard from '../components/CustomCard';
 import CustomSelectModal from '../components/CustomSelectModal';
 import { router } from 'expo-router';
+import { PlantContext } from '../context/PlantContext';
 
 const prototype = {
     id: 0,
@@ -14,9 +15,12 @@ const prototype = {
     imageSource: require("../assets/images/prototype-plant.png")
 }
 
-const Home = () => {
 
+const Home = () => {
+    
     const [viewingPlant, setViewingPlant] = useState(prototype);
+    const {plants} = useContext(PlantContext)
+
 
     return (
         <SafeAreaView className="bg-primary h-full">
