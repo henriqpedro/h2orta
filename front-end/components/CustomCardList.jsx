@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 const CustomCardShort = ({ item, index, selected, onSelected }) => {
-    console.log(item)
     return (
         <View key={index}>
             <TouchableOpacity
@@ -24,14 +23,19 @@ const CustomCardShort = ({ item, index, selected, onSelected }) => {
     )
 }
 
-const CustomCardList = ({ data, onSelected }) => {
+const CustomCardList = ({ data, onSelected, onEndReached }) => {
     const [selectedItem, setSelectedItem] = useState({})
+
+
     return (
         <SafeAreaView className="justify-center items-center max-h-[62vh]">
             <FlatList
                 numColumns={2}
                 extraData={data}
                 data={data}
+                onEndReached={() => {
+                    onEndReached();
+                }}
                 keyExtractor={(item, index) => index}
                 renderItem={({ item, index }) =>
                     <CustomCardShort

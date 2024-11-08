@@ -12,7 +12,7 @@ import { PlantContext } from "../../context/PlantContext";
 
 export default function NewPlant(){
 
-    const {plants} = useContext(PlantContext)
+    const {plants, fetchPlantsData} = useContext(PlantContext)
 
     const [newPlantData, setNewPlantData] = useState({
         nickname: "Apelido",
@@ -23,6 +23,12 @@ export default function NewPlant(){
     const [visible, setVisible] = useState(false);
 
     const [connectionType, setConnectionType] = useState("")
+
+    const [pagination, setPagination] = useState({
+        page: 0,
+        items: 10,
+        nextPage: incrementPagination
+    })
 
     function toggleConnectionType(connection){
 
@@ -37,6 +43,17 @@ export default function NewPlant(){
 
     function handleSelectVase(vase){
         setNewPlantData({...newPlantData, vase: vase})
+    }
+
+    async function incrementPagination (){
+        
+        const {page, items} = pagination;
+
+        setPagination({...pagination, page: page+1, items: items});
+
+        fetchPlantsData(pagination.page + 1, pagination.items)
+
+    
     }
 
 
@@ -109,6 +126,7 @@ export default function NewPlant(){
                 visible={visible} 
                 onClose={() => setVisible(false)}
                 onSelect={(item) => setNewPlantData({...newPlantData, plantSpecie: item.nome})}
+                incrementPagination={incrementPagination}
             />
 
         </PaperProvider>

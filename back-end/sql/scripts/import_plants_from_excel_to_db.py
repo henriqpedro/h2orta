@@ -20,14 +20,14 @@ def database_insert(row, cursor):
                row.get("Altura mínima", None),
                row.get("T° Mínima", None),
                row.get("min_umidade", None),
-               row.get("Nome da Planta", None)
+               row.get("Nome da Planta.1", None)
           )
 
           cursor.execute(insert_query, data_to_insert)
 
           print(f'{row["Nome da Planta"]} inserida com sucesso')
     except Exception as e:
-        print(f'Não foi possível inserir a planta {row["Nome da Planta"]}: {e}')
+        print(f'Não foi possível inserir a planta {row["Nome da Planta.1"]}: {e}')
         
 
 database_connection = mysql.connector.connect(
@@ -38,7 +38,7 @@ database_connection = mysql.connector.connect(
 )
 cursor = database_connection.cursor()
 
-data = pd.read_excel("./Plantas.xlsx")
+data = pd.read_excel("./Plantas")
 columns = data.columns
 rows = len(data.index)
 

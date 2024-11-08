@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 
 import java.util.List;
 
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -21,9 +22,9 @@ public class PlantaService {
                 .orElseThrow(() -> new Exception("Planta não encontrada!"));
     }
 
-    public List<Planta> findAll() throws Exception {
+    public List<Planta> findAll(int page, int items) throws Exception {
         UsuarioService.getAuthenticated()
                 .orElseThrow(() -> new Exception("Acesso negado: usuário sem login!"));
-        return repository.findAll();
+        return repository.findAll(PageRequest.of(page, items)).getContent();
     }
 }
