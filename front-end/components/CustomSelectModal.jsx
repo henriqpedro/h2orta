@@ -6,10 +6,10 @@ import CustomButton from './CustomButton';
 import { PlantContext } from '../context/PlantContext';
 
 
-const CustomSelectModal = ({ visible, onClose, onSelect }) => {
+const CustomSelectModal = ({ visible, onClose, onSelect, incrementPagination }) => {
     const [selectedItem, setSelectedItem] = useState({})
 
-    const {plants} = useContext(PlantContext)
+    const {plants} = useContext(PlantContext);
 
     return (
         <Portal>
@@ -20,7 +20,11 @@ const CustomSelectModal = ({ visible, onClose, onSelect }) => {
                 <View className="justify-center rounded-2xl items-center h-[80vh] w-[94vw] bg-primary">
                     <CustomCardList
                         data={plants}
-                        onSelected={(item) => setSelectedItem(item)} />
+                        onSelected={(item) => setSelectedItem(item)}
+                        onEndReached={() => {
+                            incrementPagination();
+                        }}
+                    />
                     <View className="self-end flex-row justify-end">
                         <CustomButton
                             handlePress={() => onClose()}

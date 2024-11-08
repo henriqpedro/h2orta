@@ -21,6 +21,17 @@ public class PlantaController {
 
     private PlantaService service;
 
+    @GetMapping
+    public ResponseEntity<List<PlantaDto>> findAll(@RequestParam int page, @RequestParam int items) throws Exception {
+        var mapper = new ModelMapper();
+        var plantas = service.findAll(page, items);
+        var dto = plantas.stream()
+                .map(planta -> mapper.map(planta, PlantaDto.class))
+                .collect(Collectors.toList());
+        return new ResponseEntity<>(dto, HttpStatus.OK);
+
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<PlantaDto> findById(@PathVariable Long id) throws Exception {
         var mapper = new ModelMapper();
@@ -31,15 +42,6 @@ public class PlantaController {
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
-    @GetMapping
-    public ResponseEntity<List<PlantaDto>> findAll() throws Exception {
-        var mapper = new ModelMapper();
 
-        var plantas = service.findAll();
-        var dto = plantas.stream()
-                .map(planta -> mapper.map(planta, PlantaDto.class))
-                .collect(Collectors.toList());
 
-        return new ResponseEntity<>(dto, HttpStatus.OK);
-    }
 }
