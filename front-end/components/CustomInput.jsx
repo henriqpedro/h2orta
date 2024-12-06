@@ -2,7 +2,7 @@ import RNDateTimePicker from '@react-native-community/datetimepicker';
 import React, { useState } from 'react';
 import { Image, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
-const CustomInput = ({ title, hide, date, placeholder, value, handleChange, inputStyles, otherStyles }) => {
+const CustomInput = ({ title, hide, date, placeholder, value, handleChange, inputStyles, otherStyles, disabled }) => {
 
     const [showHidden, setShowHidden] = useState(false);
     const [datePickerOpened, setDatePickerOpened] = useState(false);
@@ -20,7 +20,7 @@ const CustomInput = ({ title, hide, date, placeholder, value, handleChange, inpu
                     multiline={!hide}
                     value={getInputValue()}
                     placeholder={placeholder}
-                    editable={!date}
+                    editable={!disabled && !date}
                     onChangeText={handleChange}
                     secureTextEntry={hide && !showHidden}
                 />

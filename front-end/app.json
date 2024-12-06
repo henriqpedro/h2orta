@@ -29,6 +29,7 @@
       "expo-router",
       "expo-font",
       "expo-secure-store",
+      "react-native-wifi-reborn",
       [
         "react-native-ble-plx",
         {

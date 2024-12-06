@@ -5,20 +5,28 @@ import CustomInput from "../../components/CustomInput";
 import { TextInput } from "react-native";
 import { useContext, useEffect, useState } from "react";
 import CustomSelectModal from "../../components/CustomSelectModal";
-import { PaperProvider } from "react-native-paper";
+import { Modal, PaperProvider, Portal } from "react-native-paper";
 import CustomButton from "../../components/CustomButton";
 import { PlantContext } from "../../context/PlantContext";
 import useBle from "../../utils/useBLE";
 import BluetoothDeviceList from "../../components/BluetoothDeviceList";
+import WifiManager from 'react-native-wifi-reborn'
+import { Device } from "react-native-ble-plx";
+
+const WIFI_CHARACTERISTIC_UUID = "a81f2457-e76f-4a06-9f83-1949773d5a4c"
 
 export default function NewPlant(){
 
     const {plants, fetchPlantsData} = useContext(PlantContext)
+    const [wifiList, setWifiList] = useState([]); 
     const {
         requestPermissions,
         scanForPeripherals,
         allDevices,
-        connectToDevice
+        connectToDevice,
+        connectedDevice,
+        partitionMessage,
+        sendMessageToEsp
     } = useBle();
 
     const [newPlantData, setNewPlantData] = useState({
@@ -28,6 +36,11 @@ export default function NewPlant(){
     })
     
     const [visible, setVisible] = useState(false);
+    const [wifiModal, setWifiModal] = useState({
+        visibility: false,
+        ssid: null,
+        password: null
+    })
 
     const [connectionType, setConnectionType] = useState("")
 
@@ -44,8 +57,22 @@ export default function NewPlant(){
         }
     }
 
+    const scanForWifiNetworks = async () => {
+        const wifiList = await WifiManager.loadWifiList();
+        setWifiList(wifiList);
+    }
+
+    const selectWifiNetwork = async (ssid) => {
+        setWifiModal({
+            ...wifiModal,
+            visibility: true,
+            ssid: ssid
+        })
+    }
+
     useEffect(() => {
         scanForDevices();
+        scanForWifiNetworks();
     }, [])
 
     function toggleConnectionType(connection){
@@ -59,10 +86,6 @@ export default function NewPlant(){
 
     }
 
-    function handleSelectVase(vase){
-        setNewPlantData({...newPlantData, vase: vase})
-    }
-
     async function incrementPagination (){
         
         const {page, items} = pagination;
@@ -73,6 +96,57 @@ export default function NewPlant(){
 
     
     }
+
+    /**
+     * 
+     * @param {Device} device 
+     */
+    async function sendWifiInformationToVase(device){
+
+
+        try {
+
+            if(connectedDevice){
+                const services = await device.services();
+        
+                if(services.length === 1){
+                    const SERVICE_UUID = services[0].uuid;
+                    const encoder = new TextEncoder();
+
+                    const {password, ssid} = wifiModal;
+
+                    console.log("Enviando senha do wifi")
+                    if(encoder.encode(password).length > 20) {
+                        const partitionedMessage = partitionMessage(password);
+
+                        partitionedMessage.map(partition => sendMessageToEsp(partition, SERVICE_UUID, device, WIFI_CHARACTERISTIC_UUID))
+                    }else{
+                        sendMessageToEsp(password, SERVICE_UUID, device, WIFI_CHARACTERISTIC_UUID);
+                    }
+
+                    console.log("Enviando SSID do wifi")
+                    if(encoder.encode(ssid) > 20){
+                        const partitionedMessage = partitionMessage(ssid);
+
+                        partitionedMessage.map(partition => sendMessageToEsp(partition, SERVICE_UUID, device, WIFI_CHARACTERISTIC_UUID))
+                    }else{
+                        sendMessageToEsp(ssid, SERVICE_UUID, device, WIFI_CHARACTERISTIC_UUID);
+                    }
+                }else{
+                    throw new Error("Existem mais de um Serviço neste dispositivo")
+                }
+            }else{
+                throw new Error("Nenhum dispositivo Bluetooth conectado")
+            }
+
+
+        }catch(error){
+            console.error(`Não foi possível obter o UUID do serviço: ${error}`)
+        } 
+
+    }
+
+    
 
 
     return (
@@ -126,8 +200,14 @@ export default function NewPlant(){
                             {
                                  connectionType === "bluetooth" &&
                                  (
-                                    <BluetoothDeviceList allDevices={allDevices} connectToDevice={connectToDevice} />
+                                    <BluetoothDeviceList connectionList={allDevices} handlePress={connectToDevice} connectionType={"bluetooth"} />
                                  )
+                            }
+                            {
+                                connectionType === "wifi" &&
+                                (
+                                    <BluetoothDeviceList connectionList={wifiList} connectionType={"wifi"} handlePress={selectWifiNetwork} />
+                                )
                             }
                            
                         </View>
@@ -144,6 +224,50 @@ export default function NewPlant(){
                 onSelect={(item) => setNewPlantData({...newPlantData, plantSpecie: item.nome})}
                 incrementPagination={incrementPagination}
             />
+
+            <Portal>
+                <Modal
+                    visible={wifiModal.visibility}
+                    onDismiss={() => setWifiModal({...wifiModal, visibility: false})}
+                    style={{ justifyContent: 'center', alignItems: 'center' }}
+                >   
+                    <View className="bg-primary w-[85vw] rounded-2xl px-3 py-2" >
+                        <View className="flex flex-row items-center justify-between">
+                            <Text className="font-bold">Informações do Wifi</Text>
+                            <AntDesign
+                                name="close" 
+                                size={16} 
+                                onPress={() => setWifiModal({...wifiModal, visibility: false})}
+                            />
+                        </View>
+                        <View className="w-full flex items-center">
+                            <CustomInput 
+                                inputStyles={"bg-secondary font-semibold"} 
+                                placeholder={"SSID"} 
+                                value={wifiModal.ssid}
+                                disabled={true}
+                                otherStyles={"my-0"}
+                                
+                            />
+                            <CustomInput  
+                                inputStyles={"bg-secondary font-semibold"} 
+                                placeholder={"Senha"} 
+                                hide={true}
+                                handleChange={(password) => setWifiModal({...wifiModal, password: password})}
+                                otherStyles={"my-0"}
+                            />
+                        </View>
+                            <CustomButton
+                                handlePress={() => {
+                                    sendWifiInformationToVase(connectedDevice)
+                                }}
+                                title='Confirmar'
+                                textStyles='text-sm'
+                                constainerStyles={"mt-6"}
+                            />
+                    </View>
+                </Modal>
+            </Portal>
 
         </PaperProvider>
     )
