@@ -170,7 +170,7 @@ export default function NewPlant(){
                         </View>
                         <View className="space-y-1">
                             <CustomInput inputStyles={"bg-secondary font-semibold"} placeholder={"Apelido"}
-                                handleChange={(nickname) => setFormData({...newPlantData, nickname: nickname})}
+                                handleChange={(nickname) => setNewPlantData({...newPlantData, nickname: nickname})}
                             />
                             <TouchableOpacity onPress={() => setVisible(true)} className="flex flex-row justify-between w-[80%] px-4 h-10 bg-secondary rounded-3xl items-center">
                                 <TextInput
