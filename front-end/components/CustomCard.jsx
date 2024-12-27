@@ -33,15 +33,15 @@ const CustomCard = ({ item, index }) => {
         try {
             client.connect({
                 keepAliveInterval: 20,
-                onSuccess() {
-                    client.subscribe('h2orta/planta')
-                    if (mensagem) {
+                onSuccess: () => {
+                    client.subscribe(item.mqttTopic)
+                    if(mensagem){
                         client.send(mensagem)
                         ToastAndroid.show("Irrigando planta", ToastAndroid.SHORT)
                     }
                 },
-                onFailure(error) {
-                    errorConnecting(error)
+                onFailure: (error) => {
+                    ToastAndroid.show("Erro ao conectar MQTT: " + error.errorMessage, ToastAndroid.SHORT)
                 }
             })
         } catch (error) {
@@ -50,7 +50,7 @@ const CustomCard = ({ item, index }) => {
     }
 
     const errorConnecting = (error) => {
-        //ToastAndroid.show("Erro ao conectar MQTT: " + error.errorMessage, ToastAndroid.SHORT)
+        ToastAndroid.show("Erro ao conectar MQTT: " + error.errorMessage, ToastAndroid.SHORT)
         setTimeout(attemptConnection, 1000)
     }
 
@@ -87,6 +87,7 @@ const CustomCard = ({ item, index }) => {
         }
     }, [watering])
 
+
     return (
         <View className="bg-secondary min-h-[50vh] min-w-[81vw] rounded-xl px-5 pt-2 pb-12 justify-center items-center" key={index}>
             <View className="justify-center items-center">
@@ -112,9 +113,9 @@ const CustomCard = ({ item, index }) => {
                             : <></>
                     }
                 </TouchableOpacity>
-                <Image className="w-[150px] h-[150px]" source={item.imageSource} resizeMode='contain' />
-                <Text className="text-dark font-semibold text-2xl">{item.name}</Text>
-                <Text className="text-center px-10 mt-2">{item.description}</Text>
+                <Image className="w-[150px] h-[150px]" source={{uri: item.imagem}} resizeMode='contain' />
+                <Text className="text-dark font-semibold text-2xl">{item.nome}</Text>
+                <Text className="text-center px-10 mt-2">{item.descricao}</Text>
             </View>
             <View>
                 <CustomCardField
