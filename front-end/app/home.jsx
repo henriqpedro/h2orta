@@ -1,12 +1,13 @@
 import { StatusBar } from 'expo-status-bar';
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Image, ScrollView, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import CustomButton from '../components/CustomButton';
 import CustomCard from '../components/CustomCard';
 import { AntDesign } from '@expo/vector-icons'
 import { router } from 'expo-router';
-import { PlantContext } from '../context/PlantContext';
+import axios from 'axios';
+import { API_URL } from '../utils/api_config';
 
 const prototype = [
     {
@@ -39,7 +40,8 @@ const prototype = [
 const Home = () => {
     
     const [plantIndex, setPlantIndex] = useState(0)
-    const [viewingPlant, setViewingPlant] = useState(prototype[0]);
+    const [userPlants, setUserPlants] = useState(undefined)
+    const [viewingPlant, setViewingPlant] = useState(undefined);
 
     function nextPlant (){
         if(plantIndex+1 < prototype.length){
@@ -54,58 +56,80 @@ const Home = () => {
     }
 
     useEffect(() => {
-        setViewingPlant(prototype[plantIndex])
+        getUserPlants();
+    }, [])
+
+    useEffect(() => {
+        if(userPlants){
+            const newViewingPlant = {...userPlants[plantIndex].planta, mqttTopic: userPlants[plantIndex].arduino}
+            setViewingPlant(newViewingPlant);
+        }
     }, [plantIndex])
+
+    async function getUserPlants(){
+        const vases = await axios.get(`${API_URL}/vaso`);
+
+        setUserPlants(vases.data);
+        const newViewingPlant = {...vases.data[plantIndex].planta, mqttTopic: vases.data[plantIndex].arduino}
+        setViewingPlant(newViewingPlant);
+    }
+
+
 
 
     return (
         <SafeAreaView className="bg-primary h-full">
-            <ScrollView>
-                <View className="w-full min-h-[100vh]">
-                    <View className="w-[100vw] h-[15vh] rounded-b-[50px] bg-dark items-center justify-center">
-                        <Image className="w-[13vh]" source={require("../assets/adaptive-icon.png")} resizeMode='contain' />
-                    </View>
-                    <View className="w-full flex flex-row items-center justify-center mt-10 px-6">
-                        <View className="px-1 flex items-center justify-center">
-                            <TouchableOpacity onPress={previousPlant} className="flex items-center justify-center w-8 h-8 rounded-full bg-light">
-                                <AntDesign name='left' color={"#fff"} size={20} />
-                            </TouchableOpacity>
+            {
+                userPlants && viewingPlant &&
+                (  
+                <ScrollView>
+                    <View className="w-full min-h-[100vh]">
+                        <View className="w-[100vw] h-[15vh] rounded-b-[50px] bg-dark items-center justify-center">
+                            <Image className="w-[13vh]" source={require("../assets/adaptive-icon.png")} resizeMode='contain' />
                         </View>
-                        <View className="justify-center items-center">
-                            <CustomCard item={viewingPlant} index={0} />
-                            <View className="flex flex-row gap-1 mt-2 items-center">
-                                {
-                                    prototype.map((item) => {
-                                        return (
-                                            <View 
-                                                key={item.id} 
-                                                className={`
-                                                    rounded-full
-                                                    transition-colors
-                                                    duration-1000
-                                                    ease-linear
-                                                    w-3
-                                                    h-3
-                                                    ${item.id === viewingPlant.id ? "bg-dark" : "bg-secondary"}
-                                                `}
-                                            />
-                                        )
-                                    })
-                                }
+                        <View className="w-full flex flex-row items-center justify-center mt-10 px-6">
+                            <View className="px-1 flex items-center justify-center">
+                                <TouchableOpacity onPress={previousPlant} className="flex items-center justify-center w-8 h-8 rounded-full bg-light">
+                                    <AntDesign name='left' color={"#fff"} size={20} />
+                                </TouchableOpacity>
                             </View>
-                            <CustomButton
-                                handlePress={() => router.navigate('/plants/newPlant')}
-                                title='Cadastrar planta'
-                                constainerStyles='w-56 mt-10' />
-                        </View>
-                        <View className="px-1 flex items-center justify-center">
-                            <TouchableOpacity onPress={nextPlant} className="flex items-center justify-center w-8 h-8 rounded-full bg-light">
-                                <AntDesign name='right' color={"#fff"} size={20} />
-                            </TouchableOpacity>
+                            <View className="justify-center items-center">
+                                <CustomCard item={viewingPlant} index={0} />
+                                <View className="flex flex-row gap-1 mt-2 items-center">
+                                    {
+                                        userPlants.map((item) => {
+                                            return (
+                                                <View 
+                                                    key={item.id} 
+                                                    className={`
+                                                        rounded-full
+                                                        transition-colors
+                                                        duration-1000
+                                                        ease-linear
+                                                        w-3
+                                                        h-3
+                                                        ${item.planta.id === viewingPlant.id ? "bg-dark" : "bg-secondary"}
+                                                    `}
+                                                />
+                                            )
+                                        })
+                                    }
+                                </View>
+                                <CustomButton
+                                    handlePress={() => router.navigate('/plants/newPlant')}
+                                    title='Cadastrar planta'
+                                    constainerStyles='w-56 mt-10' />
+                            </View>
+                            <View className="px-1 flex items-center justify-center">
+                                <TouchableOpacity onPress={nextPlant} className="flex items-center justify-center w-8 h-8 rounded-full bg-light">
+                                    <AntDesign name='right' color={"#fff"} size={20} />
+                                </TouchableOpacity>
+                            </View>
                         </View>
                     </View>
-                </View>
-            </ScrollView>
+                </ScrollView>
+                )
+            }
             <StatusBar backgroundColor="#F9F9F9" />
         </SafeAreaView>
     );
