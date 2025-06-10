@@ -1,6 +1,6 @@
 import axios from "axios";
-import { createContext, useContext, useEffect, useState } from "react";
 import * as SecureStore from "expo-secure-store";
+import { createContext, useContext, useEffect, useState } from "react";
 import { ToastAndroid } from "react-native";
 
 const API_URL = "http://192.168.0.115:8080";
@@ -42,7 +42,6 @@ export const AuthProvider = ({ children }) => {
     const login = async (input) => {
         try {
             const result = await axios.post(`${API_URL}/usuario/login`, input);
-            console.log(result)
             setAuthState({
                 token: result.data,
                 authenticated: true
