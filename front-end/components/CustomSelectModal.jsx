@@ -1,21 +1,36 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { View } from 'react-native';
-import { Modal, Portal } from 'react-native-paper';
+import { Modal, Portal, Searchbar } from 'react-native-paper';
 import CustomCardList from '../components/CustomCardList';
 import CustomButton from './CustomButton';
 
 
 const CustomSelectModal = ({ data, visible, onClose, onSelect }) => {
     const [selectedItem, setSelectedItem] = useState({})
+    const [innerData, setInnerData] = useState(data)
+    const [search, setSearch] = useState('')
+
+    const onChangeSearch = (text) => {
+        let innerSearch = text.toLowerCase()
+        let filteredData = data.filter(plant => plant.name.toLowerCase().includes(innerSearch))
+        setInnerData(filteredData)
+        setSearch(innerSearch)
+    }
+
     return (
         <Portal>
             <Modal
                 style={{ justifyContent: 'center', alignItems: 'center' }}
                 visible={visible}
                 onDismiss={() => onClose()}>
-                <View className="justify-center rounded-2xl items-center h-[80vh] w-[94vw] bg-primary">
+                <View className="py-4 justify-center rounded-2xl items-center min-h-[80vh] w-[94vw] bg-primary">
+                    <Searchbar
+                        className="bg-secondary text-dark mx-3 fixed"
+                        cursorColor='green'
+                        value={search}
+                        onChangeText={onChangeSearch} />
                     <CustomCardList
-                        data={data}
+                        data={innerData}
                         onSelected={(item) => setSelectedItem(item)} />
                     <View className="self-end flex-row justify-end">
                         <CustomButton
