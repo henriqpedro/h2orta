@@ -1,6 +1,6 @@
 import { Entypo } from '@expo/vector-icons';
 import * as Paho from 'paho-mqtt';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Image, Text, ToastAndroid, TouchableOpacity, View } from 'react-native';
 import CustomButton from './CustomButton';
 import CustomTextIcon from './CustomTextIcon';
@@ -27,7 +27,7 @@ const CustomCard = ({ item, index }) => {
     const [showMenu, setShowMenu] = useState(false)
     const [plantData, setPlantData] = useState({ humidity: -1, tank: -1 })
 
-    const client = new Paho.Client('h2orta.zapto.org', 8083, `client-${Math.random() * 1000}`)
+    const client = new Paho.Client('177.71.154.67', 8083, `client-${Math.random() * 1000}`)
 
     const attemptConnection = (mensagem) => {
         try {

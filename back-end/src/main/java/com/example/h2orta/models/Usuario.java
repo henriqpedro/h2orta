@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -44,6 +45,10 @@ public class Usuario {
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String senha;
+
+    @Column(nullable = false)
+    @NotNull
+    private Date dataDeNascimento;
 
     @Column(nullable = false, unique = true)
     @NotNull

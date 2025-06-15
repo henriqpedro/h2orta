@@ -1,10 +1,10 @@
 package com.example.h2orta.controllers;
 
+import com.example.h2orta.controllers.dtos.Usuario.LoginInput;
 import com.example.h2orta.controllers.dtos.Usuario.UsuarioCreateInput;
 import com.example.h2orta.controllers.dtos.Usuario.UsuarioDto;
 import com.example.h2orta.models.Usuario;
 import com.example.h2orta.services.UsuarioService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -21,12 +21,18 @@ public class UsuarioController {
 
     private UsuarioService service;
 
+    @PostMapping("login")
+    public ResponseEntity<String> login(@Valid @RequestBody LoginInput input) throws Exception {
+        var token = service.login(input.usuario, input.senha);
+        return new ResponseEntity<>(token, HttpStatus.OK);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<UsuarioDto> findById(@PathVariable Long id) throws Exception {
-        var mapper = new ObjectMapper();
+        var mapper = new ModelMapper();
 
         var usuario = service.findById(id);
-        var dto = mapper.convertValue(usuario, UsuarioDto.class);
+        var dto = mapper.map(usuario, UsuarioDto.class);
 
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
@@ -54,7 +60,7 @@ public class UsuarioController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity delete(@PathVariable Long id) throws Exception {
+    public ResponseEntity<Void> delete(@PathVariable Long id) throws Exception {
         service.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
