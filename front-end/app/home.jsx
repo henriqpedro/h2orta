@@ -5,13 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import CustomButton from '../components/CustomButton';
 import CustomCard from '../components/CustomCard';
 import CustomSelectModal from '../components/CustomSelectModal';
-
-const prototype = {
-    id: 0,
-    name: 'Nome da planta',
-    description: 'Texto descrevendo a planta, indicando a rega correta para espécie e outras informações relevantes.',
-    imageSource: require("../assets/images/prototype-plant.png")
-}
+import { data, prototype } from '../utils/default-plants';
 
 const Home = () => {
 
@@ -33,7 +27,7 @@ const Home = () => {
                                 title='Cadastrar planta'
                                 constainerStyles='w-56 mt-10' />
                         </View>
-                        <CustomSelectModal visible={visible} onClose={() => setVisible(false)} onSelect={(item) => setViewingPlant(item)} />
+                        <CustomSelectModal data={data} visible={visible} onClose={() => setVisible(false)} onSelect={(item) => setViewingPlant(item)} />
                     </View>
                 </View>
             </ScrollView>
