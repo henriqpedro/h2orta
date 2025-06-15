@@ -24,11 +24,6 @@ public class Planta {
     private Long id;
 
     @Column(nullable = false, unique = true)
-    @Size(min = 2, max = 1024)
-    @NotBlank
-    private String trefleSlug;
-
-    @Column(nullable = false, unique = true)
     @Size(min = 2, max = 255)
     @NotBlank
     private String nome;
@@ -38,23 +33,42 @@ public class Planta {
     @NotBlank
     private String familia;
 
+    @Column(nullable = false)
+    @Size(min = 2, max = 255)
+    @NotBlank
+    private String habitat;
+
     @Column(nullable = false, length = 1024)
     @Size(min = 2, max = 1024)
     @NotBlank
     private String descricao;
 
     @Size(max = 255)
-    private String imagemUrl;
+    private String imagem;
 
     @Column(nullable = false)
     @NotNull
-    private Integer umidade;
+    private Integer minUmidade;
 
+    @Column(nullable = false)
+    @NotNull
+    private Integer maxUmidade;
+
+    @Column(nullable = false)
     @NotNull
     private Integer minTemperatura;
 
+    @Column(nullable = false)
     @NotNull
     private Integer maxTemperatura;
+
+    @Column(nullable = false)
+    @NotNull
+    private Integer minAltura;
+
+    @Column(nullable = false)
+    @NotNull
+    private Integer maxAltura;
 
     @Column(nullable = false)
     @NotNull

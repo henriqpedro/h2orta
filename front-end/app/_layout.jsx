@@ -1,28 +1,24 @@
 import { Stack } from 'expo-router';
+import { PaperProvider } from 'react-native-paper';
+import { AuthProvider } from '../context/AuthContext';
 
-//SplashScreen.preventAutoHideAsync();
-
-const RootLayout = () => {
-
-    // const { fontsLoaded, error } = useFonts({
-    //     "Nunito-Bold": require("../assets/fonts/Nunito-Bold.ttf"),
-    //     "Nunito-Regular": require("../assets/fonts/Nunito-Regular.ttf")
-    // });
-
-    // useEffect(() => {
-    //     if (error)
-    //         throw error;
-    //     if (fontsLoaded)
-    //         SplashScreen.hideAsync();
-    // }, [fontsLoaded, error]);
-
-    // if (!fontsLoaded && !error)
-    //     return null;
-
+export const RootStack = () => {
     return (
         <Stack>
             <Stack.Screen name="index" options={{ headerShown: false }} />
+            <Stack.Screen name="home" options={{ headerShown: false }} />
+            <Stack.Screen name="(auth)" options={{ headerShown: false }} />
         </Stack>
+    );
+}
+
+const RootLayout = () => {
+    return (
+        <PaperProvider>
+            <AuthProvider>
+                <RootStack></RootStack>
+            </AuthProvider>
+        </PaperProvider>
     );
 }
 

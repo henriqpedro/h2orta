@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -32,6 +33,9 @@ public class UsuarioDto {
     @Size(min = 2, max = 255)
     @NotBlank
     private String email;
+
+    @NotNull
+    private Date dataDeNascimento;
 
     @Column(nullable = false, unique = true)
     @NotNull
