@@ -2,9 +2,7 @@ import axios from "axios";
 import * as SecureStore from "expo-secure-store";
 import { createContext, useContext, useEffect, useState } from "react";
 import { ToastAndroid } from "react-native";
-
-const API_URL = "http://192.168.0.115:8080";
-const TOKEN_KEY = "my-jwt";
+import { API_URL, TOKEN_KEY } from "../utils/config";
 
 const AuthContext = createContext();
 export const useAuthContext = () => useContext(AuthContext);

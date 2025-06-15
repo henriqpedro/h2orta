@@ -1,6 +1,6 @@
 import { Entypo } from '@expo/vector-icons';
 import * as Paho from 'paho-mqtt';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Image, Text, ToastAndroid, TouchableOpacity, View } from 'react-native';
 import CustomButton from './CustomButton';
 import CustomTextIcon from './CustomTextIcon';
