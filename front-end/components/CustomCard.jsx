@@ -55,7 +55,7 @@ const CustomCard = ({ item, index }) => {
     }
 
     useEffect(() => {
-        if (item) {
+        if (item.id > 0) {
             setPlantData({ humidity: 0, tank: 0 })
 
             attemptConnection()
@@ -68,7 +68,7 @@ const CustomCard = ({ item, index }) => {
                 })
             }
             return () => client.disconnect()
-        }
+        }            
     }, [item])
 
     sendMessage = (message) => {
@@ -87,50 +87,45 @@ const CustomCard = ({ item, index }) => {
 
     return (
         <View className="bg-secondary min-h-[50vh] min-w-[80vw] rounded-xl px-5 pt-2 pb-12 justify-center items-center" key={index}>
-            {item ?
-                <>
-                    <View className="justify-center items-center">
-                        <TouchableOpacity
-                            activeOpacity={0.7}
-                            onPress={() => setShowMenu(!showMenu)}
-                            className='self-end min-h-[48px] px-5 top-2 justify-center items-end'>
-                            <Entypo name="dots-three-horizontal" size={24} color="black" />
-                            {
-                                showMenu ?
-                                    <CustomButton
-                                        isLoading={watering}
-                                        handlePress={() => {
-                                            sendMessage('1')
-                                            setWatering(true)
-                                        }}
-                                        constainerStyles='absolute top-10 bg-primary rounded-none'
-                                        textStyles='text-black text-sm'
-                                        title='Irrigar planta' />
-                                    : <></>
-                            }
-                        </TouchableOpacity>
-                        <Image className="w-[150px] h-[150px]" source={item.imageSource} resizeMode='contain' />
-                        <Text className="text-dark font-semibold text-2xl">{item.name}</Text>
-                        <Text className="text-center px-10 mt-2">{item.description}</Text>
-                    </View>
-                    <View>
-                        <CustomCardField
-                            containerStyles="mt-5"
-                            iconSource={require('../assets/icons/tank.png')}
-                            title="Nível do reservatório"
-                            value={plantData.tank} />
-                        <CustomCardField
-                            containerStyles="mt-2"
-                            iconSource={require('../assets/icons/humidity.png')}
-                            title="Umidade"
-                            value={plantData.humidity} />
-                    </View>
-                </> :
-                <View className="justify-center items-center">
-                    <Image className="w-[52vw] h-[32vh]" source={require('../assets/icons/not-found.png')} resizeMode='contain' />
-                    <Text>Cadastre uma planta para continuar.</Text>
-                </View>
-            }
+            <View className="justify-center items-center">
+                <TouchableOpacity
+                    activeOpacity={0.7}
+                    onPress={() => setShowMenu(!showMenu)}
+                    className='self-end min-h-[48px] px-5 top-2 justify-center items-end'>
+                    <Entypo name="dots-three-horizontal" size={24} color="black" />
+                    {
+                        showMenu ?
+                            <CustomButton
+                                isLoading={watering}
+                                handlePress={() => {
+                                    if (item.id > 0) {
+                                        sendMessage('1')
+                                        setWatering(true)
+                                    } else
+                                        ToastAndroid.show("Cadastre uma planta para irrigar", ToastAndroid.SHORT)
+                                }}
+                                constainerStyles='absolute top-10 bg-primary rounded-none'
+                                textStyles='text-black text-sm'
+                                title='Irrigar planta' />
+                            : <></>
+                    }
+                </TouchableOpacity>
+                <Image className="w-[150px] h-[150px]" source={item.imageSource} resizeMode='contain' />
+                <Text className="text-dark font-semibold text-2xl">{item.name}</Text>
+                <Text className="text-center px-10 mt-2">{item.description}</Text>
+            </View>
+            <View>
+                <CustomCardField
+                    containerStyles="mt-5"
+                    iconSource={require('../assets/icons/tank.png')}
+                    title="Nível do reservatório"
+                    value={plantData.tank} />
+                <CustomCardField
+                    containerStyles="mt-2"
+                    iconSource={require('../assets/icons/humidity.png')}
+                    title="Umidade"
+                    value={plantData.humidity} />
+            </View>
         </View>
     )
 }
