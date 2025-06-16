@@ -18,26 +18,28 @@ const SignIn = () => {
 
     if (authState.authenticated) return <Redirect href="home" />
     return (
-        <SafeAreaView className="bg-dark h-full">
+        <SafeAreaView className="bg-medium h-full">
             <ScrollView>
-                <View className="w-full min-h-[105vh] items-center justify-center">
-                    <Image className="h-[7vh] my-3" source={require("../../assets/logo.png")} resizeMode="contain" />
-                    <CustomInput inputStyles="bg-primary"
-                        value={formData.usuario}
-                        handleChange={(usuario) => setFormData({ ...formData, usuario: usuario })}
-                        title="Usuário:"
-                        placeholder="Digite seu usuário." />
-                    <CustomInput inputStyles="bg-primary"
-                        value={formData.senha}
-                        handleChange={(senha) => setFormData({ ...formData, senha: senha })}
-                        hide={true}
-                        title="Senha:"
-                        placeholder="Digite sua senha." />
+                <View className="w-full min-h-[100vh] items-center justify-center">
+                    <Image className="h-[7vh] my-3 place-self-start" source={require("../../assets/logo.png")} resizeMode="contain" />
+                    <View className="my-10">
+                        <CustomInput inputStyles="bg-primary"
+                            value={formData.usuario}
+                            handleChange={(usuario) => setFormData({ ...formData, usuario: usuario })}
+                            title="Usuário:"
+                            placeholder="Digite seu usuário." />
+                        <CustomInput inputStyles="bg-primary"
+                            value={formData.senha}
+                            handleChange={(senha) => setFormData({ ...formData, senha: senha })}
+                            hide={true}
+                            title="Senha:"
+                            placeholder="Digite sua senha." />
+                    </View>
                     <CustomButton
                         title='Entrar'
                         handlePress={signIn}
-                        constainerStyles='w-56 mt-7' />
-                    <Link href="/sign-up" className="font-bold underline py-5">Criar nova conta.</Link>
+                        constainerStyles='w-56 mt-7 place-self-end bg-dark' />
+                    <Link href="/sign-up" className="font-bold text-base underline py-5">Criar nova conta.</Link>
                 </View>
             </ScrollView>
             <StatusBar backgroundColor="#F9F9F9" />
