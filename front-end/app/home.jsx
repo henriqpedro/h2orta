@@ -13,10 +13,10 @@ const Home = () => {
     const [viewingPlant, setViewingPlant] = useState(prototype);
 
     return (
-        <SafeAreaView className="bg-primary h-full">
+        <SafeAreaView className="bg-primary h-full" importantForAccessibility={visible ? 'no-hide-descendants' : 'auto'}>
             <ScrollView>
                 <View className="w-full min-h-[100vh]">
-                    <View className="w-[100vw] h-[15vh] rounded-b-[50px] bg-dark items-center justify-center">
+                    <View className="w-[100vw] h-[15vh] rounded-b-[50px] bg-medium items-center justify-center">
                         <Image className="w-[13vh]" source={require("../assets/adaptive-icon.png")} resizeMode='contain' />
                     </View>
                     <View className="w-full items-center justify-center mt-10 px-6">

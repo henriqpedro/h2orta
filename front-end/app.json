@@ -10,7 +10,7 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#93BE5B"
+      "backgroundColor": "#76A136"
     },
     "ios": {
       "supportsTablet": true
@@ -18,7 +18,7 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#93BE5B"
+        "backgroundColor": "#76A136"
       },
       "package": "com.anonymous.h2orta"
     },

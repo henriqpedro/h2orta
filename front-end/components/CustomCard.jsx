@@ -68,7 +68,7 @@ const CustomCard = ({ item, index }) => {
                 })
             }
             return () => client.disconnect()
-        }            
+        }
     }, [item])
 
     sendMessage = (message) => {
@@ -88,30 +88,43 @@ const CustomCard = ({ item, index }) => {
     return (
         <View className="bg-secondary min-h-[50vh] min-w-[80vw] rounded-xl px-5 pt-2 pb-12 justify-center items-center" key={index}>
             <View className="justify-center items-center">
-                <TouchableOpacity
-                    activeOpacity={0.7}
-                    onPress={() => setShowMenu(!showMenu)}
-                    className='self-end min-h-[48px] px-5 top-2 justify-center items-end'>
-                    <Entypo name="dots-three-horizontal" size={24} color="black" />
-                    {
-                        showMenu ?
-                            <CustomButton
-                                isLoading={watering}
-                                handlePress={() => {
-                                    if (item.id > 0) {
-                                        sendMessage('1')
-                                        setWatering(true)
-                                    } else
-                                        ToastAndroid.show("Cadastre uma planta para irrigar", ToastAndroid.SHORT)
-                                }}
-                                constainerStyles='absolute top-10 bg-primary rounded-none'
-                                textStyles='text-black text-sm'
-                                title='Irrigar planta' />
-                            : <></>
-                    }
-                </TouchableOpacity>
+                <View className="relative self-end px-5 items-end">
+                    <TouchableOpacity
+                        accessibilityLabel="Menu de ações"
+                        accessibilityState={{ expanded: showMenu }}
+                        accessibilityHint={`${!showMenu ? 'Expandir' : 'Ocultar'} menu`}
+                        activeOpacity={0.7}
+                        onPress={() => setShowMenu(!showMenu)}
+                        className="justify-center items-center"
+                    >
+                        <View className="mt-5">
+                            <Entypo name="dots-three-horizontal" size={24} color="black" />
+                        </View>
+                    </TouchableOpacity>
+
+                    {showMenu && (
+                        <CustomButton
+                            isLoading={watering}
+                            handlePress={() => {
+                                if (item.id > 0) {
+                                    sendMessage('1')
+                                    setWatering(true)
+                                    ToastAndroid.show("Irrigando planta", ToastAndroid.SHORT)
+                                } else {
+                                    ToastAndroid.show("Cadastre uma planta para irrigar", ToastAndroid.SHORT)
+                                }
+                            }}
+                            constainerStyles="absolute top-14 right-0 bg-primary rounded-none z-50"
+                            textStyles="text-black text-sm"
+                            title="Irrigar planta"
+                            accessibilityLabel="Irrigar planta"
+                            accessibilityHint="Inicia a irrigação da planta cadastrada"
+                            accessibilityRole="button"
+                        />
+                    )}
+                </View>
                 <Image className="w-[150px] h-[150px]" source={item.imageSource} resizeMode='contain' />
-                <Text className="text-dark font-semibold text-2xl">{item.name}</Text>
+                <Text className="text-medium font-semibold text-2xl">{item.name}</Text>
                 <Text className="text-center px-10 mt-2">{item.description}</Text>
             </View>
             <View>

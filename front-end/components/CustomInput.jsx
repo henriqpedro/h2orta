@@ -13,10 +13,10 @@ const CustomInput = ({ title, hide, date, placeholder, value, handleChange, inpu
 
     return (
         <View className={`w-[80%] my-2 ${otherStyles}`}>
-            <Text className="text-primary font-bold mb-2 ml-4">{title}</Text>
-            <View className={`${inputStyles} rounded-3xl w-full h-10 px-4 items-center flex-row`}>
+            <Text className="text-primary text-base font-bold mb-2 ml-4">{title}</Text>
+            <View className={`${inputStyles} rounded-3xl w-full px-4 items-center flex-row`}>
                 <TextInput
-                    className="flex-1 text-black"
+                    className="flex-1 text-black h-12 text-base"
                     multiline={!hide}
                     value={getInputValue()}
                     placeholder={placeholder}
@@ -25,13 +25,13 @@ const CustomInput = ({ title, hide, date, placeholder, value, handleChange, inpu
                     secureTextEntry={hide && !showHidden}
                 />
                 {hide &&
-                    <TouchableOpacity onPress={() => setShowHidden(!showHidden)}>
-                        <Image className="w-5 h-5" resizeMode="contain"
+                    <TouchableOpacity className="w-12 h-12 items-end justify-center" onPress={() => setShowHidden(!showHidden)}>
+                        <Image className="w-6 h-6" resizeMode="contain"
                             source={!showHidden ? require("../assets/icons/lock.png") : require("../assets/icons/unlock.png")} />
                     </TouchableOpacity>
                 }
                 {date &&
-                    <TouchableOpacity onPress={() => setDatePickerOpened(true)}>
+                    <TouchableOpacity className="w-4 h-4" onPress={() => setDatePickerOpened(true)}>
                         <Image className="w-4 h-4" resizeMode="contain"
                             source={require("../assets/icons/calendar.png")} />
                     </TouchableOpacity>
