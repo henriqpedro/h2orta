@@ -7,6 +7,8 @@ import { useAuthContext } from '../../context/AuthContext';
 
 const SignUp = () => {
     const { authState, register } = useAuthContext();
+
+    const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({
         dataDeNascimento: undefined,
         nome: '',
@@ -16,7 +18,9 @@ const SignUp = () => {
     });
 
     const signUp = async () => {
+        setLoading(true);
         await register(formData);
+        setLoading(false);
     }
 
     if (authState.authenticated) return <Redirect href="home" />
@@ -55,9 +59,10 @@ const SignUp = () => {
                             placeholder="Digite sua senha." />
                     </View>
                     <CustomButton
+                        isLoading={loading}
                         title='Cadastrar'
                         handlePress={signUp}
-                        constainerStyles='w-56 mt-7 bg-dark' />
+                        constainerStyles='w-56 mt-7 bg-dark'/>
                     <Link href="/sign-in" className="font-bold text-base underline py-5">Já possuo cadastro.</Link>
                 </View>
             </ScrollView>
