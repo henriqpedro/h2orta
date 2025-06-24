@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Image, SafeAreaView, ScrollView, StatusBar, View } from 'react-native';
 import CustomButton from '../../components/CustomButton';
 import CustomInput from '../../components/CustomInput';
@@ -7,13 +7,17 @@ import { useAuthContext } from '../../context/AuthContext';
 
 const SignIn = () => {
     const { authState, login } = useAuthContext();
+
+    const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({
         usuario: '',
         senha: ''
     });
 
     const signIn = async () => {
+        setLoading(true);
         await login(formData);
+        setLoading(false);
     }
 
     if (authState.authenticated) return <Redirect href="home" />
@@ -36,6 +40,7 @@ const SignIn = () => {
                             placeholder="Digite sua senha." />
                     </View>
                     <CustomButton
+                        isLoading={loading}
                         title='Entrar'
                         handlePress={signIn}
                         constainerStyles='w-56 mt-7 place-self-end bg-dark' />
