@@ -13,7 +13,7 @@ void loop() {
   reconnectToBroker();
   client.loop();
 
-  irrigateLowMoisture();
+  //irrigateLowMoisture();
   publishData();
 
   delay(3000);

@@ -47,7 +47,6 @@ void recieveFromBroker(char* topic, byte* payload, unsigned int length) {
     if (doIrrigate) irrigate();
   } else if (strcmp(topic, getTopic(TOPIC_MIN_MOISTURE).c_str()) == 0) {
     Serial.println("Recieved message from moisture topic...");
-    Serial.println(length);
     int minMoisture = byteStringToInt(payload, length);
     EEPROM.put(MIN_MOISTURE_ADDR, minMoisture);
     EEPROM.commit();
