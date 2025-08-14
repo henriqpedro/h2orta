@@ -11,8 +11,8 @@ void connectToWifi() {
 
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
-    Serial.println("Trying to connect...");
+    Serial.println("Trying to connect to wifi...");
   }
 
-  Serial.println("Successfully conected to wifi...");
+  Serial.println("Successfully conected!");
 }
