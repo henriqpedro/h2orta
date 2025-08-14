@@ -13,4 +13,6 @@ void connectToWifi() {
     delay(500);
     Serial.println("Trying to connect...");
   }
+
+  Serial.println("Successfully conected to wifi...");
 }
