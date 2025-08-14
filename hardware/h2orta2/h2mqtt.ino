@@ -43,7 +43,7 @@ void recieveFromBroker(char* topic, byte* payload, unsigned int length) {
 
   if (strcmp(topic, getTopic(TOPIC_IRRIGATION).c_str()) == 0) {
     Serial.println("Recieved message from irrigation topic...");
-    bool doIrrigate = payload[0];
+    bool doIrrigate = (payload[0] - '0');
     if (doIrrigate) irrigate();
   } else if (strcmp(topic, getTopic(TOPIC_MIN_MOISTURE).c_str()) == 0) {
     Serial.println("Recieved message from moisture topic...");
