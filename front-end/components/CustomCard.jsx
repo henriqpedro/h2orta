@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { Image, Text, ToastAndroid, TouchableOpacity, View } from 'react-native';
 import CustomButton from './CustomButton';
 import CustomTextIcon from './CustomTextIcon';
+import { MQTT_BROKER } from '../utils/config';
 
 const CustomIndicator = ({ value }) => {
     let color = value < 50 ? 'bg-danger text-primary' : 'bg-light text-primary'
@@ -27,7 +28,7 @@ const CustomCard = ({ item, index }) => {
     const [showMenu, setShowMenu] = useState(false)
     const [plantData, setPlantData] = useState({ humidity: -1, tank: -1 })
 
-    const client = new Paho.Client('177.71.154.67', 8083, `client-${Math.random() * 1000}`)
+    const client = new Paho.Client(MQTT_BROKER, 8083, `client-${Math.random() * 1000}`)
 
     const attemptConnection = (mensagem) => {
         try {
