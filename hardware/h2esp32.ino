@@ -9,10 +9,8 @@ void irrigate() {
 
 void irrigateLowMoisture() {
   
-  int minMoisture;
-  EEPROM.get(MIN_MOISTURE_ADDR, minMoisture);
-
-  if (minMoisture != 0 && readSoilMoisture() < minMoisture) irrigate();
+  loadMinMoisture();
+  if (MIN_MOISTURE != 0 && readSoilMoisture() < MIN_MOISTURE) irrigate();
 }
 
 int readSoilMoisture() {

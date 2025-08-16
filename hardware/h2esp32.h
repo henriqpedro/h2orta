@@ -1,9 +1,9 @@
 #pragma once
 
 #include "esp_mac.h"
+#include "h2prom.h"
 
 #include <Arduino.h>
-#include <EEPROM.h>
 
 const uint16_t WATER_LEVEL_PIN = 34;
 const uint16_t SOIL_MOISTURE_PIN = 35;

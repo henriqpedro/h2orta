@@ -2,17 +2,22 @@
 
 void connectToWifi() {
 
-  Serial.print("Connecting to wifi ");
-  Serial.print(SSID);
-  Serial.println("...");
+  loadCredentials();
 
-  WiFi.mode(WIFI_MODE_STA); 
-  WiFi.begin(SSID, PASSWORD);
+  if (SSID[0] != '\0' && PASSWORD[0] != '\0') {
 
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(500);
-    Serial.println("Trying to connect to wifi...");
+    Serial.print("Connecting to wifi ");
+    Serial.print(SSID);
+    Serial.println("...");
+
+    WiFi.mode(WIFI_MODE_STA);
+    WiFi.begin(SSID, PASSWORD);
+
+    while (WiFi.status() != WL_CONNECTED) {
+      delay(500);
+      Serial.println("Trying to connect to wifi...");
+    }
+
+    Serial.println("Successfully conected!");
   }
-
-  Serial.println("Successfully conected!");
 }

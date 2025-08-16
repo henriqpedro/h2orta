@@ -2,9 +2,6 @@
 
 void configureBroker() {
 
-  EEPROM.put(MIN_MOISTURE_ADDR, 0);
-  EEPROM.commit();
-
   client.setServer(MQTT_SERVER, 1883);
   client.setCallback(recieveFromBroker);
   Serial.println("Broker configured...");

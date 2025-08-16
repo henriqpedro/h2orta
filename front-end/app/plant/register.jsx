@@ -1,9 +1,9 @@
 import { View, Text, SafeAreaView, ScrollView } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
-import CustomCard from '../../components/CustomCard';
 import CustomButton from '../../components/CustomButton';
 import { Link } from 'expo-router';
 import useBLE from '../../useBLE';
+import { useEffect } from 'react';
 
 const register = () => {
     const {
@@ -14,9 +14,9 @@ const register = () => {
         disconnectFromDevice
     } = useBLE();
 
-    // useEffect(() => {
-    //     //scanForDevices();
-    // }, []);
+    useEffect(() => {
+        scanForDevices();
+    }, []);
 
     return (
         <SafeAreaView className="bg-primary h-full">
@@ -25,9 +25,15 @@ const register = () => {
                     <View className="w-full items-center justify-center mt-10 px-6">
                         <View className="justify-center items-center">
                             <CustomButton
+                                handlePress={scanForDevices}
                                 title='Cadastrar planta'
                                 constainerStyles='w-56 mt-10' />
                             <Link href="plant">register</Link>
+                            {
+                                allDevices.map(device => {
+                                    return <Text key={device.name}>{device.name}</Text>;
+                                })
+                            }
                         </View>
                     </View>
                 </View>
