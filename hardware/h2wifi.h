@@ -1,9 +1,8 @@
 #pragma once
 
-#include <WiFi.h>
+#include "h2esp32.h"
 
-const char* SSID = "S24+ de Pedro";
-const char* PASSWORD = "Cherumim011";
+#include <WiFi.h>
 
 WiFiClient espClient;
 
