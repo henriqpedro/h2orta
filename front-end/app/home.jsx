@@ -6,6 +6,7 @@ import CustomButton from '../components/CustomButton';
 import CustomCard from '../components/CustomCard';
 import CustomSelectModal from '../components/CustomSelectModal';
 import { data, prototype } from '../utils/default-plants';
+import { Link } from 'expo-router';
 
 const Home = () => {
 
@@ -26,6 +27,7 @@ const Home = () => {
                                 handlePress={() => setVisible(true)}
                                 title='Cadastrar planta'
                                 constainerStyles='w-56 mt-10' />
+                            <Link href="plant">register</Link>
                         </View>
                         <CustomSelectModal data={data} visible={visible} onClose={() => setVisible(false)} onSelect={(item) => setViewingPlant(item)} />
                     </View>
