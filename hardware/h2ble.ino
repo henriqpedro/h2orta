@@ -9,12 +9,14 @@ class H2ortaProvisioningCallbacks : public BLECharacteristicCallbacks {
     if (pCharacteristic == ssidChar) {
 
       SSID = value.c_str();
-      Serial.println("Recieved SSID from BLE: %s", SSID);
+      Serial.print("Recieved SSID from BLE: ");
+      Serial.println(SSID);
 
     } else if (pCharacteristic == passChar) {
 
       PASSWORD = value.c_str();
-      Serial.println("Recieved password from BLE: %s", PASSWORD);
+      Serial.println("Recieved password from BLE: ");
+      Serial.println(PASSWORD);
 
       // When receiving password, ssid was already received
       saveCredentials();
