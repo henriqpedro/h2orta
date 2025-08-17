@@ -1,5 +1,17 @@
 #include "h2mqtt.h"
 
+#include <PubSubClient.h>
+
+PubSubClient client(espClient);
+
+const char* MQTT_USERNAME = "h2orta";
+const char* MQTT_SERVER = "h2orta.agr.br";
+const char* MQTT_PASSWORD = "h2orta-client";
+
+const char* TOPIC_IRRIGATION = "/irrigar";
+const char* TOPIC_MIN_MOISTURE = "/umidade";
+const char* TOPIC_SENSORS = "/planta";
+
 void configureBroker() {
 
   client.setServer(MQTT_SERVER, 1883);
@@ -16,7 +28,7 @@ void reconnectToBroker() {
     Serial.println(" to MQTT broker...");
 
     if (client.connect(getDefaultMacAddress().c_str(), MQTT_USERNAME, MQTT_PASSWORD)) {
-      Serial.println("Connected successfully!");
+      Serial.println("Connected!");
       client.subscribe(getTopic(TOPIC_MIN_MOISTURE).c_str());
       client.subscribe(getTopic(TOPIC_IRRIGATION).c_str());
     } else {
@@ -25,6 +37,8 @@ void reconnectToBroker() {
       delay(3000);
     }
   }
+
+  client.loop();
 }
 
 int byteStringToInt(byte* byteValue, int length) {
@@ -39,18 +53,13 @@ int byteStringToInt(byte* byteValue, int length) {
 void recieveFromBroker(char* topic, byte* payload, unsigned int length) {
 
   if (strcmp(topic, getTopic(TOPIC_IRRIGATION).c_str()) == 0) {
-    Serial.println("Recieved message from irrigation topic...");
+    Serial.println("Recieved from irrigation topic...");
     bool doIrrigate = (payload[0] - '0');
     if (doIrrigate) irrigate();
   } else if (strcmp(topic, getTopic(TOPIC_MIN_MOISTURE).c_str()) == 0) {
-    Serial.println("Recieved message from moisture topic...");
-    int minMoisture = byteStringToInt(payload, length);
-    EEPROM.put(MIN_MOISTURE_ADDR, minMoisture);
-    EEPROM.commit();
-
-    EEPROM.get(MIN_MOISTURE_ADDR, minMoisture);
-    Serial.print("Message saved to EEPROM: ");
-    Serial.println(minMoisture);
+    Serial.println("Recieved from moisture topic...");
+    MIN_MOISTURE = byteStringToInt(payload, length);
+    saveMinMoisture();
   }
 }
 

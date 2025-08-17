@@ -3,11 +3,6 @@
 void configureEEPROM() {
 
   EEPROM.begin(EEPROM_SIZE);
-
-  EEPROM.put(MIN_MOISTURE_ADDR, 0);
-  EEPROM.put(PASSWORD_ADDR, '\0');
-  EEPROM.put(SSID_ADDR, '\0');
-  EEPROM.commit();
 }
 
 void saveCredentials() {
@@ -15,7 +10,7 @@ void saveCredentials() {
   EEPROM.begin(EEPROM_SIZE);
 
   EEPROM.put(SSID_ADDR, SSID);
-  EEPROM.put(PASS_ADDR, PASSWORD);
+  EEPROM.put(PASSWORD_ADDR, PASSWORD);
 
   EEPROM.commit();
   Serial.println("Wifi credentials saved to EEPROM!");
@@ -33,7 +28,8 @@ void loadMinMoisture() {
 
   EEPROM.begin(EEPROM_SIZE);
   EEPROM.get(MIN_MOISTURE_ADDR, MIN_MOISTURE);
-  Serial.println("Min moisture: %s\n", MIN_MOISTURE);
+  Serial.print("Min moisture: ");
+  Serial.println(MIN_MOISTURE);
 }
 
 void loadCredentials() {
@@ -42,6 +38,9 @@ void loadCredentials() {
   EEPROM.get(SSID_ADDR, SSID);
   EEPROM.get(PASSWORD_ADDR, PASSWORD);
 
-  Serial.println("SSID: %s\n", SSID);
-  Serial.println("Pass: %s\n", PASSWORD);
+  Serial.print("SSID: ");
+  Serial.println(SSID);
+  Serial.print("Pass: ");
+  Serial.println(PASSWORD);
+  delay(5000);
 }
