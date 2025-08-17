@@ -4,7 +4,7 @@ void connectToWifi() {
 
   loadCredentials();
 
-  if (SSID[0] != '\0' && PASSWORD[0] != '\0') {
+  if (strlen(SSID) > 0 && strlen(PASSWORD) > 0) {
 
     Serial.print("Connecting to wifi ");
     Serial.print(SSID);
@@ -18,6 +18,6 @@ void connectToWifi() {
       Serial.println("Trying to connect to wifi...");
     }
 
-    Serial.println("Successfully conected!");
+    Serial.println("Conected!");
   }
 }

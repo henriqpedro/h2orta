@@ -5,10 +5,6 @@
 
 #include <Arduino.h>
 
-const uint16_t WATER_LEVEL_PIN = 34;
-const uint16_t SOIL_MOISTURE_PIN = 35;
-const uint16_t RELE_PIN = 5;
-
 int readWaterLevel();
 int readSoilMoisture();
 

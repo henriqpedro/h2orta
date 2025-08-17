@@ -14,8 +14,6 @@ void loop() {
 
   if (WiFi.status() == WL_CONNECTED) {
     reconnectToBroker();
-    client.loop();
-
     //irrigateLowMoisture();
     publishData();
   }
