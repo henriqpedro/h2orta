@@ -14,10 +14,10 @@ void connectToWifi() {
     WiFi.begin(SSID, PASSWORD);
 
     while (WiFi.status() != WL_CONNECTED) {
-      delay(500);
+      delay(1000);
       Serial.println("Trying to connect to wifi...");
     }
 
-    Serial.println("Conected!");
+    Serial.println("Conected to wifi!");
   }
 }
