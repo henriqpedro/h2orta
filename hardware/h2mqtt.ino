@@ -28,7 +28,7 @@ void reconnectToBroker() {
     Serial.println(" to MQTT broker...");
 
     if (client.connect(getDefaultMacAddress().c_str(), MQTT_USERNAME, MQTT_PASSWORD)) {
-      Serial.println("Connected!");
+      Serial.println("Connected to broker!");
       client.subscribe(getTopic(TOPIC_MIN_MOISTURE).c_str());
       client.subscribe(getTopic(TOPIC_IRRIGATION).c_str());
     } else {
