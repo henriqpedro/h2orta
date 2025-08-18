@@ -19,10 +19,14 @@ function useBLE() {
         const bluetoothConnectPermission = await PermissionsAndroid.request(
             PermissionsAndroid.PERMISSIONS.BLUETOOTH_CONNECT
         );
+        const bluetoothFineLocationPermission = await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
+        );
 
         return (
             bluetoothScanPermission === "granted" &&
-            bluetoothConnectPermission === "granted"
+            bluetoothConnectPermission === "granted" &&
+            bluetoothFineLocationPermission == "granted"
         );
     };
 
@@ -34,9 +38,8 @@ function useBLE() {
 
     const scanForDevices = async () => {
         const isPermissionsEnabled = await requestPermissions();
-        if (isPermissionsEnabled) {
-            scanForPeripherals();
-        }
+        if (isPermissionsEnabled)
+            await scanForPeripherals();
     };
 
     const isDuplicteDevice = (devices, nextDevice) =>
