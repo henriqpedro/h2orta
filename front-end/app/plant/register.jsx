@@ -1,11 +1,15 @@
-import { View, Text, SafeAreaView, ScrollView } from 'react-native';
+import { View, SafeAreaView, FlatList } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
-import CustomButton from '../../components/CustomButton';
-import { Link } from 'expo-router';
+import CustomBleDevice from '../../components/CustomBleDevice';
 import useBLE from '../../useBLE';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import CustomEmptyList from '../../components/CustomEmptyList';
+import Loading from '../../components/Loading';
 
-const register = () => {
+const Register = () => {
+
+    const [isLoading, setIsLoading] = useState(false);
+
     const {
         scanForDevices,
         allDevices,
@@ -15,32 +19,41 @@ const register = () => {
     } = useBLE();
 
     useEffect(() => {
-        scanForDevices();
+        scanBLE();
     }, []);
+
+    const scanBLE = async () => {
+        setIsLoading(true);
+        await scanForDevices();
+        setIsLoading(false);
+    }
+
+    const connectToBLE = async (device) => {
+        setIsLoading(true);
+        await connectToBLE(device);
+        setIsLoading(false);
+    }
 
     return (
         <SafeAreaView className="bg-primary h-full">
-            <ScrollView>
-                <View className="w-full min-h-[100vh]">
-                    <View className="w-full items-center justify-center mt-10 px-6">
-                        <View className="justify-center items-center">
-                            <CustomButton
-                                handlePress={scanForDevices}
-                                title='Cadastrar planta'
-                                constainerStyles='w-56 mt-10' />
-                            <Link href="plant">register</Link>
-                            {
-                                allDevices.map(device => {
-                                    return <Text key={device.name}>{device.name}</Text>;
-                                })
-                            }
-                        </View>
-                    </View>
+            <View className="w-full min-h-[100vh]">
+                <View className="w-full items-center mt-10 px-6">
+                    <Loading loading={isLoading}>
+                        <FlatList
+                            data={allDevices}
+                            ListEmptyComponent={<CustomEmptyList />}
+                            keyExtractor={(item, index) => index}
+                            renderItem={({ item, index }) =>
+                                <CustomBleDevice
+                                    title={item.name}
+                                    index={index}
+                                    handlePress={() => connectToBLE(item)} />} />
+                    </Loading>
                 </View>
-            </ScrollView>
+            </View>
             <StatusBar backgroundColor="#F9F9F9" />
         </SafeAreaView>
     )
 }
 
-export default register;
+export default Register;
