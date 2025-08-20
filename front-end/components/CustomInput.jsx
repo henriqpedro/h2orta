@@ -1,8 +1,9 @@
 import RNDateTimePicker from '@react-native-community/datetimepicker';
 import { useState } from 'react';
 import { Image, Text, TextInput, TouchableOpacity, View } from 'react-native';
+ import { Feather } from '@expo/vector-icons';
 
-const CustomInput = ({ title, hide, date, placeholder, value, handleChange, inputStyles, otherStyles }) => {
+const CustomInput = ({ title, hide, date, select, placeholder, value, handleChange, onPress, inputStyles, labelStyles }) => {
 
     const [showHidden, setShowHidden] = useState(false);
     const [datePickerOpened, setDatePickerOpened] = useState(false);
@@ -16,17 +17,23 @@ const CustomInput = ({ title, hide, date, placeholder, value, handleChange, inpu
         return undefined;
     }
 
+    const onPressInput = () => {
+        if (!select) return;
+        onPress();
+    }
+
     return (
-        <View className={`w-[80%] my-2 ${otherStyles}`}>
-            <Text className="text-primary text-base font-bold mb-2 ml-4">{title}</Text>
+        <View className={`w-[80%] my-2`}>
+            <Text className={`${labelStyles ?? 'text-primary text-base font-bold'} mb-2 ml-4`}>{title}</Text>
             <View className={`${inputStyles} rounded-3xl w-full px-4 items-center flex-row`}>
                 <TextInput
+                    onPress={onPressInput}
                     className="flex-1 text-black h-12 text-base"
                     multiline={!hide}
                     value={getInputValue()}
                     placeholder={placeholder}
                     accessibilityHint={getAccessibilityHint()}
-                    editable={!date}
+                    editable={!date && !select}
                     onChangeText={handleChange}
                     secureTextEntry={hide && !showHidden}
                 />
@@ -44,6 +51,11 @@ const CustomInput = ({ title, hide, date, placeholder, value, handleChange, inpu
                     <TouchableOpacity accessible={true} accessibilityLabel='Selecionar data' className="w-12 h-12 items-end justify-center" onPress={() => setDatePickerOpened(true)}>
                         <Image className="w-6 h-4" resizeMode="contain"
                             source={require("../assets/icons/calendar.png")} />
+                    </TouchableOpacity>
+                }
+                {select &&
+                    <TouchableOpacity accessible={true} accessibilityLabel='Abrir modal de plantas' className="w-12 h-12 items-end justify-center" onPress={onPressInput}>
+                        <Feather name="chevron-down" size={24} color="#555" />
                     </TouchableOpacity>
                 }
             </View>

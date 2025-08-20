@@ -17,6 +17,9 @@ public class VasoDto {
     @Size(min = 2, max = 255)
     private String arduino;
 
+    @Size(min = 2, max = 50)
+    private String apelido;
+
     private Integer usuarioId;
 
     @NotNull

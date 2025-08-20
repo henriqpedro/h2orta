@@ -1,20 +1,18 @@
 import { StatusBar } from 'expo-status-bar';
-import { useState } from 'react';
 import { Image, ScrollView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import CustomButton from '../components/CustomButton';
 import CustomCard from '../components/CustomCard';
-import CustomSelectModal from '../components/CustomSelectModal';
 import { data, prototype } from '../utils/default-plants';
-import { Link } from 'expo-router';
+import { router } from 'expo-router';
+import { useState } from 'react';
 
 const Home = () => {
 
-    const [visible, setVisible] = useState(false);
     const [viewingPlant, setViewingPlant] = useState(prototype);
 
     return (
-        <SafeAreaView className="bg-primary h-full" importantForAccessibility={visible ? 'no-hide-descendants' : 'auto'}>
+        <SafeAreaView className="bg-primary h-full">
             <ScrollView>
                 <View className="w-full min-h-[100vh]">
                     <View className="w-[100vw] h-[15vh] rounded-b-[50px] bg-medium items-center justify-center">
@@ -24,12 +22,10 @@ const Home = () => {
                         <View className="justify-center items-center">
                             <CustomCard item={viewingPlant} index={0} />
                             <CustomButton
-                                handlePress={() => setVisible(true)}
+                                handlePress={() => router.navigate('plant')}
                                 title='Cadastrar planta'
                                 constainerStyles='w-56 mt-10' />
-                            <Link href="plant">register</Link>
                         </View>
-                        <CustomSelectModal data={data} visible={visible} onClose={() => setVisible(false)} onSelect={(item) => setViewingPlant(item)} />
                     </View>
                 </View>
             </ScrollView>

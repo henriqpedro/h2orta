@@ -9,7 +9,8 @@ module.exports = {
         light: '#93BE5B',
         medium: '#76A136',
         dark: '#455E1C',
-        danger: '#D55923'
+        danger: '#D55923',
+        gray: '#555'
       },
       fontFamily: {
         nunito: ["Nunito-Regular", "sans-serif"],

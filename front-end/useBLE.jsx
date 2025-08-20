@@ -9,8 +9,14 @@ import {
 
 function useBLE() {
     const bleManager = useMemo(() => new BleManager(), []);
+
+    const [scanning, setScanning] = useState(false);
+    const [connecting, setConnecting] = useState(false);
+
     const [allDevices, setAllDevices] = useState([]);
     const [connectedDevice, setConnectedDevice] = useState(null);
+
+    const scanningTime = 1000 * 10;
 
     const requestAndroid31Permissions = async () => {
         const bluetoothScanPermission = await PermissionsAndroid.request(
@@ -24,54 +30,72 @@ function useBLE() {
         );
 
         return (
-            bluetoothScanPermission === "granted" &&
-            bluetoothConnectPermission === "granted" &&
-            bluetoothFineLocationPermission == "granted"
+            bluetoothScanPermission === PermissionsAndroid.RESULTS.GRANTED &&
+            bluetoothConnectPermission === PermissionsAndroid.RESULTS.GRANTED &&
+            bluetoothFineLocationPermission == PermissionsAndroid.RESULTS.GRANTED
         );
     };
 
     const requestPermissions = async () => {
         if (Platform.OS === "android")
             return await requestAndroid31Permissions();
-        return true;
+        return false;
     };
 
     const scanForDevices = async () => {
         const isPermissionsEnabled = await requestPermissions();
-        if (isPermissionsEnabled)
-            await scanForPeripherals();
+        if (isPermissionsEnabled) startScanning();
+        else ToastAndroid.show("É necessário conceder permissão bluetooth para continuar.", ToastAndroid.SHORT);
     };
 
     const isDuplicteDevice = (devices, nextDevice) =>
         devices.findIndex((device) => nextDevice.id === device.id) > -1;
 
-    const scanForPeripherals = () =>
-        bleManager.startDeviceScan(null, null, (error, device) => {
-            if (error) {
-                ToastAndroid.show("Erro ao escanear BLE", ToastAndroid.SHORT);
-                console.log(error);
-            }
-            if (device?.name) {
-                setAllDevices((prevState) => {
-                    if (!isDuplicteDevice(prevState, device))
-                        return [...prevState, device];
-                    return prevState;
-                });
-            }
-        });
+    const stopScanning = () => {
+        bleManager.stopDeviceScan();
+        setScanning(false);
+    }
+
+    const startScanning = () => {
+        if (!scanning) {
+            setScanning(true);
+            setTimeout(stopScanning, scanningTime);
+            return bleManager.startDeviceScan(null, null, (error, device) => {
+                if (error) {
+                    ToastAndroid.show("Erro ao escanear BLE", ToastAndroid.SHORT);
+                    console.log(error);
+                }
+                if (device?.name) {
+                    setAllDevices((prevState) => {
+                        if (!isDuplicteDevice(prevState, device))
+                            return [...prevState, device];
+                        return prevState;
+                    });
+                }
+            });
+        }
+    }
 
     const connectToDevice = async (device) => {
-        try {
-            const deviceConnection = await bleManager.connectToDevice(device.id);
-            setConnectedDevice(deviceConnection);
-            await deviceConnection.discoverAllServicesAndCharacteristics();
-            bleManager.stopDeviceScan();
-            //startStreamingData(deviceConnection);
-        } catch (e) {
-            ToastAndroid.show("Erro ao conectar BLE", ToastAndroid.SHORT);
-            console.log("Erro ao conectar BLE: ", e);
+        if (!connecting) {
+            if (connectedDevice && connectedDevice.id === device.id) {
+                ToastAndroid.show("Já conectado a " + device.name, ToastAndroid.SHORT);
+                return;
+            }
+            try {
+                setConnecting(true);
+                const deviceConnection = await bleManager.connectToDevice(device.id);
+                setConnectedDevice(deviceConnection);
+                await deviceConnection.discoverAllServicesAndCharacteristics();
+                setConnecting(false);
+                stopScanning();
+                //startStreamingData(deviceConnection);
+            } catch (e) {
+                ToastAndroid.show("Erro ao conectar BLE", ToastAndroid.SHORT);
+                console.log("Erro ao conectar BLE: ", e);
+            }
         }
-    };
+    }
 
     const disconnectFromDevice = () => {
         if (connectedDevice) {
@@ -94,7 +118,9 @@ function useBLE() {
     // };
 
     return {
+        scanning,
         scanForDevices,
+        connecting,
         connectToDevice,
         allDevices,
         connectedDevice,
