@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import CustomEmptyList from './CustomEmptyList';
 
 const CustomCardShort = ({ item, index, selected, onSelected }) => {
     return (
@@ -29,7 +30,7 @@ const CustomCardList = ({ data, onSelected }) => {
                 numColumns={2}
                 extraData={data}
                 data={data}
-                ListEmptyComponent={<ListEmptyComponent/>}
+                ListEmptyComponent={<CustomEmptyList/>}
                 keyExtractor={(item, index) => index}
                 renderItem={({ item, index }) =>
                     <CustomCardShort

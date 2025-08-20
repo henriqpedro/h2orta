@@ -26,6 +26,10 @@ public class Vaso {
     @Size(min = 2, max = 255)
     private String arduino;
 
+    @Column(nullable = false)
+    @Size(min = 2, max = 50)
+    private String apelido;
+
     @ManyToOne
     @JoinColumn(name = "usuario_id", nullable = false)
     private Usuario usuario;

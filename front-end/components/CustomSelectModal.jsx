@@ -4,9 +4,10 @@ import { Modal, Portal, Searchbar } from 'react-native-paper';
 import CustomCardList from '../components/CustomCardList';
 import CustomButton from './CustomButton';
 import { useScreenReaderEnabled } from '../hooks/useScreenReaderEnabled';
+import CustomInput from './CustomInput';
 
 
-const CustomSelectModal = ({ data, visible, onClose, onSelect }) => {
+const CustomModal = ({ data, visible, onClose, onSelect }) => {
 
     const screenReaderEnabled = useScreenReaderEnabled();
 
@@ -71,6 +72,24 @@ const CustomSelectModal = ({ data, visible, onClose, onSelect }) => {
             </Modal>
         </Portal>
     )
+}
+
+const CustomSelectModal = ({ data, onSelect }) => {
+
+    const [visible, setVisible] = useState(false);
+
+    return (
+        <View>
+            <CustomInput
+                select={true}
+                labelStyles="text-gray font-semibold text-lg"
+                inputStyles="bg-secondary"
+                onPress={() => setVisible(true)}
+                title="Planta:"
+                placeholder="Selecione a planta." />
+            <CustomModal data={data} visible={visible} onClose={() => setVisible(false)} onSelect={onSelect} />
+        </View>
+    );
 }
 
 export default CustomSelectModal
