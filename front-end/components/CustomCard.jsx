@@ -50,8 +50,7 @@ const CustomCard = ({ item, index }) => {
         }
     }
 
-    const errorConnecting = (error) => {
-        //ToastAndroid.show("Erro ao conectar MQTT: " + error.errorMessage, ToastAndroid.SHORT)
+    const errorConnecting = () => {
         setTimeout(attemptConnection, 1000)
     }
 

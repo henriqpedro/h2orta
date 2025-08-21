@@ -5,9 +5,10 @@ import CustomCardList from '../components/CustomCardList';
 import CustomButton from './CustomButton';
 import { useScreenReaderEnabled } from '../hooks/useScreenReaderEnabled';
 import CustomInput from './CustomInput';
+import { prototype } from '../utils/default-plants';
 
 
-const CustomModal = ({ data, visible, onClose, onSelect }) => {
+const CustomModal = ({ data, plant, visible, onClose, onSelect }) => {
 
     const screenReaderEnabled = useScreenReaderEnabled();
 
@@ -16,7 +17,10 @@ const CustomModal = ({ data, visible, onClose, onSelect }) => {
     const [search, setSearch] = useState('')
 
     useEffect(() => {
-        if (visible) setSelectedItem({})
+        if (visible) {
+            if (plant == prototype) setSelectedItem({});
+            else setSelectedItem(plant);
+        }
     }, [visible])
 
     const onChangeSearch = (text) => {
@@ -50,6 +54,7 @@ const CustomModal = ({ data, visible, onClose, onSelect }) => {
                         clearAccessibilityLabel="Limpar campo de busca"
                         searchAccessibilityLabel="Pesquisar" />
                     <CustomCardList
+                        selectedPlant={plant}
                         data={innerData}
                         onSelected={(item) => {
                             if (!screenReaderEnabled) setSelectedItem(item)
@@ -74,21 +79,24 @@ const CustomModal = ({ data, visible, onClose, onSelect }) => {
     )
 }
 
-const CustomSelectModal = ({ data, onSelect }) => {
+const CustomSelectModal = ({ plant, data, onSelect }) => {
 
     const [visible, setVisible] = useState(false);
 
+    const getPlaceHolder = () =>
+        plant && plant.name && plant.name == prototype.name ? "Selecione a planta." : plant.name;
+
     return (
-        <View>
+        <>
             <CustomInput
                 select={true}
                 labelStyles="text-gray font-semibold text-lg"
                 inputStyles="bg-secondary"
                 onPress={() => setVisible(true)}
                 title="Planta:"
-                placeholder="Selecione a planta." />
-            <CustomModal data={data} visible={visible} onClose={() => setVisible(false)} onSelect={onSelect} />
-        </View>
+                placeholder={getPlaceHolder()} />
+            <CustomModal plant={plant} data={data} visible={visible} onClose={() => setVisible(false)} onSelect={onSelect} />
+        </>
     );
 }
 
