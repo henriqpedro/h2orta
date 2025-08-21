@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import CustomEmptyList from './CustomEmptyList';
+import { prototype } from '../utils/default-plants';
 
 const CustomCardShort = ({ item, index, selected, onSelected }) => {
     return (
@@ -22,15 +23,22 @@ const CustomCardShort = ({ item, index, selected, onSelected }) => {
     )
 }
 
-const CustomCardList = ({ data, onSelected }) => {
+const CustomCardList = ({ selectedPlant, data, onSelected }) => {
+
     const [selectedItem, setSelectedItem] = useState({})
+
+    useEffect(() => {
+        if (selectedPlant != prototype)
+            setSelectedItem(selectedPlant);
+    }, [selectedPlant])
+
     return (
         <SafeAreaView className="justify-center items-center max-h-[62vh]">
             <FlatList
                 numColumns={2}
                 extraData={data}
                 data={data}
-                ListEmptyComponent={<CustomEmptyList/>}
+                ListEmptyComponent={<CustomEmptyList />}
                 keyExtractor={(item, index) => index}
                 renderItem={({ item, index }) =>
                     <CustomCardShort

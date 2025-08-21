@@ -20,7 +20,7 @@ const CustomBleDevice = ({ device, index, handlePress, disabled }) => {
             onPress={connectBLE}
             disabled={disabled || isLoading}
             activeOpacity={0.7}
-            className={`bg-secondary justify-between items-center flex-row rounded-3xl min-h-[48px] p-5 mt-4 ${isLoading ? 'opacity-50' : ''}`}>
+            className={`w-full bg-secondary justify-between items-center flex-row rounded-3xl min-h-[48px] p-5 mt-4 ${isLoading ? 'opacity-50' : ''}`}>
             <View>
                 <Text className={`font-semibold text-gray text-lg`}>{device.name}</Text>
                 <Text className={`'text-black`}>{device.id}</Text>

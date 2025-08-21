@@ -29,6 +29,7 @@ const CustomBleDeviceList = () => {
             extraData={allDevices}
             refreshing={scanning}
             onRefresh={scanForDevices}
+            scrollEnabled={false}
             ListEmptyComponent={<CustomEmptyList />}
             keyExtractor={(item, index) => index}
             contentContainerStyle={{ marginTop: scanning ? 80 : 0 }}

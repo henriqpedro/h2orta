@@ -1,6 +1,7 @@
 import { Stack } from 'expo-router';
 import { PaperProvider } from 'react-native-paper';
 import { AuthProvider } from '../context/AuthContext';
+import { PlantProvider } from '../context/PlantContext';
 
 export const RootStack = () => {
     return (
@@ -17,7 +18,9 @@ const RootLayout = () => {
     return (
         <PaperProvider>
             <AuthProvider>
-                <RootStack></RootStack>
+                <PlantProvider>
+                    <RootStack></RootStack>
+                </PlantProvider>
             </AuthProvider>
         </PaperProvider>
     );
