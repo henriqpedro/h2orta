@@ -6,12 +6,16 @@ void configureEEPROM() {
 
   loadNotAlreadyExecuted();
 
-  if (!NOT_ALREADY_EXECUTED) {
-    memset(SSID, 0, SSID_SIZE);
-    memset(PASSWORD, 0, PASSWORD_SIZE);
-    saveCredentials();
-    setNotAlreadyExecuted();
-  }
+  //if (!NOT_ALREADY_EXECUTED) {
+  clearCredentials();
+  setNotAlreadyExecuted();
+  //}
+}
+
+void clearCredentials() {
+  memset(SSID, 0, SSID_SIZE);
+  memset(PASSWORD, 0, PASSWORD_SIZE);
+  saveCredentials();
 }
 
 void saveCredentials() {
