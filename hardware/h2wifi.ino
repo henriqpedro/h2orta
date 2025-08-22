@@ -13,11 +13,17 @@ void connectToWifi() {
     WiFi.mode(WIFI_MODE_STA);
     WiFi.begin(SSID, PASSWORD);
 
-    while (WiFi.status() != WL_CONNECTED) {
-      delay(3000);
+    int numTries = 6;
+    while (WiFi.status() != WL_CONNECTED && numTries > 0) {
       Serial.println("Trying to connect to wifi...");
+      if (numTries == 1) {
+        clearCredentials();
+        WiFi.disconnect(true);
+      }
+      delay(1000);
+      numTries--;
     }
-
-    Serial.println("Conected to wifi!");
+    if (WiFi.status() == WL_CONNECTED) Serial.println("Conected to wifi!");
+    else Serial.println("Could not connect to wifi!");
   }
 }

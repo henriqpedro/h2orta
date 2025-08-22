@@ -8,7 +8,7 @@ import { usePlantContext } from '../context/PlantContext';
 
 const Home = () => {
 
-    const { viewingPlant } = usePlantContext();
+    const { viewingPlant, macAddr } = usePlantContext();
     return (
         <SafeAreaView className="bg-primary flex-1">
             <View className="w-full h-[15vh] rounded-b-[50px] bg-medium items-center justify-center">
@@ -16,7 +16,7 @@ const Home = () => {
             </View>
             <ScrollView>
                 <View className="w-full min-h-[70vh] px-7 justify-center items-center">
-                    <CustomCard item={viewingPlant} index={0} />
+                    <CustomCard addr={macAddr} item={viewingPlant} index={0} />
                 </View>
             </ScrollView>
             <View className="justify-center items-center pt-4">

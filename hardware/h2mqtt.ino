@@ -24,10 +24,10 @@ void reconnectToBroker() {
   while (!client.connected()) {
 
     Serial.print("Connecting client ");
-    Serial.print(getDefaultMacAddress());
+    Serial.print(getInterfaceMacAddress(ESP_MAC_BT));
     Serial.println(" to MQTT broker...");
 
-    if (client.connect(getDefaultMacAddress().c_str(), MQTT_USERNAME, MQTT_PASSWORD)) {
+    if (client.connect(getInterfaceMacAddress(ESP_MAC_BT).c_str(), MQTT_USERNAME, MQTT_PASSWORD)) {
       Serial.println("Connected to broker!");
       client.subscribe(getTopic(TOPIC_MIN_MOISTURE).c_str());
       client.subscribe(getTopic(TOPIC_IRRIGATION).c_str());
@@ -81,7 +81,7 @@ void publishData() {
 String getTopic(const char* sufix) {
 
   String topic = "h2orta/";
-  topic.concat(getDefaultMacAddress());
+  topic.concat(getInterfaceMacAddress(ESP_MAC_BT));
   topic.concat(sufix);
 
   return topic;

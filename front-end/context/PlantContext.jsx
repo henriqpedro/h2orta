@@ -6,12 +6,15 @@ export const usePlantContext = () => useContext(PlantContext);
 
 export const PlantProvider = ({ children }) => {
     const [viewingPlant, setViewingPlant] = useState(prototype);
+    const [macAddr, setMacAddr] = useState(null);
 
     return (
         <PlantContext.Provider
             value={{
                 data,
+                macAddr,
                 prototype,
+                setMacAddr,
                 viewingPlant,
                 setViewingPlant
             }}>

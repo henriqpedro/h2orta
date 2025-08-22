@@ -25,3 +25,5 @@ void saveMinMoisture();
 
 void loadMinMoisture();
 void loadCredentials();
+
+void clearCredentials();

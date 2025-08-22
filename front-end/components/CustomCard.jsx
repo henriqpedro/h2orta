@@ -23,7 +23,7 @@ const CustomCardField = ({ iconSource, title, value, containerStyles }) => {
     )
 }
 
-const CustomCard = ({ item, index }) => {
+const CustomCard = ({ item, addr, index }) => {
     const [watering, setWatering] = useState(false)
     const [showMenu, setShowMenu] = useState(false)
     const [plantData, setPlantData] = useState({ humidity: -1, tank: -1 })
@@ -35,7 +35,8 @@ const CustomCard = ({ item, index }) => {
             client.connect({
                 keepAliveInterval: 20,
                 onSuccess() {
-                    client.subscribe('h2orta/planta')
+                    console.log("conect to", `h2orta/${addr}/planta`)
+                    client.subscribe(`h2orta/${addr}/planta`)
                     if (mensagem) {
                         client.send(mensagem)
                         ToastAndroid.show("Irrigando planta", ToastAndroid.SHORT)
@@ -50,14 +51,16 @@ const CustomCard = ({ item, index }) => {
         }
     }
 
-    const errorConnecting = () => {
+    const errorConnecting = (error) => {
         setTimeout(attemptConnection, 1000)
+        console.log("Erro ao conectar ao MQTT: ", error)
     }
 
     useEffect(() => {
-        if (item.id > 0) {
+        if (item.id > 0 && !!addr) {
             setPlantData({ humidity: 0, tank: 0 })
 
+            console.log("vou comunicar")
             attemptConnection()
             client.onConnectionLost = errorConnecting
             client.onMessageArrived = (message) => {
@@ -69,12 +72,12 @@ const CustomCard = ({ item, index }) => {
             }
             return () => client.disconnect()
         }
-    }, [item])
+    }, [item, addr])
 
     sendMessage = (message) => {
         let mensagem = new Paho.Message(message)
         mensagem.qos = 2
-        mensagem.destinationName = 'h2orta/irrigar'
+        mensagem.destinationName = `h2orta/${addr}/irrigar`
         attemptConnection(mensagem)
     }
 

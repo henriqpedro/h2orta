@@ -3,7 +3,7 @@ import Loading from './Loading'
 import { useState } from 'react';
 import { Ionicons } from "@expo/vector-icons";
 
-const CustomBleDevice = ({ device, index, handlePress, disabled }) => {
+const CustomBleDevice = ({ device, index, connected, handlePress, disabled }) => {
 
     const [isLoading, setIsLoading] = useState(false);
 
@@ -25,9 +25,11 @@ const CustomBleDevice = ({ device, index, handlePress, disabled }) => {
                 <Text className={`font-semibold text-gray text-lg`}>{device.name}</Text>
                 <Text className={`'text-black`}>{device.id}</Text>
             </View>
-            <Loading loading={isLoading} color='black'>
-                <Ionicons name="chevron-forward" size={20} color="#555" />
-            </Loading>
+            {connected ? <Text className="italic text-base">Conectado</Text> :
+                <Loading loading={isLoading} color='black'>
+                    <Ionicons name="chevron-forward" size={20} color="#555" />
+                </Loading>
+            }
         </TouchableOpacity>
     )
 }

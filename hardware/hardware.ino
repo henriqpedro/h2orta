@@ -13,6 +13,11 @@ void setup() {
 void loop() {
 
   if (WiFi.status() == WL_CONNECTED) {
+    if (bleActive) {
+      notifyConnectionStatus(true);
+      delay(5000);
+      turnOffBLE();
+    }
     reconnectToBroker();
     //irrigateLowMoisture();
     publishData();

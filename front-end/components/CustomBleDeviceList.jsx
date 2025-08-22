@@ -1,20 +1,9 @@
 import { FlatList } from 'react-native'
 import CustomEmptyList from './CustomEmptyList'
 import CustomBleDevice from './CustomBleDevice'
-import useBLE from './../useBLE'
 import { useEffect } from 'react'
 
-const CustomBleDeviceList = () => {
-
-    const {
-        scanning,
-        scanForDevices,
-        allDevices,
-        connecting,
-        connectToDevice,
-        connectedDevice,
-        disconnectFromDevice
-    } = useBLE();
+const CustomBleDeviceList = ({ scanning, scanForDevices, allDevices, connecting, connectToDevice, connectedDevice, disconnectFromDevice }) => {
 
     useEffect(() => {
         scanForDevices();
@@ -37,6 +26,7 @@ const CustomBleDeviceList = () => {
                 <CustomBleDevice
                     disabled={connecting}
                     device={item}
+                    connected={item.id == connectedDevice?.id}
                     index={index}
                     handlePress={() => connectBLE(item)} />} />
     )

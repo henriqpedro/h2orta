@@ -24,7 +24,7 @@ const CustomInput = ({ title, hide, date, select, placeholder, value, handleChan
 
     return (
         <View className={`min-w-[80%] my-2`}>
-            <Text className={`${labelStyles ?? 'text-primary text-base font-bold'} mb-2 ml-4`}>{title}</Text>
+            {title && <Text className={`${labelStyles ?? 'text-primary text-base font-bold'} mb-2 ml-4`}>{title}</Text>}
             <TouchableOpacity
                 accessible={select}
                 onPress={onPressInput}
