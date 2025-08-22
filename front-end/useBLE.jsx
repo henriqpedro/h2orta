@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { PermissionsAndroid, Platform, ToastAndroid } from "react-native";
+import { Buffer } from "buffer";
 import {
     BleError,
     BleManager,
@@ -8,6 +9,7 @@ import {
 } from "react-native-ble-plx";
 
 function useBLE() {
+
     const bleManager = useMemo(() => new BleManager(), []);
 
     const [scanning, setScanning] = useState(false);
@@ -16,7 +18,14 @@ function useBLE() {
     const [allDevices, setAllDevices] = useState([]);
     const [connectedDevice, setConnectedDevice] = useState(null);
 
-    const scanningTime = 1000 * 10;
+    const [isESPConnectedToWifi, setIsESPConnectedToWifi] = useState(false);
+
+    const scanningTime = 1000 * 5;
+
+    const SERVICE_UUID = "12345678-1234-1234-1234-1234567890ab";
+    const SSID_CHAR_UUID = "12345678-1234-1234-1234-1234567890ac";
+    const PASS_CHAR_UUID = "12345678-1234-1234-1234-1234567890ad";
+    const CONNECT_CHAR_UUID = "12345678-1234-1234-1234-1234567890ae";
 
     const requestAndroid31Permissions = async () => {
         const bluetoothScanPermission = await PermissionsAndroid.request(
@@ -48,7 +57,7 @@ function useBLE() {
         else ToastAndroid.show("É necessário conceder permissão bluetooth para continuar.", ToastAndroid.SHORT);
     };
 
-    const isDuplicteDevice = (devices, nextDevice) =>
+    const isDuplicatedDevice = (devices, nextDevice) =>
         devices.findIndex((device) => nextDevice.id === device.id) > -1;
 
     const stopScanning = () => {
@@ -56,24 +65,32 @@ function useBLE() {
         setScanning(false);
     }
 
+    const addDeviceToList = (device) => {
+        if (!device) return;
+        setAllDevices((prevState) => {
+            if (!isDuplicatedDevice(prevState, device))
+                return [...prevState, device];
+            return prevState;
+        });
+    }
+
     const startScanning = () => {
-        if (!scanning) {
-            setScanning(true);
-            setTimeout(stopScanning, scanningTime);
-            return bleManager.startDeviceScan(null, null, (error, device) => {
-                if (error) {
-                    ToastAndroid.show("Erro ao escanear BLE", ToastAndroid.SHORT);
-                    console.log(error);
-                }
-                if (device?.name) {
-                    setAllDevices((prevState) => {
-                        if (!isDuplicteDevice(prevState, device))
-                            return [...prevState, device];
-                        return prevState;
-                    });
-                }
-            });
-        }
+        if (scanning) return;
+        setScanning(true);
+        let errorShown = false;
+        const timeoutId = setTimeout(stopScanning, scanningTime);
+        addDeviceToList(connectedDevice);
+        return bleManager.startDeviceScan(null, null, (error, device) => {
+            if (error && !errorShown) {
+                stopScanning();
+                clearTimeout(timeoutId);
+                ToastAndroid.show("Erro ao escanear BLE: verifique se o bluetooth está ligado.", ToastAndroid.SHORT);
+                errorShown = true;
+                console.log(error);
+                return;
+            }
+            if (device?.name) addDeviceToList(device);
+        });
     }
 
     const connectToDevice = async (device) => {
@@ -89,10 +106,11 @@ function useBLE() {
                 await deviceConnection.discoverAllServicesAndCharacteristics();
                 setConnecting(false);
                 stopScanning();
-                //startStreamingData(deviceConnection);
+                startStreamingData(deviceConnection);
             } catch (e) {
                 ToastAndroid.show("Erro ao conectar BLE", ToastAndroid.SHORT);
                 console.log("Erro ao conectar BLE: ", e);
+                return;
             }
         }
     }
@@ -101,21 +119,60 @@ function useBLE() {
         if (connectedDevice) {
             bleManager.cancelDeviceConnection(connectedDevice.id);
             setConnectedDevice(null);
-            setHeartRate(0);
         }
     };
 
-    // const startStreamingData = async (device: Device) => {
-    //     if (device) {
-    //         device.monitorCharacteristicForService(
-    //             HEART_RATE_UUID,
-    //             HEART_RATE_CHARACTERISTIC,
-    //             onHeartRateUpdate
-    //         );
-    //     } else {
-    //         console.log("No Device Connected");
-    //     }
-    // };
+    const onStatusUpdate = (error, characteristic) => {
+        if (error) {
+            console.error("Erro ao receber notificação", error);
+            return;
+        }
+
+        if (characteristic?.value) {
+            const decoded = atob(characteristic.value);
+            console.log("Notificação recebida:", decoded);
+
+            setIsESPConnectedToWifi(decoded == "CONNECTED");
+        }
+    }
+
+    const sendWifiCredentials = async (ssid, password) => {
+        if (connectedDevice) {
+            try {
+
+                const ssidBytes = Buffer.from(ssid, "utf-8");
+                const passBytes = Buffer.from(password, "utf-8");
+
+                await connectedDevice.writeCharacteristicWithResponseForService(
+                    SERVICE_UUID,
+                    SSID_CHAR_UUID,
+                    ssidBytes.toString("base64")
+                );
+
+                await connectedDevice.writeCharacteristicWithResponseForService(
+                    SERVICE_UUID,
+                    PASS_CHAR_UUID,
+                    passBytes.toString("base64")
+                );
+
+                console.log("Credenciais enviadas!");
+            } catch (error) {
+                console.error("Erro ao enviar credenciais:", error);
+            }
+        } else
+            console.log("Nenhum dispositivo BLE conectado para enviar credenciais WIFI");
+    }
+
+    const startStreamingData = async (device) => {
+        if (device) {
+            device.monitorCharacteristicForService(
+                SERVICE_UUID,
+                CONNECT_CHAR_UUID,
+                onStatusUpdate
+            );
+        } else
+            console.log("Nenhum dispositivo BLE conectado para receber notificação");
+    };
 
     return {
         scanning,
@@ -124,7 +181,9 @@ function useBLE() {
         connectToDevice,
         allDevices,
         connectedDevice,
-        disconnectFromDevice
+        disconnectFromDevice,
+        sendWifiCredentials,
+        isESPConnectedToWifi
     };
 }
 

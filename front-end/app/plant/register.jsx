@@ -1,20 +1,42 @@
-import { View, SafeAreaView, Image, TouchableOpacity, ToastAndroid, ScrollView, Text } from 'react-native';
+import { View, SafeAreaView, Image, ScrollView, Text } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import CustomBleDeviceList from '../../components/CustomBleDeviceList';
 import CustomInput from '../../components/CustomInput';
 import CustomSelectModal from '../../components/CustomSelectModal';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { usePlantContext } from '../../context/PlantContext';
 import CustomButton from '../../components/CustomButton';
-import { Ionicons, MaterialIcons } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import CameraIcon from '../../components/CameraIcon';
 import { router } from 'expo-router';
+import CustomWifiList from '../../components/CustomWifiList';
+import useBLE from '../../useBLE';
+import useWifi from '../../useWifi';
 
 const Register = () => {
 
-    const { data, prototype, viewingPlant, setViewingPlant } = usePlantContext();
+    const { data, prototype, setMacAddr, setViewingPlant } = usePlantContext();
+
+    const {
+        scanning: scanningBLE,
+        scanForDevices,
+        allDevices,
+        connecting,
+        connectToDevice,
+        connectedDevice,
+        sendWifiCredentials,
+        disconnectFromDevice
+    } = useBLE();
+
+    const {
+        scanning: scanningWifi,
+        currentSSID,
+        scanForWifi,
+        allNetworks
+    } = useWifi();
 
     const [plant, setPlant] = useState(prototype);
+    const [ble, setBle] = useState(true);
 
     const [vasoInput, setVasoInput] = useState({
         id: 0,
@@ -25,9 +47,24 @@ const Register = () => {
         }
     });
 
+    useEffect(() => {
+        if (connectedDevice) setBle(false);
+    }, [connectedDevice]);
+
     const save = () => {
         setViewingPlant(plant);
+        console.log(connectedDevice.id)
+        setMacAddr(connectedDevice.id);
         router.navigate("home");
+    }
+
+    const handleBleClick = () => {
+        setBle(true);
+        scanForDevices();
+    }
+
+    const handleWifiClick = () => {
+        setBle(false);
     }
 
     return (
@@ -51,14 +88,30 @@ const Register = () => {
                     </View>
                     <Text className="text-base text-black mb-6">Configure o vaso: </Text>
                     <View className="w-full flex-row justify-around mb-2">
-                        <CustomButton constainerStyles="w-[150px]">
+                        <CustomButton disabled={!!connectedDevice} constainerStyles="w-[150px]" handlePress={handleBleClick}>
                             <Ionicons name="bluetooth-outline" size={32} color="white" />
                         </CustomButton>
-                        <CustomButton constainerStyles="w-[150px]">
+                        <CustomButton disabled={!connectedDevice} constainerStyles="w-[150px]" handlePress={handleWifiClick}>
                             <Ionicons name="wifi-outline" size={32} color="white" />
                         </CustomButton>
                     </View>
-                    <CustomBleDeviceList />
+                    {
+                        ble ?
+                            <CustomBleDeviceList
+                                scanning={scanningBLE}
+                                scanForDevices={scanForDevices}
+                                connectedDevice={connectedDevice}
+                                connectToDevice={connectToDevice}
+                                allDevices={allDevices}
+                                connecting={connecting}
+                            /> :
+                            <CustomWifiList
+                            sendCredentials={sendWifiCredentials}
+                                scanForWifi={scanForWifi}
+                                scanning={scanningWifi}
+                                currentSSID={currentSSID}
+                                allNetworks={allNetworks} />
+                    }
                 </View>
                 <StatusBar backgroundColor="#F9F9F9" />
             </ScrollView>

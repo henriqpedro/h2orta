@@ -26,6 +26,7 @@
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
+      "react-native-wifi-reborn",
       "react-native-ble-plx",
       "expo-router",
       "expo-font",
