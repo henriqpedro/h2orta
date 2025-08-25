@@ -47,7 +47,6 @@ const SignIn = () => {
                     <Link href="/sign-up" className="font-bold text-base underline py-5">Criar nova conta.</Link>
                 </View>
             </ScrollView>
-            <StatusBar backgroundColor="#F9F9F9" />
         </SafeAreaView>
     );
 }

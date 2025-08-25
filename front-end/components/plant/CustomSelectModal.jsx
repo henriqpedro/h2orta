@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { Modal, Portal, Searchbar } from 'react-native-paper';
-import CustomCardList from '../components/CustomCardList';
-import CustomButton from './CustomButton';
-import { useScreenReaderEnabled } from '../hooks/useScreenReaderEnabled';
-import CustomInput from './CustomInput';
-import { prototype } from '../utils/default-plants';
+import CustomCardList from '../home/CustomCardList';
+import CustomButton from '../CustomButton';
+import { useScreenReaderEnabled } from '../../hooks/useScreenReaderEnabled';
+import CustomInput from '../CustomInput';
+import { prototype } from '../../utils/default-plants';
 
 
 const CustomModal = ({ data, plant, visible, onClose, onSelect }) => {

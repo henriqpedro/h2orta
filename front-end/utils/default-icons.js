@@ -1,0 +1,5 @@
+export const notFound = require("../assets/icons/not-found.png")
+export const check = require("../assets/icons/check.png")
+export const add = require("../assets/icons/add.png")
+export const humidity = require('../assets/icons/humidity.png')
+export const tank = require('../assets/icons/tank.png')

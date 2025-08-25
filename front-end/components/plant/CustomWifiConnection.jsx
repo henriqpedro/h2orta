@@ -2,13 +2,17 @@ import { Text, TouchableOpacity, View } from 'react-native';
 import { Ionicons } from "@expo/vector-icons";
 import { useState } from 'react';
 import { Modal, Portal } from 'react-native-paper';
-import CustomButton from './CustomButton';
-import CustomInput from './CustomInput';
+import CustomButton from '../CustomButton';
+import CustomInput from '../CustomInput';
 
 const CustomWifiModal = ({ SSID, onClose, visible, onSend }) => {
 
     const [password, setPassword] = useState("");
 
+    const send = () => {
+        onSend(SSID, password);
+        onClose();
+    }
     return (
         <Portal>
             <Modal
@@ -17,10 +21,6 @@ const CustomWifiModal = ({ SSID, onClose, visible, onSend }) => {
                 visible={visible}
                 onDismiss={() => onClose()}>
                 <View className="p-4 rounded-2xl pt-8 w-[90vw] bg-primary">
-                    {/* <View className="flex-row mb-4">
-                        <Text className="mx-2 ml-4 text-gray text-2xl font-semibold">{SSID}</Text>
-                        <Ionicons name="wifi-outline" size={28} color="black" />
-                    </View> */}
                     <Text className="text-base mb-2 ml-4">Digite a senha para "{SSID}".</Text>
                     <View className="justify-center items-center">
                         <CustomInput
@@ -37,7 +37,7 @@ const CustomWifiModal = ({ SSID, onClose, visible, onSend }) => {
                                 constainerStyles='bg-secondary mr-2 mt-5'
                                 textStyles='text-black text-sm' />
                             <CustomButton
-                                handlePress={() => onSend(SSID, password)}
+                                handlePress={send}
                                 title='Confirmar'
                                 constainerStyles='mr-1 mt-5'
                                 textStyles='text-sm' />

@@ -1,14 +1,15 @@
 import { StatusBar } from 'expo-status-bar';
-import { Image, ScrollView, View } from 'react-native';
+import { Image, ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import CustomButton from '../components/CustomButton';
-import CustomCard from '../components/CustomCard';
 import { router } from 'expo-router';
 import { usePlantContext } from '../context/PlantContext';
+import PlantCard from '../components/home/CustomCard';
 
 const Home = () => {
 
     const { viewingPlant, macAddr } = usePlantContext();
+
     return (
         <SafeAreaView className="bg-primary flex-1">
             <View className="w-full h-[15vh] rounded-b-[50px] bg-medium items-center justify-center">
@@ -16,7 +17,8 @@ const Home = () => {
             </View>
             <ScrollView>
                 <View className="w-full min-h-[70vh] px-7 justify-center items-center">
-                    <CustomCard addr={macAddr} item={viewingPlant} index={0} />
+                    <Text className={`text-2xl mb-10 ${viewingPlant && 'mt-6'} font-semibold text-gray`}>Meus vasinhos</Text>
+                    <PlantCard addr={macAddr} item={viewingPlant} index={0} />
                 </View>
             </ScrollView>
             <View className="justify-center items-center pt-4">
@@ -25,7 +27,7 @@ const Home = () => {
                     title='Cadastrar planta'
                     constainerStyles='w-56 mb-8' />
             </View>
-            <StatusBar backgroundColor="#F9F9F9" />
+            <StatusBar backgroundColor='#76A136' />
         </SafeAreaView>
     );
 }

@@ -1,14 +1,14 @@
 import { Image, Text, View } from 'react-native'
-import { notFound } from '../utils/default-icons'
+import { check } from '../utils/default-icons'
 
-const CustomEmptyList = () => {
+const CustomCheckIcon = () => {
     return (
         <View className="justify-center items-center my-8">
             <Image className="w-[230px] h-[230px] mb-1" resizeMode="contain"
-                source={notFound} />
-            <Text className='text-base'>Nenhum resultado exibido.</Text>
+                source={check} />
+            <Text className='text-base'>Cadastro finalizado com sucesso.</Text>
         </View>
     )
 }
 
-export default CustomEmptyList
+export default CustomCheckIcon

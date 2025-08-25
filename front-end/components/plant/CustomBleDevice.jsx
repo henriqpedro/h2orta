@@ -1,5 +1,5 @@
 import { Text, TouchableOpacity, View } from 'react-native'
-import Loading from './Loading'
+import Loading from '../Loading'
 import { useState } from 'react';
 import { Ionicons } from "@expo/vector-icons";
 

@@ -1,21 +1,22 @@
-import { View, SafeAreaView, Image, ScrollView, Text } from 'react-native';
-import { StatusBar } from 'expo-status-bar';
-import CustomBleDeviceList from '../../components/CustomBleDeviceList';
-import CustomInput from '../../components/CustomInput';
-import CustomSelectModal from '../../components/CustomSelectModal';
-import { useEffect, useState } from 'react';
+import { View, SafeAreaView, ScrollView, ToastAndroid } from 'react-native';
+import CustomBleDeviceList from '../../components/plant/CustomBleDeviceList';
+import { useState } from 'react';
 import { usePlantContext } from '../../context/PlantContext';
 import CustomButton from '../../components/CustomButton';
-import { Ionicons } from '@expo/vector-icons';
-import CameraIcon from '../../components/CameraIcon';
 import { router } from 'expo-router';
-import CustomWifiList from '../../components/CustomWifiList';
+import CustomWifiList from '../../components/plant/CustomWifiList';
 import useBLE from '../../useBLE';
 import useWifi from '../../useWifi';
+import RegisterPlant from '../../components/plant/RegisterPlant';
+import { ProgressBar } from 'react-native-paper';
+import CustomCheckIcon from '../../components/CustomCheckIcon';
 
 const Register = () => {
 
     const { data, prototype, setMacAddr, setViewingPlant } = usePlantContext();
+
+    const [step, setStep] = useState(1);
+    const [plant, setPlant] = useState(prototype);
 
     const {
         scanning: scanningBLE,
@@ -24,8 +25,8 @@ const Register = () => {
         connecting,
         connectToDevice,
         connectedDevice,
-        sendWifiCredentials,
-        disconnectFromDevice
+        isESPConnectedToWifi,
+        sendWifiCredentials
     } = useBLE();
 
     const {
@@ -35,8 +36,6 @@ const Register = () => {
         allNetworks
     } = useWifi();
 
-    const [plant, setPlant] = useState(prototype);
-    const [ble, setBle] = useState(true);
 
     const [vasoInput, setVasoInput] = useState({
         id: 0,
@@ -47,79 +46,111 @@ const Register = () => {
         }
     });
 
-    useEffect(() => {
-        if (connectedDevice) setBle(false);
-    }, [connectedDevice]);
+    const validate = () => {
+        if (step == 1) {
+            if (!vasoInput.apelido || vasoInput.apelido == "") {
+                ToastAndroid.show("Informe um apelido para plantinha.", ToastAndroid.SHORT);
+                return false;
+            }
+            else if (!plant || plant.id <= 0) {
+                ToastAndroid.show("Selecione uma planta para continuar.", ToastAndroid.SHORT);
+                return false;
+            }
+            return true;
+        }
+
+        if (step == 2) {
+            if (!connectedDevice) {
+                ToastAndroid.show("Conecte com um vaso H2orta por bluetooth para prosseguir.", ToastAndroid.SHORT);
+                return false;
+            }
+            return true;
+        }
+
+        if (step == 3) {
+            if (!isESPConnectedToWifi) {
+                ToastAndroid.show("Conecte um vaso a uma rede wifi para prosseguir.", ToastAndroid.SHORT);
+                return false;
+            }
+            return true;
+        }
+
+        return true;
+    }
 
     const save = () => {
+        if (!validate()) return;
         setViewingPlant(plant);
-        console.log(connectedDevice.id)
         setMacAddr(connectedDevice.id);
         router.navigate("home");
     }
 
-    const handleBleClick = () => {
-        setBle(true);
-        scanForDevices();
+    const nextStep = () => {
+        if (!validate()) return;
+        setStep(step + 1);
     }
 
-    const handleWifiClick = () => {
-        setBle(false);
+    const prevStep = () => {
+        setStep(step - 1);
     }
 
     return (
         <SafeAreaView className="flex-1 bg-primary">
+            <ProgressBar progress={step / 3} color='#93BE5B' />
             <ScrollView>
-                <View className="min-h-[100vh] w-full mt-4 px-6 justify-center items-center">
-                    <View className="w-[90%] mb-4 justify-center items-center">
-                        {
-                            plant.imageSource == prototype.imageSource ?
-                                <CameraIcon /> :
-                                <Image className="w-[150px] h-[150px] mb-2 rounded-xl" source={plant.imageSource} resizeMode='contain' />
-                        }
-                        <CustomInput
-                            labelStyles="text-gray font-semibold text-lg"
-                            inputStyles="bg-secondary"
-                            value={vasoInput.apelido}
-                            handleChange={(apelido) => setVasoInput({ ...vasoInput, apelido })}
-                            title="Apelido:"
-                            placeholder="Digite o apelido da planta." />
-                        <CustomSelectModal plant={plant} data={data} onSelect={setPlant} />
-                    </View>
-                    <Text className="text-base text-black mb-6">Configure o vaso: </Text>
-                    <View className="w-full flex-row justify-around mb-2">
-                        <CustomButton disabled={!!connectedDevice} constainerStyles="w-[150px]" handlePress={handleBleClick}>
-                            <Ionicons name="bluetooth-outline" size={32} color="white" />
-                        </CustomButton>
-                        <CustomButton disabled={!connectedDevice} constainerStyles="w-[150px]" handlePress={handleWifiClick}>
-                            <Ionicons name="wifi-outline" size={32} color="white" />
-                        </CustomButton>
-                    </View>
+                <View className="min-h-[56vh] w-full mt-10 px-6 justify-center items-center">
                     {
-                        ble ?
-                            <CustomBleDeviceList
-                                scanning={scanningBLE}
-                                scanForDevices={scanForDevices}
-                                connectedDevice={connectedDevice}
-                                connectToDevice={connectToDevice}
-                                allDevices={allDevices}
-                                connecting={connecting}
-                            /> :
+                        step == 1 &&
+                        <RegisterPlant
+                            data={data}
+                            plant={plant}
+                            setPlant={setPlant}
+                            apelido={vasoInput.apelido}
+                            setApelido={(apelido) => setVasoInput({ ...vasoInput, apelido })} />
+                    }
+                    {
+                        step == 2 &&
+                        < CustomBleDeviceList
+                            scanning={scanningBLE}
+                            scanForDevices={scanForDevices}
+                            connectedDevice={connectedDevice}
+                            connectToDevice={connectToDevice}
+                            allDevices={allDevices}
+                            connecting={connecting}
+                        />
+                    }
+                    {
+                        step == 3 && !isESPConnectedToWifi ?
                             <CustomWifiList
-                            sendCredentials={sendWifiCredentials}
+                                sendCredentials={sendWifiCredentials}
                                 scanForWifi={scanForWifi}
                                 scanning={scanningWifi}
                                 currentSSID={currentSSID}
                                 allNetworks={allNetworks} />
+                            : step == 3 &&
+                            <CustomCheckIcon />
                     }
                 </View>
-                <StatusBar backgroundColor="#F9F9F9" />
             </ScrollView>
             <View className="justify-center items-center pt-4">
                 <CustomButton
-                    handlePress={save}
-                    title='Salvar'
-                    constainerStyles='w-56 mb-8' />
+                    handlePress={step == 3 ? save : nextStep}
+                    title={step == 3 ? 'Salvar' : 'Prosseguir'}
+                    constainerStyles={`w-56 mb-2 ${step != 2 && 'mb-8'}`} />
+                {step == 2 &&
+                    <>
+                        <CustomButton
+                            color={'bg-dark'}
+                            handlePress={scanForDevices}
+                            title='Procurar'
+                            constainerStyles='w-56 mb-2' />
+                        <CustomButton
+                            color={'bg-zinc-600'}
+                            handlePress={prevStep}
+                            title='Voltar'
+                            constainerStyles='w-56 mb-8' />
+                    </>
+                }
             </View>
         </SafeAreaView>
     )
