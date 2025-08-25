@@ -2,9 +2,10 @@ import { Entypo } from '@expo/vector-icons';
 import * as Paho from 'paho-mqtt';
 import { useEffect, useState } from 'react';
 import { Image, Text, ToastAndroid, TouchableOpacity, View } from 'react-native';
-import CustomButton from './CustomButton';
+import CustomButton from '../CustomButton';
 import CustomTextIcon from './CustomTextIcon';
-import { MQTT_BROKER } from '../utils/config';
+import { MQTT_BROKER } from '../../utils/config';
+import { add, humidity, tank } from '../../utils/default-icons';
 
 const CustomIndicator = ({ value }) => {
     let color = value < 50 ? 'bg-danger text-primary' : 'bg-light text-primary'
@@ -23,7 +24,22 @@ const CustomCardField = ({ iconSource, title, value, containerStyles }) => {
     )
 }
 
+const EmptyCard = ({ index }) => {
+
+    return (
+        <View className="bg-secondary min-h-[50vh] min-w-[80vw] rounded-xl px-5 pt-2 pb-12 justify-center items-center" key={index}>
+            <View className="justify-center items-center">
+                <Image className="w-[230px] h-[230px] my-5" source={add} resizeMode='contain' />
+                <Text className="text-base text-center mx-8">
+                    Aqui será possível acompanhar o monitoramento de água e o cuidado das suas plantinhas.
+                </Text>
+            </View>
+        </View>
+    )
+}
+
 const CustomCard = ({ item, addr, index }) => {
+
     const [watering, setWatering] = useState(false)
     const [showMenu, setShowMenu] = useState(false)
     const [plantData, setPlantData] = useState({ humidity: -1, tank: -1 })
@@ -33,9 +49,10 @@ const CustomCard = ({ item, addr, index }) => {
     const attemptConnection = (mensagem) => {
         try {
             client.connect({
+                userName: "h2orta",
+                password: "h2orta-client",
                 keepAliveInterval: 20,
                 onSuccess() {
-                    console.log("conect to", `h2orta/${addr}/planta`)
                     client.subscribe(`h2orta/${addr}/planta`)
                     if (mensagem) {
                         client.send(mensagem)
@@ -57,7 +74,7 @@ const CustomCard = ({ item, addr, index }) => {
     }
 
     useEffect(() => {
-        if (item.id > 0 && !!addr) {
+        if (item && item.id > 0 && !!addr) {
             setPlantData({ humidity: 0, tank: 0 })
 
             console.log("vou comunicar")
@@ -93,6 +110,7 @@ const CustomCard = ({ item, addr, index }) => {
             <View className="justify-center items-center">
                 <View className="relative self-end px-5 items-end">
                     <TouchableOpacity
+                        disabled={!item}
                         accessibilityLabel="Menu de ações"
                         accessibilityState={{ expanded: showMenu }}
                         accessibilityHint={`${!showMenu ? 'Expandir' : 'Ocultar'} menu`}
@@ -113,9 +131,8 @@ const CustomCard = ({ item, addr, index }) => {
                                     sendMessage('1')
                                     setWatering(true)
                                     ToastAndroid.show("Irrigando planta", ToastAndroid.SHORT)
-                                } else {
+                                } else
                                     ToastAndroid.show("Cadastre uma planta para irrigar", ToastAndroid.SHORT)
-                                }
                             }}
                             constainerStyles="absolute top-14 right-0 bg-primary rounded-none z-50"
                             textStyles="text-black text-sm"
@@ -133,12 +150,12 @@ const CustomCard = ({ item, addr, index }) => {
             <View>
                 <CustomCardField
                     containerStyles="mt-5"
-                    iconSource={require('../assets/icons/tank.png')}
+                    iconSource={tank}
                     title="Nível do reservatório"
                     value={plantData.tank} />
                 <CustomCardField
                     containerStyles="mt-2"
-                    iconSource={require('../assets/icons/humidity.png')}
+                    iconSource={humidity}
                     title="Umidade"
                     value={plantData.humidity} />
             </View>
@@ -146,4 +163,9 @@ const CustomCard = ({ item, addr, index }) => {
     )
 }
 
-export default CustomCard
+const PlantCard = ({ item, addr, index }) => {
+    return item ? <CustomCard item={item} index={index} addr={addr} />
+        : <EmptyCard />
+}
+
+export default PlantCard;

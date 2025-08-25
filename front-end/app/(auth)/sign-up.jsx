@@ -66,7 +66,6 @@ const SignUp = () => {
                     <Link href="/sign-in" className="font-bold text-base underline py-5">Já possuo cadastro.</Link>
                 </View>
             </ScrollView>
-            <StatusBar backgroundColor="#F9F9F9" />
         </SafeAreaView>
     );
 }

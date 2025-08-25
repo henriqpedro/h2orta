@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import CustomEmptyList from './CustomEmptyList';
-import { prototype } from '../utils/default-plants';
+import CustomEmptyList from '../CustomEmptyList';
+import { prototype } from '../../utils/default-plants';
 
 const CustomCardShort = ({ item, index, selected, onSelected }) => {
     return (

@@ -1,12 +1,7 @@
 import { useMemo, useState } from "react";
 import { PermissionsAndroid, Platform, ToastAndroid } from "react-native";
 import { Buffer } from "buffer";
-import {
-    BleError,
-    BleManager,
-    Characteristic,
-    Device
-} from "react-native-ble-plx";
+import { BleManager } from "react-native-ble-plx";
 
 function useBLE() {
 
@@ -89,7 +84,7 @@ function useBLE() {
                 console.log(error);
                 return;
             }
-            if (device?.name) addDeviceToList(device);
+            if (device?.name?.includes("H2orta")) addDeviceToList(device);
         });
     }
 

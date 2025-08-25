@@ -5,7 +5,7 @@ const PlantContext = createContext();
 export const usePlantContext = () => useContext(PlantContext);
 
 export const PlantProvider = ({ children }) => {
-    const [viewingPlant, setViewingPlant] = useState(prototype);
+    const [viewingPlant, setViewingPlant] = useState(undefined);
     const [macAddr, setMacAddr] = useState(null);
 
     return (
