@@ -59,6 +59,7 @@ class H2ortaProvisioningCallbacks : public NimBLECharacteristicCallbacks {
       Serial.println(PASSWORD);
 
       // When receiving password, ssid was already received
+      newAttempt = true;
       saveCredentials();
       connectToWifi();
     }

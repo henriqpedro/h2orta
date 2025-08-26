@@ -23,7 +23,8 @@ void connectToWifi() {
       delay(1000);
       numTries--;
     }
-    if (WiFi.status() == WL_CONNECTED) Serial.println("Conected to wifi!");
+    if (WiFi.status() == WL_CONNECTED)
+      Serial.println("Conected to wifi!");
     else Serial.println("Could not connect to wifi!");
   }
 }

@@ -12,6 +12,8 @@ void setup() {
 
 void loop() {
 
+  delay(1000);
+
   if (WiFi.status() == WL_CONNECTED) {
     if (bleActive) {
       notifyConnectionStatus(true);
@@ -21,7 +23,10 @@ void loop() {
     reconnectToBroker();
     //irrigateLowMoisture();
     publishData();
+  } else if (newAttempt && bleActive) {
+    newAttempt = false;
+    notifyConnectionStatus(false);
   }
 
-  delay(3000);
+  delay(2000);
 }
