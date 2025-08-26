@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { Image, SafeAreaView, ScrollView, StatusBar, View } from 'react-native';
+import { Link, Redirect } from 'expo-router';
+import { useState } from 'react';
+import { Image, SafeAreaView, ScrollView, View } from 'react-native';
 import CustomButton from '../../components/CustomButton';
 import CustomInput from '../../components/CustomInput';
-import { Link, Redirect } from 'expo-router';
 import { useAuthContext } from '../../context/AuthContext';
 
 const SignUp = () => {
@@ -27,8 +27,8 @@ const SignUp = () => {
     return (
         <SafeAreaView className="bg-medium h-full">
             <ScrollView>
-                <View className="w-full min-h-[100vh] mt-6 items-center justify-center">
-                    <Image className="h-[6vh] my-3" source={require("../../assets/logo.png")} resizeMode="contain" />
+                <View className="w-full min-h-[100vh] my-6 items-center justify-center">
+                    <Image className="h-[6vh] mt-12" source={require("../../assets/logo.png")} resizeMode="contain" />
                     <View className="my-6">
                         <CustomInput inputStyles="bg-primary"
                             value={formData.nome}

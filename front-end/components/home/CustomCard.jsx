@@ -2,10 +2,10 @@ import { Entypo } from '@expo/vector-icons';
 import * as Paho from 'paho-mqtt';
 import { useEffect, useState } from 'react';
 import { Image, Text, ToastAndroid, TouchableOpacity, View } from 'react-native';
-import CustomButton from '../CustomButton';
-import CustomTextIcon from './CustomTextIcon';
 import { MQTT_BROKER } from '../../utils/config';
 import { add, humidity, tank } from '../../utils/default-icons';
+import CustomButton from '../CustomButton';
+import CustomTextIcon from './CustomTextIcon';
 
 const CustomIndicator = ({ value }) => {
     let color = value < 50 ? 'bg-danger text-primary' : 'bg-light text-primary'
@@ -30,7 +30,7 @@ const EmptyCard = ({ index }) => {
         <View className="bg-secondary min-h-[50vh] min-w-[80vw] rounded-xl px-5 pt-2 pb-12 justify-center items-center" key={index}>
             <View className="justify-center items-center">
                 <Image className="w-[230px] h-[230px] my-5" source={add} resizeMode='contain' />
-                <Text className="text-base text-center mx-8">
+                <Text className="text-base text-center mx-6">
                     Aqui será possível acompanhar o monitoramento de água e o cuidado das suas plantinhas.
                 </Text>
             </View>
