@@ -7,6 +7,7 @@ function useBLE() {
 
     const bleManager = useMemo(() => new BleManager(), []);
 
+    const [sending, setSending] = useState(false);
     const [scanning, setScanning] = useState(false);
     const [connecting, setConnecting] = useState(false);
 
@@ -118,6 +119,9 @@ function useBLE() {
     };
 
     const onStatusUpdate = (error, characteristic) => {
+
+        setSending(false);
+        
         if (error) {
             console.error("Erro ao receber notificação", error);
             return;
@@ -138,6 +142,8 @@ function useBLE() {
                 const ssidBytes = Buffer.from(ssid, "utf-8");
                 const passBytes = Buffer.from(password, "utf-8");
 
+                setSending(true);
+
                 await connectedDevice.writeCharacteristicWithResponseForService(
                     SERVICE_UUID,
                     SSID_CHAR_UUID,
@@ -151,6 +157,7 @@ function useBLE() {
                 );
 
                 console.log("Credenciais enviadas!");
+
             } catch (error) {
                 console.error("Erro ao enviar credenciais:", error);
             }
@@ -170,6 +177,7 @@ function useBLE() {
     };
 
     return {
+        sending,
         scanning,
         scanForDevices,
         connecting,

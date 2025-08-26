@@ -19,6 +19,7 @@ const Register = () => {
     const [plant, setPlant] = useState(prototype);
 
     const {
+        sending,
         scanning: scanningBLE,
         scanForDevices,
         allDevices,
@@ -110,7 +111,7 @@ const Register = () => {
                     }
                     {
                         step == 2 &&
-                        < CustomBleDeviceList
+                        <CustomBleDeviceList
                             scanning={scanningBLE}
                             scanForDevices={scanForDevices}
                             connectedDevice={connectedDevice}
@@ -122,6 +123,7 @@ const Register = () => {
                     {
                         step == 3 && !isESPConnectedToWifi ?
                             <CustomWifiList
+                                sending={sending}
                                 sendCredentials={sendWifiCredentials}
                                 scanForWifi={scanForWifi}
                                 scanning={scanningWifi}

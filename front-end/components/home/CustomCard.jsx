@@ -77,7 +77,6 @@ const CustomCard = ({ item, addr, index }) => {
         if (item && item.id > 0 && !!addr) {
             setPlantData({ humidity: 0, tank: 0 })
 
-            console.log("vou comunicar")
             attemptConnection()
             client.onConnectionLost = errorConnecting
             client.onMessageArrived = (message) => {

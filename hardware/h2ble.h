@@ -3,6 +3,7 @@
 #include "h2wifi.h"
 
 bool bleActive = true;
+bool newAttempt = false;
 
 void turnOffBLE();
 void configureBLE();
