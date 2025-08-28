@@ -23,7 +23,7 @@ const CustomBleDeviceList = ({ scanning, scanForDevices, allDevices, connecting,
                 scrollEnabled={false}
                 ListEmptyComponent={<CustomEmptyList />}
                 keyExtractor={(item, index) => index}
-                contentContainerStyle={{ marginTop: scanning ? 60 : 0 }}
+                contentContainerStyle={{ marginTop: scanning ? 80 : 0 }}
                 renderItem={({ item, index }) =>
                     <CustomBleDevice
                         disabled={connecting}

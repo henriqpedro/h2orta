@@ -59,9 +59,9 @@ class H2ortaProvisioningCallbacks : public NimBLECharacteristicCallbacks {
       Serial.println(PASSWORD);
 
       // When receiving password, ssid was already received
-      newAttempt = true;
       saveCredentials();
-      connectToWifi();
+      if (connectToWifi()) notifyConnectionStatus(true);
+      else notifyConnectionStatus(false);
     }
   }
 
@@ -122,7 +122,7 @@ void configureBLE() {
 }
 
 void turnOffBLE() {
-  
+
   NimBLEDevice::getAdvertising()->stop();
 
   // Desliga servidor e libera conexões

@@ -22,7 +22,7 @@ const CustomWifiList = ({ scanning, sending, scanForWifi, allNetworks, currentSS
                     scrollEnabled={false}
                     ListEmptyComponent={<CustomEmptyList />}
                     keyExtractor={(item, index) => index}
-                    contentContainerStyle={{ marginTop: scanning ? 60 : 0 }}
+                    contentContainerStyle={{ marginTop: scanning ? 80 : 0 }}
                     renderItem={({ item, index }) =>
                         <CustomWifiConnection
                             connected={item.SSID == currentSSID}
@@ -31,7 +31,7 @@ const CustomWifiList = ({ scanning, sending, scanForWifi, allNetworks, currentSS
                             wifi={item}
                             index={index} />} />
             </Loading>
-            { sending && <Text className="text-base mt-2">Conectando...</Text> }
+            { sending && <Text className="text-base mt-4">Conectando...</Text> }
         </View>
     )
 }

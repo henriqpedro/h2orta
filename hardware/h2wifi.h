@@ -6,4 +6,4 @@
 
 WiFiClient espClient;
 
-void connectToWifi();
+bool connectToWifi();

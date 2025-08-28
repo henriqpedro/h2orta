@@ -1,6 +1,6 @@
 #include "h2wifi.h"
 
-void connectToWifi() {
+bool connectToWifi() {
 
   loadCredentials();
 
@@ -13,18 +13,21 @@ void connectToWifi() {
     WiFi.mode(WIFI_MODE_STA);
     WiFi.begin(SSID, PASSWORD);
 
-    int numTries = 6;
+    int numTries = 10;
     while (WiFi.status() != WL_CONNECTED && numTries > 0) {
       Serial.println("Trying to connect to wifi...");
       if (numTries == 1) {
         clearCredentials();
         WiFi.disconnect(true);
       }
-      delay(1000);
+      delay(800);
       numTries--;
     }
-    if (WiFi.status() == WL_CONNECTED)
+    if (WiFi.status() == WL_CONNECTED) {
       Serial.println("Conected to wifi!");
-    else Serial.println("Could not connect to wifi!");
+      return true;
+    }
+    Serial.println("Could not connect to wifi!");
+    return false;
   }
 }

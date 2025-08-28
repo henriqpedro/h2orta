@@ -132,6 +132,11 @@ function useBLE() {
             console.log("Notificação recebida:", decoded);
 
             setIsESPConnectedToWifi(decoded == "CONNECTED");
+
+            if (decoded == "DISCONNECTED") {
+                console.log("Erro ao conectar ao WI-FI")
+                ToastAndroid.show("Erro ao conectar ao WI-FI: verifique as credenciais", ToastAndroid.SHORT);
+            }
         }
     }
 

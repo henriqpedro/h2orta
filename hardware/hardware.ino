@@ -12,21 +12,15 @@ void setup() {
 
 void loop() {
 
-  delay(1000);
-
   if (WiFi.status() == WL_CONNECTED) {
     if (bleActive) {
-      notifyConnectionStatus(true);
-      delay(5000);
+      delay(1000 * 30);
       turnOffBLE();
     }
     reconnectToBroker();
     //irrigateLowMoisture();
     publishData();
-  } else if (newAttempt && bleActive) {
-    newAttempt = false;
-    notifyConnectionStatus(false);
   }
 
-  delay(2000);
+  delay(1000 * 15);
 }
