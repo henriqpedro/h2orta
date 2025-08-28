@@ -33,6 +33,7 @@ export const AuthProvider = ({ children }) => {
             await axios.post(`${API_URL}/usuario`, input);
             await login(input);
         } catch (e) {
+            console.log(e);
             ToastAndroid.show("Erro ao criar conta.", ToastAndroid.SHORT);
         }
     }
@@ -50,6 +51,7 @@ export const AuthProvider = ({ children }) => {
 
             return result;
         } catch (e) {
+            console.log(e);
             ToastAndroid.show("Erro ao logar.", ToastAndroid.SHORT);
         }
     }

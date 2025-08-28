@@ -33,7 +33,7 @@ public class Usuario {
     @NotBlank
     private String nome;
 
-    @Column(nullable = false, length = 16)
+    @Column(nullable = false, length = 16, unique = true)
     @Size(min = 2, max = 16)
     @NotBlank
     private String usuario;
