@@ -13,16 +13,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+@Validated
 @RestController
 @RequestMapping("/planta")
-@Validated
 @AllArgsConstructor
 public class PlantaController {
 
     private PlantaService service;
 
     @GetMapping("/{id}")
-    public ResponseEntity<PlantaDto> findById(@PathVariable Long id) throws Exception {
+    public ResponseEntity<PlantaDto> findById(@PathVariable Long id) {
         var mapper = new ModelMapper();
 
         var planta = service.findById(id);
@@ -32,10 +32,14 @@ public class PlantaController {
     }
 
     @GetMapping
-    public ResponseEntity<List<PlantaDto>> findAll() throws Exception {
+    public ResponseEntity<List<PlantaDto>> findAll(
+            @RequestParam(defaultValue = "0") Integer page,
+            @RequestParam(defaultValue = "10") Integer size,
+            @RequestParam(required = false) String search
+    ) {
         var mapper = new ModelMapper();
 
-        var plantas = service.findAll();
+        var plantas = service.findAll(page, size, search);
         var dto = plantas.stream()
                 .map(planta -> mapper.map(planta, PlantaDto.class))
                 .collect(Collectors.toList());

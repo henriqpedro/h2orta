@@ -10,9 +10,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class LoginInput {
 
-    @NotBlank
+    @NotBlank(message = "Usuário não informado")
     public String usuario;
 
-    @NotBlank
+    @NotBlank(message = "Senha não informada")
     public String senha;
 }

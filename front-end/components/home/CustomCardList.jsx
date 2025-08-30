@@ -16,14 +16,14 @@ const CustomCardShort = ({ item, index, selected, onSelected }) => {
                 activeOpacity={0.7}
                 className={`rounded-xl py-10 min-w-[40vw] max-h-[24vh] justify-center items-center m-2
                 ${selected ? 'bg-light' : 'bg-secondary'}`}>
-                <Image className="w-[100px] h-[100px]" source={item.imageSource} resizeMode='contain' />
-                <Text numberOfLines={1} ellipsizeMode='tail' className={`font-semibold max-w-[35vw] px-3 ${selected ? 'text-primary' : 'text-black'}`}>{item.name}</Text>
+                <Image className="w-[100px] h-[90px] rounded-2xl mb-1" source={{ uri: item.imagem }} resizeMode='cover' />
+                <Text numberOfLines={1} ellipsizeMode='tail' className={`text-base font-semibold max-w-[37vw] ${selected ? 'text-primary' : 'text-black'}`}>{item.nome}</Text>
             </TouchableOpacity>
         </View>
     )
 }
 
-const CustomCardList = ({ selectedPlant, data, onSelected }) => {
+const CustomCardList = ({ selectedPlant, data, onSelected, onEndReached }) => {
 
     const [selectedItem, setSelectedItem] = useState({})
 
@@ -39,6 +39,7 @@ const CustomCardList = ({ selectedPlant, data, onSelected }) => {
                 extraData={data}
                 data={data}
                 ListEmptyComponent={<CustomEmptyList />}
+                onEndReached={onEndReached}
                 keyExtractor={(item, index) => index}
                 renderItem={({ item, index }) =>
                     <CustomCardShort
@@ -46,6 +47,7 @@ const CustomCardList = ({ selectedPlant, data, onSelected }) => {
                         index={index}
                         selected={item == selectedItem}
                         onSelected={(element) => {
+                            console.log(element.imagem)
                             setSelectedItem(element)
                             onSelected(element)
                         }} />} />

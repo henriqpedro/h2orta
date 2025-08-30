@@ -1,6 +1,5 @@
 package com.example.h2orta.controllers.dtos.Planta;
 
-import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -11,9 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class PlantaDto  {
-
-    private Long id;
+public class PlantaCreateInput {
 
     @Size(min = 2, max = 255, message = "Nome da planta deve conter entre 2 e 255 caracteres")
     @NotBlank(message = "Nome da planta deve ser informado")

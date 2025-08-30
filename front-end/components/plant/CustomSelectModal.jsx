@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { Modal, Portal, Searchbar } from 'react-native-paper';
 import CustomCardList from '../home/CustomCardList';
@@ -6,34 +6,43 @@ import CustomButton from '../CustomButton';
 import { useScreenReaderEnabled } from '../../hooks/useScreenReaderEnabled';
 import CustomInput from '../CustomInput';
 import { prototype } from '../../utils/default-plants';
+import { usePlantContext } from '../../context/PlantContext';
 
 
-const CustomModal = ({ data, plant, visible, onClose, onSelect }) => {
+const CustomModal = ({ plant, visible, onClose, onSelect }) => {
 
+    const { getAll, data } = usePlantContext();
     const screenReaderEnabled = useScreenReaderEnabled();
 
     const [selectedItem, setSelectedItem] = useState({})
-    const [innerData, setInnerData] = useState(data)
     const [search, setSearch] = useState('')
+    const [page, setPage] = useState(0)
+
+    useEffect(() => {
+        getAll(page, 10, search);
+    }, [page, search]);
 
     useEffect(() => {
         if (visible) {
+            setPage(0);
             if (plant == prototype) setSelectedItem({});
             else setSelectedItem(plant);
         }
-    }, [visible])
+    }, [visible]);
+
+    const onEndReached = () => {
+        setPage(page + 1);
+    }
 
     const onChangeSearch = (text) => {
-        let innerSearch = text.toLowerCase()
-        let filteredData = data.filter(plant => plant.name.toLowerCase().includes(innerSearch))
-        setInnerData(filteredData)
-        setSearch(innerSearch)
+        let innerSearch = text.toLowerCase();
+        setSearch(innerSearch);
     }
 
     const selectPlant = (item) => {
-        let selected = item.id ? item : selectedItem
-        onSelect(selected)
-        onClose()
+        let selected = item.id ? item : selectedItem;
+        onSelect(selected);
+        onClose();
     }
 
     return (
@@ -55,7 +64,8 @@ const CustomModal = ({ data, plant, visible, onClose, onSelect }) => {
                         searchAccessibilityLabel="Pesquisar" />
                     <CustomCardList
                         selectedPlant={plant}
-                        data={innerData}
+                        data={data}
+                        onEndReached={onEndReached}
                         onSelected={(item) => {
                             if (!screenReaderEnabled) setSelectedItem(item)
                             else selectPlant(item)
@@ -79,12 +89,12 @@ const CustomModal = ({ data, plant, visible, onClose, onSelect }) => {
     )
 }
 
-const CustomSelectModal = ({ plant, data, onSelect }) => {
+const CustomSelectModal = ({ getPlants, plant, data, onSelect }) => {
 
     const [visible, setVisible] = useState(false);
 
     const getPlaceHolder = () =>
-        plant && plant.name && plant.name == prototype.name ? "Selecione a planta." : plant.name;
+        plant && plant.nome && plant.nome == prototype.nome ? "Selecione a planta." : plant.nome;
 
     return (
         <>
@@ -95,7 +105,7 @@ const CustomSelectModal = ({ plant, data, onSelect }) => {
                 onPress={() => setVisible(true)}
                 title="Planta:"
                 placeholder={getPlaceHolder()} />
-            <CustomModal plant={plant} data={data} visible={visible} onClose={() => setVisible(false)} onSelect={onSelect} />
+            <CustomModal getPlants={getPlants} plant={plant} data={data} visible={visible} onClose={() => setVisible(false)} onSelect={onSelect} />
         </>
     );
 }

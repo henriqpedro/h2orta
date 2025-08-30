@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -55,11 +56,11 @@ public class UsuarioService {
 
     public void trataUsuario(Usuario usuario) {
         repository.findByUsuario(usuario.getUsuario()).ifPresent(user -> {
-            if (user.getId() != usuario.getId())
+            if (!Objects.equals(user.getId(), usuario.getId()))
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Já existe um usuário " + usuario.getUsuario());
         });
         repository.findByEmail(usuario.getEmail()).ifPresent(user -> {
-            if (user.getId() != usuario.getId())
+            if (!Objects.equals(user.getId(), usuario.getId()))
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Já existe um usuário com o email informado");
         });
     }
@@ -75,8 +76,12 @@ public class UsuarioService {
 
     @Transactional
     public Usuario update(Usuario usuario) {
-        findById(usuario.getId());
-        return repository.save(usuario);
+        var existingUsuario = findById(usuario.getId());
+        existingUsuario.setNome(usuario.getNome());
+        existingUsuario.setEmail(usuario.getEmail());
+        existingUsuario.setDataDeNascimento(usuario.getDataDeNascimento());
+        trataUsuario(existingUsuario);
+        return repository.save(existingUsuario);
     }
 
     public void delete(Long id) {
@@ -86,8 +91,7 @@ public class UsuarioService {
 
     public static Optional<UserSecurity> getAuthenticated() {
         try {
-            return Optional
-                    .ofNullable((UserSecurity) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+            return Optional.ofNullable((UserSecurity) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
         } catch (Exception ex) {
             return Optional.empty();
         }

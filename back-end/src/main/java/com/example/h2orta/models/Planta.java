@@ -41,7 +41,17 @@ public class Planta {
     @Column(nullable = false, length = 1024)
     @Size(min = 2, max = 1024)
     @NotBlank
-    private String descricao;
+    private String usoComum;
+
+    @Column(nullable = false)
+    @Size(min = 2, max = 255)
+    @NotBlank
+    private String cicloDeVida;
+
+    @Column(nullable = false, length = 1024)
+    @Size(min = 2, max = 1024)
+    @NotBlank
+    private String caracteristicasEspeciais;
 
     @Size(max = 255)
     private String imagem;

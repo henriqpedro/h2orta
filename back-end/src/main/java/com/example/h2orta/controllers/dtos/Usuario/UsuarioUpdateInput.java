@@ -1,7 +1,5 @@
 package com.example.h2orta.controllers.dtos.Usuario;
 
-import java.util.Date;
-
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -9,18 +7,16 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UsuarioCreateInput {
+public class UsuarioUpdateInput {
 
     @Size(min = 2, max = 128, message = "Nome do usuário deve conter entre 2 e 128 caracteres")
     @NotBlank(message = "Nome do usuário não informado")
     private String nome;
-
-    @Size(min = 2, max = 16, message = "Usuário deve conter entre 2 e 16 caracteres")
-    @NotBlank(message = "Usuário não informado")
-    private String usuario;
 
     @Size(min = 2, max = 255, message = "E-mail deve conter entre 2 e 255 caracteres")
     @NotBlank(message = "E-mail não informado")
@@ -28,8 +24,4 @@ public class UsuarioCreateInput {
 
     @NotNull(message = "Data de nascimento não informada")
     private Date dataDeNascimento;
-
-    @Size(min = 8, max = 16, message = "A senha deve conter entre 8 e 16 caracteres")
-    @NotBlank(message = "Senha não informada")
-    private String senha;
 }

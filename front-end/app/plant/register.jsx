@@ -13,7 +13,7 @@ import CustomCheckIcon from '../../components/CustomCheckIcon';
 
 const Register = () => {
 
-    const { data, prototype, setMacAddr, setViewingPlant } = usePlantContext();
+    const { get, getAll, data, prototype, setMacAddr, setViewingPlant } = usePlantContext();
 
     const [step, setStep] = useState(1);
     const [plant, setPlant] = useState(prototype);
@@ -103,7 +103,6 @@ const Register = () => {
                     {
                         step == 1 &&
                         <RegisterPlant
-                            data={data}
                             plant={plant}
                             setPlant={setPlant}
                             apelido={vasoInput.apelido}

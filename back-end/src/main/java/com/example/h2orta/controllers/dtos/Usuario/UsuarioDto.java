@@ -1,5 +1,6 @@
 package com.example.h2orta.controllers.dtos.Usuario;
 
+import com.example.h2orta.controllers.dtos.Vaso.VasoDto;
 import com.example.h2orta.models.Vaso;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Column;
@@ -22,30 +23,28 @@ public class UsuarioDto {
 
     private Long id;
 
-    @Size(min = 2, max = 128)
-    @NotBlank
+    @Size(min = 2, max = 128, message = "Nome do usuário deve conter entre 2 e 128 caracteres")
+    @NotBlank(message = "Nome do usuário não informado")
     private String nome;
 
-    @Size(min = 2, max = 16)
-    @NotBlank
+    @Size(min = 2, max = 16, message = "Usuário deve conter entre 2 e 16 caracteres")
+    @NotBlank(message = "Usuário não informado")
     private String usuario;
 
-    @Size(min = 2, max = 255)
-    @NotBlank
+    @Size(min = 2, max = 255, message = "E-mail deve conter entre 2 e 255 caracteres")
+    @NotBlank(message = "E-mail não informado")
     private String email;
 
-    @NotNull
+    @NotNull(message = "Data de nascimento não informada")
     private Date dataDeNascimento;
 
-    @Column(nullable = false, unique = true)
-    @NotNull
+    @NotNull(message = "Código compartilhado não informado")
     private UUID codigoCompartilhado;
 
-    @Column(nullable = false)
-    @NotNull
+    @NotNull(message = "Estado do registro não informado")
     private Boolean deletado = Boolean.FALSE;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @OneToMany(mappedBy = "usuario")
-    private List<Vaso> vasos;
+    private List<VasoDto> vasos;
 }

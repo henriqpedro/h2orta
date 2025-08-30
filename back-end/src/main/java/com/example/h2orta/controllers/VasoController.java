@@ -1,6 +1,8 @@
 package com.example.h2orta.controllers;
 
+import com.example.h2orta.controllers.dtos.Vaso.VasoCreateInput;
 import com.example.h2orta.controllers.dtos.Vaso.VasoDto;
+import com.example.h2orta.controllers.dtos.Vaso.VasoUpdateInput;
 import com.example.h2orta.models.Vaso;
 import com.example.h2orta.services.VasoService;
 import jakarta.validation.Valid;
@@ -15,16 +17,16 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+@Validated
 @RestController
 @RequestMapping("/vaso")
-@Validated
 @AllArgsConstructor
 public class VasoController {
 
     private VasoService service;
 
     @GetMapping("/{id}")
-    public ResponseEntity<VasoDto> findById(@PathVariable Long id) throws Exception {
+    public ResponseEntity<VasoDto> findById(@PathVariable Long id) {
         var mapper = new ModelMapper();
 
         var vaso = service.findById(id);
@@ -34,7 +36,7 @@ public class VasoController {
     }
 
     @GetMapping
-    public ResponseEntity<List<VasoDto>> findAllByUsuario() throws Exception {
+    public ResponseEntity<List<VasoDto>> findAllByUsuario() {
         var mapper = new ModelMapper();
 
         var vasos = service.findAllByUsuario();
@@ -46,7 +48,7 @@ public class VasoController {
     }
 
     @GetMapping("/codigo/{codigo}")
-    public ResponseEntity<List<VasoDto>> findAllByCodigoCompartilhado(@PathVariable UUID codigo) throws Exception {
+    public ResponseEntity<List<VasoDto>> findAllByCodigoCompartilhado(@PathVariable UUID codigo) {
         var mapper = new ModelMapper();
 
         var vasos = service.findAllByCodigoCompartilhado(codigo);
@@ -58,24 +60,24 @@ public class VasoController {
     }
 
     @PostMapping
-    public ResponseEntity<VasoDto> create(@Valid @RequestBody VasoDto dto) throws Exception {
+    public ResponseEntity<VasoDto> create(@Valid @RequestBody VasoCreateInput input) {
         var mapper = new ModelMapper();
 
-        var vaso = mapper.map(dto, Vaso.class);
+        var vaso = mapper.map(input, Vaso.class);
         vaso = service.create(vaso);
 
-        dto = mapper.map(vaso, VasoDto.class);
+        var dto = mapper.map(vaso, VasoDto.class);
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
     @PutMapping
-    public ResponseEntity<VasoDto> update(@Valid @RequestBody VasoDto dto) throws Exception {
+    public ResponseEntity<VasoDto> update(@Valid @RequestBody VasoUpdateInput input) {
         var mapper = new ModelMapper();
 
-        var vaso = mapper.map(dto, Vaso.class);
+        var vaso = mapper.map(input, Vaso.class);
         vaso = service.update(vaso);
 
-        dto = mapper.map(vaso, VasoDto.class);
+        var dto = mapper.map(vaso, VasoDto.class);
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 

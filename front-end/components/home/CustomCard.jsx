@@ -142,9 +142,9 @@ const CustomCard = ({ item, addr, index }) => {
                         />
                     )}
                 </View>
-                <Image className="w-[150px] h-[150px]" source={item.imageSource} resizeMode='contain' />
-                <Text className="text-medium font-semibold text-2xl">{item.name}</Text>
-                <Text className="text-center px-10 mt-2">{item.description}</Text>
+                <Image className="w-[150px] h-[150px] rounded-2xl mb-3" source={{ uri: item.imagem }} resizeMode='cover' />
+                <Text className="text-medium font-semibold text-2xl">{item.nome}</Text>
+                <Text className="text-center px-10 mt-3">{item.usoComum}</Text>
             </View>
             <View>
                 <CustomCardField
