@@ -16,7 +16,7 @@ const CustomTextButtom = ({ title, color, handlePress, constainerStyles, textSty
             className={`${getColor()} rounded-3xl min-h-[48px] px-5
                 justify-center items-center ${constainerStyles} ${isLoading ? 'opacity-50' : ''}`}
             disabled={isLoading || disabled}>
-            <Loading loading={isLoading} color='black'>
+            <Loading loading={isLoading}>
                 <Text className={`${disabled ? 'text-gray-500' : 'text-primary'} font-semibold text-lg ${textStyles}`}>{title}</Text>
             </Loading>
         </TouchableOpacity>
@@ -38,7 +38,7 @@ const CustomIconButtom = ({ children, color, handlePress, constainerStyles, isLo
             className={`${getColor()} rounded-3xl min-h-[48px] px-5
                 justify-center items-center ${constainerStyles} ${isLoading ? 'opacity-50' : ''}`}
             disabled={isLoading || disabled}>
-            <Loading loading={isLoading} color='black'>
+            <Loading loading={isLoading}>
                 {children}
             </Loading>
         </TouchableOpacity>

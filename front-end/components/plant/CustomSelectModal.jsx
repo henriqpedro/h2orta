@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { Modal, Portal, Searchbar } from 'react-native-paper';
 import CustomCardList from '../home/CustomCardList';
@@ -11,16 +11,23 @@ import { usePlantContext } from '../../context/PlantContext';
 
 const CustomModal = ({ plant, visible, onClose, onSelect }) => {
 
-    const { getAll, data } = usePlantContext();
+    const { getAll, data, setData } = usePlantContext();
     const screenReaderEnabled = useScreenReaderEnabled();
 
+    const [loading, setLoading] = useState(false)
     const [selectedItem, setSelectedItem] = useState({})
     const [search, setSearch] = useState('')
     const [page, setPage] = useState(0)
 
     useEffect(() => {
-        getAll(page, 10, search);
-    }, [page, search]);
+        loadPlantas(page, search);
+    }, [page]);
+
+    useEffect(() => {
+        setPage(0);
+        setData([]);
+        loadPlantas(0, search);
+    }, [search]);
 
     useEffect(() => {
         if (visible) {
@@ -29,6 +36,12 @@ const CustomModal = ({ plant, visible, onClose, onSelect }) => {
             else setSelectedItem(plant);
         }
     }, [visible]);
+
+    const loadPlantas = async (page, search) => {
+        setLoading(true);
+        await getAll(page, 10, search);
+        setLoading(false);
+    }
 
     const onEndReached = () => {
         setPage(page + 1);
@@ -54,8 +67,11 @@ const CustomModal = ({ plant, visible, onClose, onSelect }) => {
                 onDismiss={() => onClose()}>
                 <View className="py-4 justify-center rounded-2xl items-center min-h-[80vh] w-[94vw] bg-primary">
                     <Searchbar
-                        className="bg-secondary text-dark mx-3 fixed"
-                        cursorColor='green'
+                        className="bg-secondary mx-3 fixed"
+                        cursorColor="black"
+                        iconColor="black"              // cor do ícone de lupa
+                        placeholderTextColor="#76A136"   // cor do placeholder (texto apagado)
+                        inputStyle={{ color: "#000" }}   // cor do texto digitado
                         value={search}
                         onChangeText={onChangeSearch}
                         accessibilityLabel="Campo de busca"
@@ -64,6 +80,7 @@ const CustomModal = ({ plant, visible, onClose, onSelect }) => {
                         searchAccessibilityLabel="Pesquisar" />
                     <CustomCardList
                         selectedPlant={plant}
+                        loading={loading}
                         data={data}
                         onEndReached={onEndReached}
                         onSelected={(item) => {
@@ -100,7 +117,7 @@ const CustomSelectModal = ({ getPlants, plant, data, onSelect }) => {
         <>
             <CustomInput
                 select={true}
-                labelStyles="text-gray font-semibold text-lg"
+                labelStyles="text-medium font-bold text-lg"
                 inputStyles="bg-secondary"
                 onPress={() => setVisible(true)}
                 title="Planta:"

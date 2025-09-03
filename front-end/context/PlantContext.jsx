@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { prototype } from "../utils/default-plants";
 import { API_URL } from "../utils/config";
 import axios from "axios";
@@ -12,6 +12,7 @@ export const PlantProvider = ({ children }) => {
     const [viewingPlant, setViewingPlant] = useState(undefined);
     const [data, setData] = useState([]);
     const [macAddr, setMacAddr] = useState(null);
+    const [apelido, setApelido] = useState(null);
 
     const isDuplicatedPlant = (plants, newPlant) =>
         plants.findIndex((plant) => newPlant.id === plant.id) > -1;
@@ -20,8 +21,8 @@ export const PlantProvider = ({ children }) => {
         if (!plant) return;
         setData((prevState) => {
             if (!isDuplicatedPlant(prevState, plant))
-                return [...prevState, plant];
-            return prevState;
+                return [...prevState, plant].sort(planta => planta.nome);
+            return prevState.sort(planta => planta.nome);
         });
     }
 
@@ -31,7 +32,6 @@ export const PlantProvider = ({ children }) => {
                 params: { page, size, search }
             });
             response.data.forEach(plant => addPlantToList(plant));
-            console.log(response.data)
             return response.data;
         } catch(e) {
             ToastAndroid.show("Erro ao recuperar plantas", ToastAndroid.SHORT);
@@ -54,8 +54,11 @@ export const PlantProvider = ({ children }) => {
         <PlantContext.Provider
             value={{
                 data,
-                macAddr,
+                setData,
+                apelido,
+                setApelido,
                 prototype,
+                macAddr,
                 setMacAddr,
                 viewingPlant,
                 setViewingPlant,

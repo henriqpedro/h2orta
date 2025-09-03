@@ -13,7 +13,7 @@ import CustomCheckIcon from '../../components/CustomCheckIcon';
 
 const Register = () => {
 
-    const { get, getAll, data, prototype, setMacAddr, setViewingPlant } = usePlantContext();
+    const { prototype, setMacAddr, setViewingPlant, setApelido, apelido } = usePlantContext();
 
     const [step, setStep] = useState(1);
     const [plant, setPlant] = useState(prototype);
@@ -37,19 +37,9 @@ const Register = () => {
         allNetworks
     } = useWifi();
 
-
-    const [vasoInput, setVasoInput] = useState({
-        id: 0,
-        apelido: '',
-        arduino: '',
-        planta: {
-            id: 0
-        }
-    });
-
     const validate = () => {
         if (step == 1) {
-            if (!vasoInput.apelido || vasoInput.apelido == "") {
+            if (!apelido || apelido == "") {
                 ToastAndroid.show("Informe um apelido para plantinha.", ToastAndroid.SHORT);
                 return false;
             }
@@ -105,8 +95,8 @@ const Register = () => {
                         <RegisterPlant
                             plant={plant}
                             setPlant={setPlant}
-                            apelido={vasoInput.apelido}
-                            setApelido={(apelido) => setVasoInput({ ...vasoInput, apelido })} />
+                            apelido={apelido}
+                            setApelido={setApelido} />
                     }
                     {
                         step == 2 &&

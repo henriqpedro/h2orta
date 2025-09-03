@@ -54,7 +54,7 @@ const Menu = ({ setOpen }) => {
 
 const Home = () => {
 
-    const { viewingPlant, macAddr } = usePlantContext();
+    const { viewingPlant, macAddr, apelido } = usePlantContext();
 
     const [open, setOpen] = useState(false);
 
@@ -65,13 +65,13 @@ const Home = () => {
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
             <SafeAreaView className="bg-primary flex-1">
-                <TouchableOpacity onPress={onPressTop} className="w-full h-[15vh] rounded-b-[50px] bg-medium items-center justify-center">
+                <TouchableOpacity activeOpacity={1} onPress={onPressTop} className="w-full h-[15vh] rounded-b-[50px] bg-medium items-center justify-center">
                     <Image className="w-[13vh]" source={require("../assets/adaptive-icon.png")} resizeMode='contain' />
                 </TouchableOpacity>
                 <ScrollView>
                     <View className="w-full min-h-[70vh] px-7 justify-center items-center">
                         {/* <Text className={`text-2xl mb-10 ${viewingPlant && 'mt-6'} font-semibold text-gray`}>Meus vasinhos</Text> */}
-                        <PlantCard addr={macAddr} item={viewingPlant} index={0} />
+                        <PlantCard apelido={apelido} addr={macAddr} item={viewingPlant} index={0} />
                     </View>
                 </ScrollView>
                 <View className="justify-center items-center pt-4">

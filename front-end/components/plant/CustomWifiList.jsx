@@ -12,7 +12,7 @@ const CustomWifiList = ({ scanning, sending, scanForWifi, allNetworks, currentSS
 
     return (
         <View className="w-full mb-4 justify-center items-center">
-            <Loading color='black' loading={sending}>
+            <Loading loading={sending}>
                 <Text className="text-center text-base mt-6 mb-6 mx-10">Informe as credenciais WI-FI para seu vasinho se conectar a Internet:</Text>
                 <FlatList
                     data={allNetworks}

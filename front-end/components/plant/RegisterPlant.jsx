@@ -12,10 +12,16 @@ const RegisterPlant = ({ plant, apelido, setApelido, setPlant }) => {
             {
                 plant.imagem == prototype.imagem ?
                     <CameraIcon /> :
-                    <Image className="w-[150px] h-[150px] mb-6 rounded-xl" source={{ uri: plant.imagem }} resizeMode='cover' />
+                    <View className="w-[150px] h-[150px] overflow-hidden rounded-xl mb-3">
+                        <Image
+                            source={{ uri: plant.imagem }}
+                            className="w-full h-[160px] absolute top-0"
+                            resizeMode="cover"
+                        />
+                    </View>
             }
             <CustomInput
-                labelStyles="text-gray font-semibold text-lg"
+                labelStyles="text-medium font-bold text-lg"
                 inputStyles="bg-secondary"
                 value={apelido}
                 handleChange={setApelido}

@@ -6,6 +6,8 @@ import { MQTT_BROKER } from '../../utils/config';
 import { add, humidity, tank } from '../../utils/default-icons';
 import CustomButton from '../CustomButton';
 import CustomTextIcon from './CustomTextIcon';
+import { usePlantContext } from '../../context/PlantContext';
+import { router } from 'expo-router';
 
 const CustomIndicator = ({ value }) => {
     let color = value < 50 ? 'bg-danger text-primary' : 'bg-light text-primary'
@@ -38,7 +40,7 @@ const EmptyCard = ({ index }) => {
     )
 }
 
-const CustomCard = ({ item, addr, index }) => {
+const CustomCard = ({ apelido, item, addr, index }) => {
 
     const [watering, setWatering] = useState(false)
     const [showMenu, setShowMenu] = useState(false)
@@ -104,8 +106,12 @@ const CustomCard = ({ item, addr, index }) => {
         }
     }, [watering])
 
+    const goToAbout = () => {
+        router.navigate("about");
+    }
+
     return (
-        <View className="bg-secondary min-h-[50vh] min-w-[80vw] rounded-xl px-5 pt-2 pb-12 justify-center items-center" key={index}>
+        <TouchableOpacity activeOpacity={0.7} onPress={goToAbout} className="bg-secondary min-h-[50vh] min-w-[80vw] rounded-xl px-5 pt-2 pb-12 justify-center items-center" key={index}>
             <View className="justify-center items-center">
                 <View className="relative self-end px-5 items-end">
                     <TouchableOpacity
@@ -115,8 +121,7 @@ const CustomCard = ({ item, addr, index }) => {
                         accessibilityHint={`${!showMenu ? 'Expandir' : 'Ocultar'} menu`}
                         activeOpacity={0.7}
                         onPress={() => setShowMenu(!showMenu)}
-                        className="justify-center items-center"
-                    >
+                        className="justify-center items-center">
                         <View className="mt-5">
                             <Entypo name="dots-three-horizontal" size={24} color="black" />
                         </View>
@@ -142,8 +147,15 @@ const CustomCard = ({ item, addr, index }) => {
                         />
                     )}
                 </View>
-                <Image className="w-[150px] h-[150px] rounded-2xl mb-3" source={{ uri: item.imagem }} resizeMode='cover' />
-                <Text className="text-medium font-semibold text-2xl">{item.nome}</Text>
+                <View className="w-[150px] h-[150px] overflow-hidden rounded-2xl mb-3">
+                    <Image
+                        source={{ uri: item.imagem }}
+                        className="w-full h-[160px] absolute top-0"
+                        resizeMode="cover"
+                    />
+                </View>
+                <Text className="text-medium font-semibold text-2xl">{apelido}</Text>
+                <Text className="text-medium text-base">{item.nome}</Text>
                 <Text className="text-center px-10 mt-3">{item.usoComum}</Text>
             </View>
             <View>
@@ -158,12 +170,12 @@ const CustomCard = ({ item, addr, index }) => {
                     title="Umidade"
                     value={plantData.humidity} />
             </View>
-        </View>
+        </TouchableOpacity>
     )
 }
 
-const PlantCard = ({ item, addr, index }) => {
-    return item ? <CustomCard item={item} index={index} addr={addr} />
+const PlantCard = ({ item, apelido, addr, index }) => {
+    return item ? <CustomCard apelido={apelido} item={item} index={index} addr={addr} />
         : <EmptyCard />
 }
 

@@ -26,7 +26,7 @@ const CustomBleDevice = ({ device, index, connected, handlePress, disabled }) =>
                 <Text className={`'text-black`}>{device.id}</Text>
             </View>
             {connected ? <Text className="italic text-base">Conectado</Text> :
-                <Loading loading={isLoading} color='black'>
+                <Loading loading={isLoading}>
                     <Ionicons name="chevron-forward" size={20} color="#555" />
                 </Loading>
             }
