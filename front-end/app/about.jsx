@@ -7,14 +7,14 @@ import { router } from 'expo-router';
 
 const about = () => {
 
-    const { viewingPlant } = usePlantContext();
+    const { vase } = usePlantContext();
 
     return (
         <SafeAreaView className="bg-primary flex-1">
             <ScrollView>
                 <View className="w-full px-7 pt-8 justify-center items-center">
-                    <CustomCardDetailed item={viewingPlant} />
-                    <CustomPropertyList item={viewingPlant} />
+                    <CustomCardDetailed item={vase.planta} />
+                    <CustomPropertyList item={vase.planta} />
                 </View>
             </ScrollView>
             <View className="justify-center items-center pt-4">

@@ -40,8 +40,9 @@ const EmptyCard = ({ index }) => {
     )
 }
 
-const CustomCard = ({ apelido, item, addr, index }) => {
+const CustomCard = ({ apelido, item, addr, index, deletar }) => {
 
+    const [deleting, setDeleting] = useState(false)
     const [watering, setWatering] = useState(false)
     const [showMenu, setShowMenu] = useState(false)
     const [plantData, setPlantData] = useState({ humidity: -1, tank: -1 })
@@ -128,23 +129,43 @@ const CustomCard = ({ apelido, item, addr, index }) => {
                     </TouchableOpacity>
 
                     {showMenu && (
-                        <CustomButton
-                            isLoading={watering}
-                            handlePress={() => {
-                                if (item.id > 0) {
-                                    sendMessage('1')
-                                    setWatering(true)
-                                    ToastAndroid.show("Irrigando planta", ToastAndroid.SHORT)
-                                } else
-                                    ToastAndroid.show("Cadastre uma planta para irrigar", ToastAndroid.SHORT)
-                            }}
-                            constainerStyles="absolute top-14 right-0 bg-primary rounded-none z-50"
-                            textStyles="text-black text-sm"
-                            title="Irrigar planta"
-                            accessibilityLabel="Irrigar planta"
-                            accessibilityHint="Inicia a irrigação da planta cadastrada"
-                            accessibilityRole="button"
-                        />
+                        <View className="border- absolute top-14 right-0 bg-primary rounded-none z-50">
+                            <CustomButton
+                                isLoading={watering}
+                                handlePress={() => {
+                                    if (item.id > 0) {
+                                        sendMessage('1')
+                                        setWatering(true)
+                                        ToastAndroid.show("Irrigando planta", ToastAndroid.SHORT)
+                                    } else
+                                        ToastAndroid.show("Cadastre uma planta para irrigar", ToastAndroid.SHORT)
+                                }}
+                                constainerStyles="bg-primary rounded-none z-50"
+                                textStyles="text-black text-sm"
+                                title="Irrigar planta"
+                                accessibilityLabel="Irrigar planta"
+                                accessibilityHint="Inicia a irrigação da planta cadastrada"
+                                accessibilityRole="button"
+                            />
+                            <CustomButton
+                                isLoading={deleting}
+                                disabled={deleting}
+                                handlePress={async () => {
+                                    if (item.id > 0) {
+                                        setDeleting(true)
+                                        await deletar();
+                                        setDeleting(false);
+                                    } else
+                                        ToastAndroid.show("Cadastre uma planta primeiro", ToastAndroid.SHORT)
+                                }}
+                                constainerStyles="border-t-2 border-t-stone-400 bg-primary rounded-none z-50"
+                                textStyles="text-black text-sm"
+                                title="Deletar planta"
+                                accessibilityLabel="Deletar planta"
+                                accessibilityHint="Deleta a planta mostrada na tela"
+                                accessibilityRole="button"
+                            />
+                        </View>
                     )}
                 </View>
                 <View className="w-[150px] h-[150px] overflow-hidden rounded-2xl mb-3">
@@ -174,8 +195,8 @@ const CustomCard = ({ apelido, item, addr, index }) => {
     )
 }
 
-const PlantCard = ({ item, apelido, addr, index }) => {
-    return item ? <CustomCard apelido={apelido} item={item} index={index} addr={addr} />
+const PlantCard = ({ vaso, index, deletar }) => {
+    return vaso ? <CustomCard deletar={deletar} apelido={vaso.apelido} item={vaso.planta} index={index} addr={vaso.arduino} />
         : <EmptyCard />
 }
 

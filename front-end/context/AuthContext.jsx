@@ -38,16 +38,34 @@ export const AuthProvider = ({ children }) => {
         }
     }
 
+    const setUser = async () => {
+        const user = await getUser();
+        setAuthState({ ...authState, user });
+    }
+
+    const getUser = async () => {
+        try {
+            const result = await axios.get(`${API_URL}/usuario`);
+            return result.data;
+        } catch (e) {
+            console.log(e);
+            ToastAndroid.show("Erro ao recuperar usuário.", ToastAndroid.SHORT);
+        }
+    }
+
     const login = async (input) => {
         try {
             const result = await axios.post(`${API_URL}/usuario/login`, input);
-            setAuthState({
-                token: result.data,
-                authenticated: true
-            });
 
             axios.defaults.headers.common['Authorization'] = `Bearer ${result.data}`;
             await SecureStore.setItemAsync(TOKEN_KEY, result.data);
+
+            const user = await getUser();
+            setAuthState({
+                user: user,
+                token: result.data,
+                authenticated: true
+            });
 
             return result;
         } catch (e) {
@@ -70,6 +88,7 @@ export const AuthProvider = ({ children }) => {
             value={{
                 authState,
                 setAuthState,
+                setUser,
                 login,
                 logout,
                 register

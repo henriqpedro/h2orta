@@ -48,6 +48,13 @@ public class UsuarioService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado!"));
     }
 
+    public Usuario find() {
+        var loggedUser = getAuthenticated()
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Acesso negado: usuário sem login!"));
+        return repository.findById(loggedUser.getId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado!"));
+    }
+
     public Usuario findByCodigoCompartilhado(UUID codigoCompartilhado) {
         return repository.findByCodigoCompartilhado(codigoCompartilhado)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,

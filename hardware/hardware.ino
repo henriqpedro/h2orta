@@ -14,7 +14,7 @@ void loop() {
 
   if (WiFi.status() == WL_CONNECTED) {
     if (bleActive) {
-      delay(1000 * 5);
+      delay(100 * 5);
       turnOffBLE();
     }
     reconnectToBroker();
@@ -22,5 +22,5 @@ void loop() {
     publishData();
   }
 
-  delay(1000 * 5);
+  delay(1000 * 3);
 }

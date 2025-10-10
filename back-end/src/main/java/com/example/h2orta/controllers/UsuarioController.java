@@ -5,6 +5,7 @@ import com.example.h2orta.controllers.dtos.Usuario.UsuarioCreateInput;
 import com.example.h2orta.controllers.dtos.Usuario.UsuarioDto;
 import com.example.h2orta.controllers.dtos.Usuario.UsuarioUpdateInput;
 import com.example.h2orta.models.Usuario;
+import com.example.h2orta.responses.StandardApiResponses;
 import com.example.h2orta.services.UsuarioService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -18,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/usuario")
 @AllArgsConstructor
-public class UsuarioController {
+public class UsuarioController implements StandardApiResponses {
 
     private UsuarioService service;
 
@@ -33,6 +34,16 @@ public class UsuarioController {
         var mapper = new ModelMapper();
 
         var usuario = service.findById(id);
+        var dto = mapper.map(usuario, UsuarioDto.class);
+
+        return new ResponseEntity<>(dto, HttpStatus.OK);
+    }
+
+    @GetMapping
+    public ResponseEntity<UsuarioDto> find() {
+        var mapper = new ModelMapper();
+
+        var usuario = service.find();
         var dto = mapper.map(usuario, UsuarioDto.class);
 
         return new ResponseEntity<>(dto, HttpStatus.OK);

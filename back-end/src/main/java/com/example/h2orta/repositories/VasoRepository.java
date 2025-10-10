@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface VasoRepository extends JpaRepository<Vaso, Long> {
     List<Vaso> findAllByUsuarioId(Long usuarioId);
+    Boolean existsByArduino(String arduino);
 }

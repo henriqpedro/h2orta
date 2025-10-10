@@ -14,7 +14,7 @@ import org.hibernate.annotations.Where;
 @AllArgsConstructor
 @Entity
 @Table(name = "vaso")
-@SQLDelete(sql = "UPDATE vaso SET deletado = FALSE WHERE id = ?")
+@SQLDelete(sql = "UPDATE vaso SET deletado = TRUE WHERE id = ?")
 @Where(clause = "deletado = FALSE")
 public class Vaso {
 
@@ -22,7 +22,7 @@ public class Vaso {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     @Size(min = 2, max = 255)
     private String arduino;
 

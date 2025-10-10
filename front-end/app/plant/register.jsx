@@ -13,9 +13,10 @@ import CustomCheckIcon from '../../components/CustomCheckIcon';
 
 const Register = () => {
 
-    const { prototype, setMacAddr, setViewingPlant, setApelido, apelido } = usePlantContext();
+    const { save, prototype } = usePlantContext();
 
     const [step, setStep] = useState(1);
+    const [apelido, setApelido] = useState('');
     const [plant, setPlant] = useState(prototype);
 
     const {
@@ -69,10 +70,9 @@ const Register = () => {
         return true;
     }
 
-    const save = () => {
+    const salvar = async () => {
         if (!validate()) return;
-        setViewingPlant(plant);
-        setMacAddr(connectedDevice.id);
+        await save(plant, connectedDevice.id, apelido);
         router.navigate("home");
     }
 
@@ -125,7 +125,7 @@ const Register = () => {
             </ScrollView>
             <View className="justify-center items-center pt-4">
                 <CustomButton
-                    handlePress={step == 3 ? save : nextStep}
+                    handlePress={step == 3 ? salvar : nextStep}
                     title={step == 3 ? 'Salvar' : 'Prosseguir'}
                     constainerStyles={`w-56 mb-2 ${step != 2 && 'mb-8'}`} />
                 {step == 2 &&

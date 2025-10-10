@@ -1,6 +1,7 @@
 package com.example.h2orta.controllers;
 
 import com.example.h2orta.controllers.dtos.Planta.PlantaDto;
+import com.example.h2orta.responses.StandardApiResponses;
 import com.example.h2orta.services.PlantaService;
 import lombok.AllArgsConstructor;
 
@@ -17,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/planta")
 @AllArgsConstructor
-public class PlantaController {
+public class PlantaController implements StandardApiResponses {
 
     private PlantaService service;
 

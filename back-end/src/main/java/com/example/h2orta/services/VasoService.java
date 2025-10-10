@@ -22,7 +22,8 @@ public class VasoService {
 
     public Vaso findById(long id) {
         var loggedUser = UsuarioService.getAuthenticated()
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Acesso negado: usuário sem login!"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED,
+                        "Acesso negado: usuário sem login!"));
         var vaso = repository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Vaso não encontrado!"));
         if (vaso.getUsuario().getId() != loggedUser.getId())
@@ -32,7 +33,8 @@ public class VasoService {
 
     public List<Vaso> findAllByUsuario() {
         var loggedUser = UsuarioService.getAuthenticated()
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Acesso negado: usuário sem login!"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED,
+                        "Acesso negado: usuário sem login!"));
         return repository.findAllByUsuarioId(loggedUser.getId());
     }
 
@@ -47,8 +49,11 @@ public class VasoService {
     @Transactional
     public Vaso create(Vaso vaso) {
         var loggedUser = UsuarioService.getAuthenticated()
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Acesso negado: usuário sem login!"));
-                
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED,
+                        "Acesso negado: usuário sem login!"));
+
+        if (Boolean.TRUE.equals(repository.existsByArduino(vaso.getArduino())))
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Vaso H2orta já está sendo utilizado por outra plantinha");
         var usuario = usuarioService.findById(loggedUser.getId());
         vaso.setUsuario(usuario);
 
@@ -64,7 +69,7 @@ public class VasoService {
         var existingVaso = findById(vaso.getId());
         existingVaso.setApelido(vaso.getApelido());
         existingVaso.setCompartilhado(vaso.getCompartilhado());
-        var planta = plantaService.findById(existingVaso.getPlanta().getId());
+        var planta = plantaService.findById(vaso.getPlanta().getId());
         existingVaso.setPlanta(planta);
         return repository.save(existingVaso);
     }

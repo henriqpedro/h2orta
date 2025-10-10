@@ -20,7 +20,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Entity
 @Table(name = "usuario")
-@SQLDelete(sql = "UPDATE usuario SET deletado = FALSE WHERE id = ?")
+@SQLDelete(sql = "UPDATE usuario SET deletado = TRUE WHERE id = ?")
 @Where(clause = "deletado = FALSE")
 public class Usuario {
 
@@ -33,12 +33,12 @@ public class Usuario {
     @NotBlank
     private String nome;
 
-    @Column(nullable = false, length = 16, unique = true)
+    @Column(nullable = false, length = 16)
     @Size(min = 2, max = 16)
     @NotBlank
     private String usuario;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     @Size(min = 2, max = 255)
     @NotBlank
     private String email;

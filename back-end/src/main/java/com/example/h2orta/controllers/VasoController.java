@@ -4,6 +4,7 @@ import com.example.h2orta.controllers.dtos.Vaso.VasoCreateInput;
 import com.example.h2orta.controllers.dtos.Vaso.VasoDto;
 import com.example.h2orta.controllers.dtos.Vaso.VasoUpdateInput;
 import com.example.h2orta.models.Vaso;
+import com.example.h2orta.responses.StandardApiResponses;
 import com.example.h2orta.services.VasoService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -21,7 +22,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/vaso")
 @AllArgsConstructor
-public class VasoController {
+public class VasoController implements StandardApiResponses {
 
     private VasoService service;
 

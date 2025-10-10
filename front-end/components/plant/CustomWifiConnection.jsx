@@ -71,7 +71,7 @@ const CustomWifiConnection = ({ wifi, index, disabled, connected, sendCredential
                 <Text className={`font-semibold text-gray text-lg`}>{wifi.SSID}</Text>
                 <Text className={`text-black`}>{wifi.BSSID}</Text>
             </View>
-            {connected ? <Text className="italic text-base">Conectado</Text> :
+            {connected ? <Text className="italic text-xs">Conectado</Text> :
                 <Ionicons name="chevron-forward" size={20} color="#555" />}
             <CustomWifiModal onSend={sendCredentials} SSID={wifi.SSID} visible={visible} onClose={onClose} />
         </TouchableOpacity>

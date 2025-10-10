@@ -1,62 +1,44 @@
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { Redirect, router } from 'expo-router';
+import { router } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { AnimatePresence, MotiView } from 'moti';
-import { useState } from 'react';
+import { AnimatePresence } from 'moti';
+import { useEffect, useState } from 'react';
 import { Image, ScrollView, TouchableOpacity, View } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import CustomButton from '../components/CustomButton';
 import PlantCard from '../components/home/CustomCard';
-import { useAuthContext } from '../context/AuthContext';
 import { usePlantContext } from '../context/PlantContext';
-
-const Menu = ({ setOpen }) => {
-
-    const { authState, logout } = useAuthContext();
-
-    const handleClose = () => {
-        setOpen(false);
-    }
-
-    if (!authState.authenticated) return <Redirect href="sign-in" />
-    return (
-        <MotiView
-            from={{ translateY: -600 }}
-            animate={{ translateY: 0 }}
-            exit={{ translateY: -1000 }}
-            transition={{
-                type: 'spring',
-                damping: 20,
-                stiffness: 150
-            }}
-            style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0, // ocupa toda a tela
-                backgroundColor: '#76A136',
-                alignItems: 'center',
-                justifyContent: 'center'
-            }}>
-            <View>
-                <TouchableOpacity onPress={handleClose} className="mt-10">
-                    <MaterialCommunityIcons name="close" size={24} color="black" />
-                </TouchableOpacity>
-                <TouchableOpacity onPress={logout} className="mt-10">
-                    <MaterialCommunityIcons name="logout" size={24} color="black" />
-                </TouchableOpacity>
-            </View>
-        </MotiView>
-    );
-}
+import Menu from '../components/home/Menu';
+import { prototype } from '../utils/default-plants';
+import { useAuthContext } from '../context/AuthContext';
 
 const Home = () => {
 
-    const { viewingPlant, macAddr, apelido } = usePlantContext();
+    const { vase, setVase, deletar } = usePlantContext();
+    const { authState, setUser } = useAuthContext();
 
     const [open, setOpen] = useState(false);
+
+    useEffect(() => {
+        if (authState) {
+            if (authState.user) {
+                if (!vase || vase == prototype)
+                    if (authState.user.vasos && authState.user.vasos.length > 0) {
+                        setVase(authState.user.vasos[0]);
+                        return;
+                    }
+            }
+        }
+    }, [authState]);
+
+    useEffect(() => {
+        if (authState)
+            if (!authState.user) setAuth();
+    }, []);
+
+    const setAuth = async () => {
+        await setUser();
+    }
 
     const onPressTop = () => {
         setOpen(true);
@@ -71,7 +53,7 @@ const Home = () => {
                 <ScrollView>
                     <View className="w-full min-h-[70vh] px-7 justify-center items-center">
                         {/* <Text className={`text-2xl mb-10 ${viewingPlant && 'mt-6'} font-semibold text-gray`}>Meus vasinhos</Text> */}
-                        <PlantCard apelido={apelido} addr={macAddr} item={viewingPlant} index={0} />
+                        <PlantCard vaso={vase} index={0} deletar={deletar} />
                     </View>
                 </ScrollView>
                 <View className="justify-center items-center pt-4">

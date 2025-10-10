@@ -12,7 +12,7 @@ const CustomCardDetailed = ({ item }) => {
                         resizeMode="cover"
                     />
                 </View>
-                <Text className="text-medium font-semibold text-2xl">{item.nome}</Text>
+                <Text className="text-medium font-semibold text-xl">{item.nome}</Text>
                 <Text className="text-medium text-base italic">{item.familia}</Text>
                 <Text className="text-center px-10 mt-3">{item.usoComum}</Text>
                 <Text className="text-center px-10 mt-3">{item.caracteristicasEspeciais}</Text>
