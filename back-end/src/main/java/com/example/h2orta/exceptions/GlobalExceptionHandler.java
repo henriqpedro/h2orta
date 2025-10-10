@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -23,7 +24,7 @@ public class GlobalExceptionHandler {
                 var messages = ex.getBindingResult().getFieldErrors()
                                 .stream()
                                 .map(error -> error.getDefaultMessage())
-                                .collect(Collectors.joining(", "));
+                                .collect(Collectors.joining(". "));
 
                 var response = new ErrorResponse(
                                 LocalDateTime.now(),

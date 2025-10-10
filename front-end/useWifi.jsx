@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { PermissionsAndroid, Platform, ToastAndroid } from "react-native";
+import { PermissionsAndroid, Platform } from "react-native";
+import Toast from "react-native-toast-message";
 import WifiManager from "react-native-wifi-reborn";
 
 function useWifi() {
@@ -28,7 +29,11 @@ function useWifi() {
     const scanForWifi = async () => {
         const isPermissionsEnabled = await requestPermissions();
         if (isPermissionsEnabled) startScanning();
-        else ToastAndroid.show("É necessário conceder permissão WIFI para continuar.", ToastAndroid.SHORT);
+        else Toast.show({
+            type: 'info',
+            text1: 'Atenção',
+            text2: "É necessário conceder permissão WIFI para continuar."
+        });
     };
 
     const isDuplicatedDevice = (networks, nextNetwork) =>
@@ -59,7 +64,11 @@ function useWifi() {
                 checkWifi();
             } catch (error) {
                 console.log("Erro ao escanear redes:", error);
-                ToastAndroid.show("Erro ao escanear redes WIFI", ToastAndroid.SHORT);
+                Toast.show({
+                    type: 'error',
+                    text1: 'Erro',
+                    text2: "Erro ao escanear redes WIFI"
+                });
             }
         }
     }

@@ -1,4 +1,4 @@
-import { View, SafeAreaView, ScrollView, ToastAndroid } from 'react-native';
+import { View, SafeAreaView, ScrollView } from 'react-native';
 import CustomBleDeviceList from '../../components/plant/CustomBleDeviceList';
 import { useState } from 'react';
 import { usePlantContext } from '../../context/PlantContext';
@@ -10,6 +10,8 @@ import useWifi from '../../useWifi';
 import RegisterPlant from '../../components/plant/RegisterPlant';
 import { ProgressBar } from 'react-native-paper';
 import CustomCheckIcon from '../../components/CustomCheckIcon';
+import CustomToast from '../../components/CustomToast';
+import Toast from 'react-native-toast-message';
 
 const Register = () => {
 
@@ -41,11 +43,19 @@ const Register = () => {
     const validate = () => {
         if (step == 1) {
             if (!apelido || apelido == "") {
-                ToastAndroid.show("Informe um apelido para plantinha.", ToastAndroid.SHORT);
+                Toast.show({
+                    type: 'info',
+                    text1: 'Atenção',
+                    text2: "Informe um apelido para plantinha."
+                });
                 return false;
             }
             else if (!plant || plant.id <= 0) {
-                ToastAndroid.show("Selecione uma planta para continuar.", ToastAndroid.SHORT);
+                Toast.show({
+                    type: 'info',
+                    text1: 'Atenção',
+                    text2: "Selecione uma planta para continuar."
+                });
                 return false;
             }
             return true;
@@ -53,7 +63,11 @@ const Register = () => {
 
         if (step == 2) {
             if (!connectedDevice) {
-                ToastAndroid.show("Conecte com um vaso H2orta por bluetooth para prosseguir.", ToastAndroid.SHORT);
+                Toast.show({
+                    type: 'info',
+                    text1: 'Atenção',
+                    text2: "Conecte-se com um vaso H2orta por bluetooth para prosseguir."
+                });
                 return false;
             }
             return true;
@@ -61,7 +75,11 @@ const Register = () => {
 
         if (step == 3) {
             if (!isESPConnectedToWifi) {
-                ToastAndroid.show("Conecte um vaso a uma rede wifi para prosseguir.", ToastAndroid.SHORT);
+                Toast.show({
+                    type: 'info',
+                    text1: 'Atenção',
+                    text2: "Conecte-se um vaso a uma rede wifi para prosseguir."
+                });
                 return false;
             }
             return true;
@@ -143,6 +161,11 @@ const Register = () => {
                     </>
                 }
             </View>
+            <Toast position='top' topOffset={20} config={{
+                error: (props) => <CustomToast {...props} type="error" />,
+                success: (props) => <CustomToast {...props} type="success" />,
+                info: (props) => <CustomToast {...props} type="info" />,
+            }} />
         </SafeAreaView>
     )
 }

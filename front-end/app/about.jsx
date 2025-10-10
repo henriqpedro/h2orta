@@ -3,7 +3,9 @@ import CustomCardDetailed from '../components/home/CustomCardDetailed'
 import { usePlantContext } from '../context/PlantContext'
 import CustomButton from '../components/CustomButton';
 import CustomPropertyList from '../components/home/CustomPropertyList';
+import CustomToast from '../components/CustomToast';
 import { router } from 'expo-router';
+import Toast from 'react-native-toast-message';
 
 const about = () => {
 
@@ -23,6 +25,11 @@ const about = () => {
                     title='Voltar'
                     constainerStyles='w-56 mb-8' />
             </View>
+            <Toast config={{
+                error: (props) => <CustomToast {...props} type="error" />,
+                success: (props) => <CustomToast {...props} type="success" />,
+                info: (props) => <CustomToast {...props} type="info" />,
+            }} />
         </SafeAreaView>
     )
 }

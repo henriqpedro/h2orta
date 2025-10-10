@@ -4,6 +4,8 @@ import CustomButton from '../../components/CustomButton';
 import CustomInput from '../../components/CustomInput';
 import { Link, Redirect } from 'expo-router';
 import { useAuthContext } from '../../context/AuthContext';
+import Toast from 'react-native-toast-message';
+import CustomToast from '../../components/CustomToast';
 
 const SignIn = () => {
     const { authState, login } = useAuthContext();
@@ -46,6 +48,11 @@ const SignIn = () => {
                         constainerStyles='w-56 mt-7 place-self-end bg-dark' />
                     <Link href="/sign-up" className="font-bold text-base underline py-5">Criar nova conta.</Link>
                 </View>
+                <Toast config={{
+                    error: (props) => <CustomToast {...props} type="error" />,
+                    success: (props) => <CustomToast {...props} type="success" />,
+                    info: (props) => <CustomToast {...props} type="info" />,
+                }} />
             </ScrollView>
         </SafeAreaView>
     );

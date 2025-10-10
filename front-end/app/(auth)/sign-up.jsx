@@ -4,6 +4,8 @@ import { Image, SafeAreaView, ScrollView, View } from 'react-native';
 import CustomButton from '../../components/CustomButton';
 import CustomInput from '../../components/CustomInput';
 import { useAuthContext } from '../../context/AuthContext';
+import Toast from 'react-native-toast-message';
+import CustomToast from '../../components/CustomToast';
 
 const SignUp = () => {
     const { authState, register } = useAuthContext();
@@ -62,9 +64,14 @@ const SignUp = () => {
                         isLoading={loading}
                         title='Cadastrar'
                         handlePress={signUp}
-                        constainerStyles='w-56 mt-7 bg-dark'/>
+                        constainerStyles='w-56 mt-7 bg-dark' />
                     <Link href="/sign-in" className="font-bold text-base underline py-5">Já possuo cadastro.</Link>
                 </View>
+                <Toast config={{
+                    error: (props) => <CustomToast {...props} type="error" />,
+                    success: (props) => <CustomToast {...props} type="success" />,
+                    info: (props) => <CustomToast {...props} type="info" />,
+                }} />
             </ScrollView>
         </SafeAreaView>
     );

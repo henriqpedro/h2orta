@@ -1,4 +1,3 @@
-import { StatusBar } from 'expo-status-bar';
 import 'react-native-gesture-handler';
 import 'react-native-reanimated';
 import { useAuthContext } from '../context/AuthContext';
@@ -15,7 +14,6 @@ export default function App() {
           <Home></Home> :
           <SignIn></SignIn>
       }
-      <StatusBar backgroundColor='#455E1C' />
     </>
   );
 }

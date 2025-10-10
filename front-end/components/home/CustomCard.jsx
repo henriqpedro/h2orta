@@ -1,13 +1,13 @@
 import { Entypo } from '@expo/vector-icons';
 import * as Paho from 'paho-mqtt';
 import { useEffect, useState } from 'react';
-import { Image, Text, ToastAndroid, TouchableOpacity, View } from 'react-native';
+import { Image, Text, TouchableOpacity, View } from 'react-native';
 import { MQTT_BROKER } from '../../utils/config';
 import { add, humidity, tank } from '../../utils/default-icons';
 import CustomButton from '../CustomButton';
 import CustomTextIcon from './CustomTextIcon';
-import { usePlantContext } from '../../context/PlantContext';
 import { router } from 'expo-router';
+import Toast from 'react-native-toast-message';
 
 const CustomIndicator = ({ value }) => {
     let color = value < 50 ? 'bg-danger text-primary' : 'bg-light text-primary'
@@ -59,7 +59,11 @@ const CustomCard = ({ apelido, item, addr, index, deletar }) => {
                     client.subscribe(`h2orta/${addr}/planta`)
                     if (mensagem) {
                         client.send(mensagem)
-                        ToastAndroid.show("Irrigando planta", ToastAndroid.SHORT)
+                        Toast.show({
+                            type: 'success',
+                            text1: 'Sucesso',
+                            text2: "Irrigando planta"
+                        });
                     }
                 },
                 onFailure(error) {
@@ -67,7 +71,11 @@ const CustomCard = ({ apelido, item, addr, index, deletar }) => {
                 }
             })
         } catch (error) {
-            ToastAndroid.show("Erro ao comunicar com broker", ToastAndroid.SHORT)
+            Toast.show({
+                type: 'error',
+                text1: 'Erro',
+                text2: "Erro ao comunicar com broker"
+            });
         }
     }
 
@@ -136,9 +144,17 @@ const CustomCard = ({ apelido, item, addr, index, deletar }) => {
                                     if (item.id > 0) {
                                         sendMessage('1')
                                         setWatering(true)
-                                        ToastAndroid.show("Irrigando planta", ToastAndroid.SHORT)
+                                        Toast.show({
+                                            type: 'success',
+                                            text1: 'Sucesso',
+                                            text2: "Irrigando planta"
+                                        });
                                     } else
-                                        ToastAndroid.show("Cadastre uma planta para irrigar", ToastAndroid.SHORT)
+                                        Toast.show({
+                                            type: 'info',
+                                            text1: 'Atenção',
+                                            text2: "Cadastre uma planta para irrigar"
+                                        });
                                 }}
                                 constainerStyles="bg-primary rounded-none z-50"
                                 textStyles="text-black text-sm"
@@ -156,7 +172,11 @@ const CustomCard = ({ apelido, item, addr, index, deletar }) => {
                                         await deletar();
                                         setDeleting(false);
                                     } else
-                                        ToastAndroid.show("Cadastre uma planta primeiro", ToastAndroid.SHORT)
+                                        Toast.show({
+                                            type: 'info',
+                                            text1: 'Atenção',
+                                            text2: "Cadastre uma planta"
+                                        });
                                 }}
                                 constainerStyles="border-t-2 border-t-stone-400 bg-primary rounded-none z-50"
                                 textStyles="text-black text-sm"

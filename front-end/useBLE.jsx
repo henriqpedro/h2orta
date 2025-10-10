@@ -1,7 +1,8 @@
 import { useMemo, useState } from "react";
-import { PermissionsAndroid, Platform, ToastAndroid } from "react-native";
+import { PermissionsAndroid, Platform } from "react-native";
 import { Buffer } from "buffer";
 import { BleManager } from "react-native-ble-plx";
+import Toast from "react-native-toast-message";
 
 function useBLE() {
 
@@ -50,7 +51,11 @@ function useBLE() {
     const scanForDevices = async () => {
         const isPermissionsEnabled = await requestPermissions();
         if (isPermissionsEnabled) startScanning();
-        else ToastAndroid.show("É necessário conceder permissão bluetooth para continuar.", ToastAndroid.SHORT);
+        else Toast.show({
+            type: 'info',
+            text1: "Atenção",
+            text2: "É necessário conceder permissão bluetooth para continuar."
+        });
     };
 
     const isDuplicatedDevice = (devices, nextDevice) =>
@@ -80,7 +85,11 @@ function useBLE() {
             if (error && !errorShown) {
                 stopScanning();
                 clearTimeout(timeoutId);
-                ToastAndroid.show("Erro ao escanear BLE: verifique se o bluetooth está ligado.", ToastAndroid.SHORT);
+                Toast.show({
+                    type: 'error',
+                    text1: "Erro ao escanear BLE",
+                    text2: "Verifique se o bluetooth está ligado."
+                });
                 errorShown = true;
                 console.log(error);
                 return;
@@ -92,7 +101,11 @@ function useBLE() {
     const connectToDevice = async (device) => {
         if (!connecting) {
             if (connectedDevice && connectedDevice.id === device.id) {
-                ToastAndroid.show("Já conectado a " + device.name, ToastAndroid.SHORT);
+                Toast.show({
+                    type: 'info',
+                    text1: "Atenção",
+                    text2: "Já conectado a " + device.name
+                });
                 return;
             }
             try {
@@ -104,7 +117,11 @@ function useBLE() {
                 stopScanning();
                 startStreamingData(deviceConnection);
             } catch (e) {
-                ToastAndroid.show("Erro ao conectar BLE", ToastAndroid.SHORT);
+                Toast.show({
+                    type: 'error',
+                    text1: 'Erro',
+                    text2: "Erro ao conectar BLE"
+                });
                 console.log("Erro ao conectar BLE: ", e);
                 return;
             }
@@ -121,7 +138,7 @@ function useBLE() {
     const onStatusUpdate = (error, characteristic) => {
 
         setSending(false);
-        
+
         if (error) {
             console.error("Erro ao receber notificação", error);
             return;
@@ -135,7 +152,11 @@ function useBLE() {
 
             if (decoded == "DISCONNECTED") {
                 console.log("Erro ao conectar ao WI-FI")
-                ToastAndroid.show("Erro ao conectar ao WI-FI: verifique as credenciais", ToastAndroid.SHORT);
+                Toast.show({
+                    type: 'error',
+                    text1: "Erro ao conectar ao WI-FI",
+                    text2: "Verifique as credenciais informadas"
+                });
             }
         }
     }

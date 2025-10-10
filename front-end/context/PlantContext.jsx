@@ -1,9 +1,9 @@
 import { createContext, useContext, useState } from "react";
 import { prototype } from "../utils/default-plants";
 import { API_URL } from "../utils/config";
-import axios from "axios";
-import { ToastAndroid } from "react-native";
 import { useAuthContext } from "./AuthContext";
+import api from "../utils/api";
+import Toast from "react-native-toast-message";
 
 const PlantContext = createContext();
 export const usePlantContext = () => useContext(PlantContext);
@@ -28,49 +28,53 @@ export const PlantProvider = ({ children }) => {
 
     const getAll = async (page, size, search) => {
         try {
-            const response = await axios.get(`${API_URL}/planta`, {
+            const response = await api.get(`${API_URL}/planta`, {
                 params: { page, size, search }
             });
             response.data.forEach(plant => addPlantToList(plant));
             return response.data;
         } catch (e) {
-            ToastAndroid.show("Erro ao recuperar plantas", ToastAndroid.SHORT);
-            console.log(e);
+            console.log("Erro ao recuperar plantas", e);
         }
     }
 
     const get = async (id) => {
         try {
-            const response = await axios.get(`${API_URL}/planta/${id}`);
+            const response = await api.get(`${API_URL}/planta/${id}`);
             addPlantToList(response.data);
             return response.data;
         } catch (e) {
-            ToastAndroid.show("Erro ao recuperar planta selecionada", ToastAndroid.SHORT);
-            console.log(e);
+            console.log("Erro ao recuperar planta selecionada", e);
         }
     }
 
     const save = async (plant, addr, apelido) => {
         try {
-            const vaso = await axios.post(`${API_URL}/vaso`, { plantaId: plant.id, apelido, arduino: addr });
+            const vaso = await api.post(`${API_URL}/vaso`, { plantaId: plant.id, apelido, arduino: addr });
             await setUser();
             setVase(vaso);
-            ToastAndroid.show("Vaso salvo com sucesso", ToastAndroid.SHORT);
+            Toast.show({
+                type: 'success',
+                text1: 'Sucesso',
+                text2: "Vaso salvo com sucesso"
+            });
         } catch (e) {
-            ToastAndroid.show("Erro ao salvar vaso", ToastAndroid.SHORT);
-            console.log(e);
+            console.log("Erro ao salvar vaso", e);
         }
     }
 
     const deletar = async () => {
         try {
-            await axios.delete(`${API_URL}/vaso/${vase.id}`);
+            await api.delete(`${API_URL}/vaso/${vase.id}`);
             await setUser();
             setVase(undefined);
-            ToastAndroid.show("Vaso deletado com sucesso", ToastAndroid.SHORT);
+            Toast.show({
+                type: 'success',
+                text1: 'Sucesso',
+                text2: "Vaso deletado com sucesso"
+            });
         } catch (e) {
-            ToastAndroid.show("Erro ao deletar vaso", ToastAndroid.SHORT);
-            console.log(e);
+            console.log("Erro ao deletar vaso", e);
         }
     }
 

@@ -1,10 +1,15 @@
 import { Feather } from '@expo/vector-icons';
-import { ToastAndroid, TouchableOpacity } from 'react-native';
+import { TouchableOpacity } from 'react-native';
+import Toast from 'react-native-toast-message';
 
 const CameraIcon = () => {
 
     const onPress = () => {
-        ToastAndroid.show("Selecione uma planta para continuar.", ToastAndroid.SHORT);
+        Toast.show({
+            type: 'info',
+            text1: 'Atenção',
+            text2: "Selecione uma planta para continuar."
+        });
     }
 
     return (

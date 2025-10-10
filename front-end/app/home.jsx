@@ -9,8 +9,10 @@ import CustomButton from '../components/CustomButton';
 import PlantCard from '../components/home/CustomCard';
 import { usePlantContext } from '../context/PlantContext';
 import Menu from '../components/home/Menu';
+import CustomToast from '../components/CustomToast';
 import { prototype } from '../utils/default-plants';
 import { useAuthContext } from '../context/AuthContext';
+import Toast from 'react-native-toast-message';
 
 const Home = () => {
 
@@ -65,6 +67,11 @@ const Home = () => {
                 <AnimatePresence>
                     {open && <Menu key="menu" setOpen={setOpen} />}
                 </AnimatePresence>
+                <Toast config={{
+                    error: (props) => <CustomToast {...props} type="error" />,
+                    success: (props) => <CustomToast {...props} type="success" />,
+                    info: (props) => <CustomToast {...props} type="info" />,
+                }} />
                 <StatusBar backgroundColor='#76A136' />
             </SafeAreaView>
         </GestureHandlerRootView >

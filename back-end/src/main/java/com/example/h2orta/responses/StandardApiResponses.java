@@ -1,6 +1,5 @@
 package com.example.h2orta.responses;
 
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
 import com.example.h2orta.exceptions.ErrorResponse;
