@@ -6,23 +6,22 @@ services:
     image: mysql:8.0
     container_name: mysql-h2orta
     restart: always
+    env_file:
+      - .env
     environment:
-      TZ: ${TZ}
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      LANG: C.UTF-8
     ports:
-      - "3307:3306"
+      - "${MYSQL_PORT}:3306"
     volumes:
       - ./data/mysql:/var/lib/mysql
       - ./logs/mysql:/var/log/mysql
-      - ./scripts:/docker-entrypoint-initdb.d
+      - ./mysql/conf.d:/etc/mysql/conf.d
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u${MYSQL_USER}", "-p${MYSQL_PASSWORD}"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "${MYSQL_USER}", "-p${MYSQL_PASSWORD}"]
       interval: 10s
-      timeout: 5s
-      retries: 10
+      timeout: 10s
+      retries: 15
+      start_period: 20s
 
   # ===========================
   # Spring Boot Application
@@ -34,23 +33,43 @@ services:
     depends_on:
       mysql:
         condition: service_healthy
+    env_file:
+      - .env
     ports:
-      - "8080:8080"
+      - "${APP_PORT}:8080"
     environment:
-      TZ: ${TZ}
-      # Banco de dados
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/${MYSQL_DATABASE}?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=${TZ}&createDatabaseIfNotExist=true
       SPRING_DATASOURCE_USERNAME: ${MYSQL_USER}
       SPRING_DATASOURCE_PASSWORD: ${MYSQL_PASSWORD}
-      # Configuração JPA / Hibernate
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
       SPRING_JPA_SHOW_SQL: "false"
-      # Perfil ativo
       SPRING_PROFILES_ACTIVE: docker
-      # JVM otimizações
       JAVA_OPTS: "-Xms256m -Xmx512m"
     volumes:
       - ./logs/app:/app/logs
+
+  # ===========================
+  # Seed Script (executa após MySQL)
+  # ===========================
+  seed:
+    image: mysql:8.0
+    container_name: mysql-seed
+    depends_on:
+      mysql:
+        condition: service_healthy
+    env_file:
+      - .env
+    volumes:
+      - ./mysql/scripts:/init
+    command: >
+      bash -c "
+        echo '⏳ Waiting 30s for tables to be ready...' &&
+        sleep 30 &&
+        echo '🚀 Inserting initial data into ${MYSQL_DATABASE}...' &&
+        mysql --default-character-set=utf8mb4 -h${MYSQL_HOST} -u${MYSQL_USER} -p${MYSQL_PASSWORD} ${MYSQL_DATABASE} < /init/plantas.sql &&
+        echo '✅ Seed data inserted successfully!'
+      "
+    restart: "no"
 
 volumes:
   mysql_data:
