@@ -47,7 +47,7 @@ const CustomCard = ({ apelido, item, addr, index, deletar }) => {
     const [showMenu, setShowMenu] = useState(false)
     const [plantData, setPlantData] = useState({ humidity: -1, tank: -1 })
 
-    const client = new Paho.Client(MQTT_BROKER, 8083, `client-${Math.random() * 1000}`)
+    const client = new Paho.Client(MQTT_BROKER, 9001, `client-${Math.random() * 1000}`)
 
     const attemptConnection = (mensagem) => {
         try {

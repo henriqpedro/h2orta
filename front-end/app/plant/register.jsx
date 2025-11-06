@@ -78,7 +78,7 @@ const Register = () => {
                 Toast.show({
                     type: 'info',
                     text1: 'Atenção',
-                    text2: "Conecte-se um vaso a uma rede wifi para prosseguir."
+                    text2: "Conecte o vaso a uma rede wifi para prosseguir."
                 });
                 return false;
             }
