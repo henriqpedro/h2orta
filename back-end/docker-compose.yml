@@ -71,5 +71,49 @@ services:
       "
     restart: "no"
 
+  # ===========================
+  # Mosquitto Server
+  # ===========================
+  mosquitto:
+    image: eclipse-mosquitto:2
+    container_name: mqtt-broker
+    restart: always
+    ports:
+      - "1883:1883"
+      - "9001:9001"
+    environment:
+      - TZ=${TZ}
+    volumes:
+      - ./mosquitto/config:/mosquitto/config
+      - ./data/mosquitto:/mosquitto/data
+      - ./logs/mosquitto:/mosquitto/log
+    command: >
+      /bin/sh -c "
+        if [ ! -f /mosquitto/config/password.txt ]; then
+          echo '🔐 Creating MQTT user...' &&
+          mosquitto_passwd -b -c /mosquitto/config/password.txt h2orta h2orta-client;
+        fi &&
+        echo '🚀 Starting Mosquitto broker...' &&
+        mosquitto -c /mosquitto/config/mosquitto.conf
+      "
+  # ===========================
+  # Certificado TLS (HTTPS)
+  # ===========================
+  caddy:
+    image: caddy:2
+    container_name: caddy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - app
+
 volumes:
+  mosquitto_data:
   mysql_data:
+  caddy_data:
+  caddy_config:
