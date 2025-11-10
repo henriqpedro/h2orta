@@ -1,8 +1,11 @@
 package com.example.h2orta.security;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
+import com.example.h2orta.exceptions.ErrorResponse;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -26,7 +29,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request,
-            HttpServletResponse response) throws AuthenticationException {
+                                                HttpServletResponse response) throws AuthenticationException {
         try {
             var userCredentials = new ObjectMapper().readValue(request.getInputStream(), Usuario.class);
             var authToken = new UsernamePasswordAuthenticationToken(userCredentials.getUsuario(),
@@ -40,7 +43,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
-            FilterChain filterChain, Authentication authentication) throws IOException, ServletException {
+                                            FilterChain filterChain, Authentication authentication) throws IOException, ServletException {
 
         var userSpringSecurity = (UserSecurity) authentication.getPrincipal();
 
