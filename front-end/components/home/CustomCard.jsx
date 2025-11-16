@@ -195,6 +195,7 @@ const CustomCard = ({ apelido, item, addr, index, deletar }) => {
                                     handlePress={async () => {
                                         if (item.id > 0) {
                                             setDeleteConfirmModalVisible(true)
+                                            setShowMenu(false)
                                         } else
                                             Toast.show({
                                                 type: 'info',

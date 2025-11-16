@@ -12,9 +12,9 @@ const CostumConfirmModal = ({ action, visible, onConfirm, onClose }) => {
                 style={{ justifyContent: 'center', alignItems: 'center' }}
                 visible={visible}
                 onDismiss={onClose}>
-                <View className="p-8 justify-center rounded-2xl items-center min-h-[20vh] w-[85vw] bg-primary">
+                <View className="p-8 rounded-2xl items-center min-h-[25vh] w-[85vw] bg-primary">
                     <Text className="text-base text-center">{action ?? 'Deseja realmente prosseguir?'}</Text>
-                    <View className="mt-8 items-center flex-row">
+                    <View className="mt-12 items-center flex-row">
                         <CustomButton
                             title='Confirmar'
                             handlePress={onConfirm}
