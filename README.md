@@ -1,6 +1,6 @@
 # 🌱 H2Orta
 
-**H2Orta** é um sistema de monitoramento e irrigação inteligente de plantas, integrando **ESP32**, **MOSQUITTO MQTT**, **back-end em Java (Spring Boot)** e **app mobile em React Native (Expo + Tailwind)**.  
+**H2Orta** é um sistema de monitoramento e irrigação inteligente de plantas, integrando **ESP32**, **Mosquitto MQTT**, **back-end em Java (Spring Boot)** e **app mobile em React Native (Expo + Tailwind)**.  
 
 O sistema permite **cadastrar e gerenciar vasos**, monitorar parâmetros das plantas, acionar irrigação remotamente e visualizar dados no app.
 
