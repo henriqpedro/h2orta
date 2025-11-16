@@ -23,6 +23,7 @@ const about = () => {
                 <CustomButton
                     handlePress={() => router.navigate('home')}
                     title='Voltar'
+                    color={'bg-zinc-600'}
                     constainerStyles='w-56 mb-8' />
             </View>
             <Toast config={{

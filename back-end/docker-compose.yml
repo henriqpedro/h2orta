@@ -22,6 +22,8 @@ services:
       timeout: 10s
       retries: 15
       start_period: 20s
+    networks:
+      - internal
 
   # ===========================
   # Spring Boot Application
@@ -35,8 +37,8 @@ services:
         condition: service_healthy
     env_file:
       - .env
-    ports:
-      - "${APP_PORT}:8080"
+    expose:
+      - "8080"
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/${MYSQL_DATABASE}?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=${TZ}&createDatabaseIfNotExist=true
       SPRING_DATASOURCE_USERNAME: ${MYSQL_USER}
@@ -47,6 +49,8 @@ services:
       JAVA_OPTS: "-Xms256m -Xmx512m"
     volumes:
       - ./logs/app:/app/logs
+    networks:
+      - internal
 
   # ===========================
   # Seed Script (executa após MySQL)
@@ -70,6 +74,8 @@ services:
         echo '✅ Seed data inserted successfully!'
       "
     restart: "no"
+    networks:
+      - internal
 
   # ===========================
   # Mosquitto Server
@@ -96,6 +102,9 @@ services:
         echo '🚀 Starting Mosquitto broker...' &&
         mosquitto -c /mosquitto/config/mosquitto.conf
       "
+    networks:
+      - internal
+
   # ===========================
   # Certificado TLS (HTTPS)
   # ===========================
@@ -111,9 +120,15 @@ services:
       - caddy_config:/config
     depends_on:
       - app
-
+    networks:
+      - internal
+      
 volumes:
   mosquitto_data:
   mysql_data:
   caddy_data:
   caddy_config:
+
+networks:
+  internal:
+    driver: bridge

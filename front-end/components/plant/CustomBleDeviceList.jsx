@@ -3,7 +3,7 @@ import CustomEmptyList from '../CustomEmptyList'
 import CustomBleDevice from './CustomBleDevice'
 import { useEffect } from 'react'
 
-const CustomBleDeviceList = ({ scanning, scanForDevices, allDevices, connecting, connectToDevice, connectedDevice, disconnectFromDevice }) => {
+const CustomBleDeviceList = ({ scanning, scanForDevices, allDevices, connecting, connectToDevice, connectedDevice }) => {
 
     useEffect(() => {
         scanForDevices();

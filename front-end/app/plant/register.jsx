@@ -28,6 +28,7 @@ const Register = () => {
         allDevices,
         connecting,
         connectToDevice,
+        disconnectFromDevice,
         connectedDevice,
         isESPConnectedToWifi,
         sendWifiCredentials
@@ -91,6 +92,7 @@ const Register = () => {
     const salvar = async () => {
         if (!validate()) return;
         await save(plant, connectedDevice.id, apelido);
+        disconnectFromDevice(connectedDevice);
         router.navigate("home");
     }
 

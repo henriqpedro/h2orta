@@ -10,10 +10,8 @@ const int PASSWORD_SIZE = 64;
 const int SSID_ADDR = 6;
 const int PASSWORD_ADDR = 42;
 const int MIN_MOISTURE_ADDR = 0;
-const int NOT_ALREADY_EXECUTED_ADDR = 5;
 
 int MIN_MOISTURE = 0;
-bool NOT_ALREADY_EXECUTED = true;
 
 char SSID[SSID_SIZE];
 char PASSWORD[PASSWORD_SIZE];

@@ -50,9 +50,24 @@ export const PlantProvider = ({ children }) => {
 
     const save = async (plant, addr, apelido) => {
         try {
-            const vaso = await api.post(`${API_URL}/vaso`, { plantaId: plant.id, apelido, arduino: addr });
+            const response = await api.post(`${API_URL}/vaso`, { plantaId: plant.id, apelido, arduino: addr });
             await setUser();
-            setVase(vaso);
+            setVase(response.data);
+            Toast.show({
+                type: 'success',
+                text1: 'Sucesso',
+                text2: "Vaso salvo com sucesso"
+            });
+        } catch (e) {
+            console.log("Erro ao salvar vaso", e);
+        }
+    }
+
+    const update = async (id, plant, addr, apelido) => {
+        try {
+            const response = await api.put(`${API_URL}/vaso`, { id: id, plantaId: plant.id, apelido, arduino: addr });
+            await setUser();
+            setVase(response.data);
             Toast.show({
                 type: 'success',
                 text1: 'Sucesso',
@@ -85,6 +100,7 @@ export const PlantProvider = ({ children }) => {
                 setVase,
                 data,
                 save,
+                update,
                 deletar,
                 setData,
                 prototype,

@@ -13,6 +13,7 @@ import CustomToast from '../components/CustomToast';
 import { prototype } from '../utils/default-plants';
 import { useAuthContext } from '../context/AuthContext';
 import Toast from 'react-native-toast-message';
+import Loading from '../components/Loading';
 
 const Home = () => {
 
@@ -20,6 +21,7 @@ const Home = () => {
     const { authState, setUser } = useAuthContext();
 
     const [open, setOpen] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         if (authState) {
@@ -39,7 +41,9 @@ const Home = () => {
     }, []);
 
     const setAuth = async () => {
+        setLoading(true);
         await setUser();
+        setLoading(false);
     }
 
     const onPressTop = () => {
@@ -54,8 +58,9 @@ const Home = () => {
                 </TouchableOpacity>
                 <ScrollView>
                     <View className="w-full min-h-[70vh] px-7 justify-center items-center">
-                        {/* <Text className={`text-2xl mb-10 ${viewingPlant && 'mt-6'} font-semibold text-gray`}>Meus vasinhos</Text> */}
-                        <PlantCard vaso={vase} index={0} deletar={deletar} />
+                        <Loading loading={loading}>
+                            <PlantCard vaso={vase} index={0} deletar={deletar} />
+                        </Loading>
                     </View>
                 </ScrollView>
                 <View className="justify-center items-center pt-4">
@@ -67,7 +72,7 @@ const Home = () => {
                 <AnimatePresence>
                     {open && <Menu key="menu" setOpen={setOpen} />}
                 </AnimatePresence>
-                <Toast config={{
+                <Toast position='bottom' bottomOffset={30} config={{
                     error: (props) => <CustomToast {...props} type="error" />,
                     success: (props) => <CustomToast {...props} type="success" />,
                     info: (props) => <CustomToast {...props} type="info" />,

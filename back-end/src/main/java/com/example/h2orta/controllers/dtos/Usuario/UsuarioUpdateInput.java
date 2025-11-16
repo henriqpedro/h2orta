@@ -14,6 +14,9 @@ import java.util.Date;
 @AllArgsConstructor
 public class UsuarioUpdateInput {
 
+    @NotNull(message = "ID do usuário não informado")
+    private Long id;
+
     @Size(min = 2, max = 128, message = "Nome do usuário deve conter entre 2 e 128 caracteres")
     @NotBlank(message = "Nome do usuário não informado")
     private String nome;

@@ -43,7 +43,7 @@ void reconnectToBroker() {
 
 int byteStringToInt(byte* byteValue, int length) {
 
-  char buffer[16]; // tamanho suficiente
+  char buffer[16];  // tamanho suficiente
   for (int i = 0; i < length; i++)
     buffer[i] = byteValue[i];
   buffer[length] = '\0';
@@ -68,7 +68,9 @@ void publishData() {
   char buffer[20];
   String topic = getTopic(TOPIC_SENSORS);
 
-  snprintf(buffer, sizeof(buffer), "%d %d", readSoilMoisture(), readWaterLevel());
+  snprintf(buffer, sizeof(buffer), "%d %d %d %d",
+           readSoilMoisture(), readWaterLevel(),
+           readTemperature(), readHumidity());
 
   Serial.print("Publishing ");
   Serial.print(buffer);

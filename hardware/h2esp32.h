@@ -3,9 +3,14 @@
 #include "esp_mac.h"
 #include "h2prom.h"
 
+#include <DHT.h>
 #include <Arduino.h>
 
+void configureHardware();
+
+int readHumidity();
 int readWaterLevel();
+int readTemperature();
 int readSoilMoisture();
 
 void irrigate();

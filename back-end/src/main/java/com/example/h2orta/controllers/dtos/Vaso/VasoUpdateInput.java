@@ -12,6 +12,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class VasoUpdateInput {
 
+    @NotNull(message = "ID do vaso não informado")
+    private Long id;
+
     @NotBlank(message = "Apelido do vaso não informado")
     @Size(min = 2, max = 50, message = "Apelido deve conter entre 2 e 50 caracteres")
     private String apelido;

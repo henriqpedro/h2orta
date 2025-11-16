@@ -128,19 +128,24 @@ function useBLE() {
         }
     }
 
-    const disconnectFromDevice = () => {
-        if (connectedDevice) {
-            bleManager.cancelDeviceConnection(connectedDevice.id);
-            setConnectedDevice(null);
-        }
+    const disconnectFromDevice = async (device) => {
+        if (device) {
+            console.log("Desconectando dispositivo BLE", device.id);
+            try {
+                await bleManager.cancelDeviceConnection(device.id);
+            } catch (e) {
+                console.log("Erro ao cancelar conexão:", e);
+            } finally {
+                setConnectedDevice(null);
+            }
+        } else console.log("Não há dispositivo para desconectar");
     };
 
     const onStatusUpdate = (error, characteristic) => {
 
         setSending(false);
-
         if (error) {
-            console.error("Erro ao receber notificação", error);
+            console.log("Erro ao receber notificação BLE:", error);
             return;
         }
 
@@ -208,9 +213,9 @@ function useBLE() {
         scanForDevices,
         connecting,
         connectToDevice,
+        disconnectFromDevice,
         allDevices,
         connectedDevice,
-        disconnectFromDevice,
         sendWifiCredentials,
         isESPConnectedToWifi
     };

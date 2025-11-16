@@ -34,7 +34,7 @@ public class Vaso {
     @JoinColumn(name = "usuario_id", nullable = false)
     private Usuario usuario;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "planta_id", nullable = false)
     private Planta planta;
 

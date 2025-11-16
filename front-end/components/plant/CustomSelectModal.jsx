@@ -69,9 +69,9 @@ const CustomModal = ({ plant, visible, onClose, onSelect }) => {
                     <Searchbar
                         className="bg-secondary mx-3 fixed"
                         cursorColor="black"
-                        iconColor="black"              // cor do ícone de lupa
-                        placeholderTextColor="#76A136"   // cor do placeholder (texto apagado)
-                        inputStyle={{ color: "#000" }}   // cor do texto digitado
+                        iconColor="black"
+                        placeholderTextColor="#76A136"
+                        inputStyle={{ color: "#000" }}
                         value={search}
                         onChangeText={onChangeSearch}
                         accessibilityLabel="Campo de busca"

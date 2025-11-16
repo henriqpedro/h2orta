@@ -4,6 +4,7 @@ void setup() {
 
   Serial.begin(115200);
 
+  configureHardware();
   configureEEPROM();
   configureBroker();
   connectToWifi();
@@ -13,14 +14,13 @@ void setup() {
 void loop() {
 
   if (WiFi.status() == WL_CONNECTED) {
-    if (bleActive) {
-      delay(100 * 5);
-      turnOffBLE();
-    }
     reconnectToBroker();
-    //irrigateLowMoisture();
     publishData();
+    //irrigateLowMoisture();
+    delay(1000 * 3);
+    if (bleActive) turnOffBLE();
   }
 
-  delay(1000 * 3);
+  pressBootButton();
+  delay(10);
 }

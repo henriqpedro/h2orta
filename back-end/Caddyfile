@@ -1,4 +1,6 @@
 api.h2orta.agr.br {
+    encode gzip
+    
     # redireciona raiz para swagger
     @root {
         path /
@@ -6,5 +8,5 @@ api.h2orta.agr.br {
     redir @root /swagger-ui/index.html 302
 
     # proxy todo o resto para a app
-    reverse_proxy /* app:8080
+    reverse_proxy app:8080
 }

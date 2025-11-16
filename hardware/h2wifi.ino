@@ -14,8 +14,8 @@ bool connectToWifi() {
     WiFi.begin(SSID, PASSWORD);
 
     int numTries = 10;
+    Serial.println("Trying to connect to wifi...");
     while (WiFi.status() != WL_CONNECTED && numTries > 0) {
-      Serial.println("Trying to connect to wifi...");
       if (numTries == 1) {
         clearCredentials();
         WiFi.disconnect(true);

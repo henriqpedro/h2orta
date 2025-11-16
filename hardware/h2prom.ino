@@ -3,13 +3,6 @@
 void configureEEPROM() {
 
   EEPROM.begin(EEPROM_SIZE);
-
-  loadNotAlreadyExecuted();
-
-  //if (!NOT_ALREADY_EXECUTED) {
-  clearCredentials();
-  setNotAlreadyExecuted();
-  //}
 }
 
 void clearCredentials() {
@@ -35,21 +28,6 @@ void saveMinMoisture() {
 
   EEPROM.put(MIN_MOISTURE_ADDR, MIN_MOISTURE);
   Serial.println("Min moisture saved to EEPROM!");
-}
-
-void loadNotAlreadyExecuted() {
-
-  EEPROM.begin(EEPROM_SIZE);
-  NOT_ALREADY_EXECUTED = EEPROM.read(NOT_ALREADY_EXECUTED_ADDR);
-  Serial.print("Not already executed: ");
-  Serial.println(NOT_ALREADY_EXECUTED);
-}
-
-void setNotAlreadyExecuted() {
-
-  EEPROM.begin(EEPROM_SIZE);
-  EEPROM.write(NOT_ALREADY_EXECUTED_ADDR, false);
-  Serial.println("Not already executed set to false");
 }
 
 void loadMinMoisture() {
