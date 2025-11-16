@@ -15,8 +15,6 @@ O sistema permite **cadastrar e gerenciar vasos**, monitorar parâmetros das pla
 - **Mosquitto (MQTT)**: broker para comunicação de IoT (ESP32 e back-end se necessário).
 - **Caddy**: servidor web / proxy reverso com HTTPS.
 
-
-> As plantas são pré-carregadas via script.
 ---
 
 ## 🔧 Tecnologias
