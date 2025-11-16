@@ -12,7 +12,7 @@ O sistema permite **cadastrar e gerenciar vasos**, monitorar parâmetros das pla
 - **App Mobile (Expo)**: recebe dados do ESP32, envia comandos ao back-end e persiste informações de **vasos e usuários** no banco MySQL.
 - **Back-end (Java)**: fornece API REST, autenticação, persistência de dados e integração com o banco.
 - **Banco de dados (MySQL)**: armazena vasos, usuários e dados de plantas (pré-carregadas via script inicial).
-- **Mosquitto (MQTT)**: broker para comunicação de IoT (ESP32 e back-end se necessário).
+- **Mosquitto (MQTT)**: broker para comunicação de IoT (ESP32 e app para amostragem dos dados enviados pelos sensores).
 - **Caddy**: servidor web / proxy reverso com HTTPS.
 
 ---
