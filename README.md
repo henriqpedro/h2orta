@@ -59,6 +59,3 @@ O sistema permite **cadastrar e gerenciar vasos**, monitorar parâmetros das pla
 - Ações:
   - **Irrigar vaso**
   - **Deletar vaso**
-
-# App Configuration
-APP_PORT=8080
