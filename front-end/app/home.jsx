@@ -22,6 +22,7 @@ const Home = () => {
 
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [visible, setVisible] = useState(false);
 
     useEffect(() => {
         if (authState) {
@@ -52,18 +53,33 @@ const Home = () => {
 
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
-            <SafeAreaView className="bg-primary flex-1">
-                <TouchableOpacity activeOpacity={1} onPress={onPressTop} className="w-full h-[15vh] rounded-b-[50px] bg-medium items-center justify-center">
+            <SafeAreaView importantForAccessibility={visible ? 'no-hide-descendants' : 'auto'} className="bg-primary flex-1">
+                <TouchableOpacity
+                    importantForAccessibility={open ? "no-hide-descendants" : "auto"}
+                    accessibilityElementsHidden={open}
+                    accessible={true}
+                    accessibilityRole="button"
+                    accessibilityLabel="Abrir menu principal"
+                    accessibilityHint="Toque duas vezes para abrir o menu principal"
+                    activeOpacity={1}
+                    onPress={onPressTop}
+                    className="w-full h-[15vh] rounded-b-[50px] bg-medium items-center justify-center">
                     <Image className="w-[13vh]" source={require("../assets/adaptive-icon.png")} resizeMode='contain' />
                 </TouchableOpacity>
-                <ScrollView>
-                    <View className="w-full min-h-[70vh] px-7 justify-center items-center">
+                <ScrollView
+                    importantForAccessibility={open ? "no-hide-descendants" : "auto"}
+                    accessibilityElementsHidden={open}>
+                    <View
+                        className="w-full min-h-[70vh] px-7 justify-center items-center">
                         <Loading loading={loading}>
-                            <PlantCard vaso={vase} index={0} deletar={deletar} />
+                            <PlantCard visible={visible} setVisible={setVisible} vaso={vase} index={0} deletar={deletar} />
                         </Loading>
                     </View>
                 </ScrollView>
-                <View className="justify-center items-center pt-4">
+                <View
+                    importantForAccessibility={open ? "no-hide-descendants" : "auto"}
+                    accessibilityElementsHidden={open}
+                    className="justify-center items-center pt-4">
                     <CustomButton
                         handlePress={() => router.navigate('plant')}
                         title='Cadastrar planta'

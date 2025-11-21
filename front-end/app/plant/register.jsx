@@ -1,6 +1,6 @@
-import { View, SafeAreaView, ScrollView } from 'react-native';
+import { View, SafeAreaView, ScrollView, findNodeHandle, AccessibilityInfo } from 'react-native';
 import CustomBleDeviceList from '../../components/plant/CustomBleDeviceList';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { usePlantContext } from '../../context/PlantContext';
 import CustomButton from '../../components/CustomButton';
 import { router } from 'expo-router';
@@ -12,6 +12,7 @@ import { ProgressBar } from 'react-native-paper';
 import CustomCheckIcon from '../../components/CustomCheckIcon';
 import CustomToast from '../../components/CustomToast';
 import Toast from 'react-native-toast-message';
+import { useScreenReaderEnabled } from '../../hooks/useScreenReaderEnabled';
 
 const Register = () => {
 
@@ -20,6 +21,11 @@ const Register = () => {
     const [step, setStep] = useState(1);
     const [apelido, setApelido] = useState('');
     const [plant, setPlant] = useState(prototype);
+    const [visible, setVisible] = useState(false);
+
+    const screenReaderEnabled = useScreenReaderEnabled();
+    const accessibleRef = useRef(null);
+    const prosseguirRef = useRef(null);
 
     const {
         sending,
@@ -40,6 +46,35 @@ const Register = () => {
         scanForWifi,
         allNetworks
     } = useWifi();
+
+    const focus = (ref) => {
+        if (screenReaderEnabled)
+            setTimeout(() => {
+                if (ref.current) {
+                    const node = findNodeHandle(ref.current);
+                    if (node)
+                        AccessibilityInfo.setAccessibilityFocus(node);
+                }
+            }, 300);
+    }
+
+    useEffect(() => {
+        if (screenReaderEnabled && isESPConnectedToWifi)
+            AccessibilityInfo.announceForAccessibility("Cadastro finalizado com sucesso");
+    }, [isESPConnectedToWifi]);
+
+    useEffect(() => {
+        focus(accessibleRef);
+    }, [step]);
+
+    useEffect(() => {
+        if (!visible) focus(prosseguirRef);
+    }, [visible]);
+
+    const scanBLE = async () => {
+        await scanForDevices();
+        focus(accessibleRef);
+    }
 
     const validate = () => {
         if (step == 1) {
@@ -106,21 +141,32 @@ const Register = () => {
     }
 
     return (
-        <SafeAreaView className="flex-1 bg-primary">
-            <ProgressBar progress={step / 3} color='#93BE5B' />
+        <SafeAreaView
+            importantForAccessibility={visible ? 'no-hide-descendants' : 'auto'}
+            className="flex-1 bg-primary">
+            <View
+                accessible={false}
+                importantForAccessibility='no-hide-descendants'
+                accessibilityElementsHidden={true}>
+                <ProgressBar progress={step / 3} color='#93BE5B' />
+            </View>
             <ScrollView>
                 <View className="min-h-[56vh] w-full mt-10 px-6 justify-center items-center">
                     {
                         step == 1 &&
                         <RegisterPlant
+                            ref={accessibleRef}
                             plant={plant}
-                            setPlant={setPlant}
+                            visible={visible}
                             apelido={apelido}
+                            setPlant={setPlant}
+                            setVisible={setVisible}
                             setApelido={setApelido} />
                     }
                     {
                         step == 2 &&
                         <CustomBleDeviceList
+                            ref={accessibleRef}
                             scanning={scanningBLE}
                             scanForDevices={scanForDevices}
                             connectedDevice={connectedDevice}
@@ -132,7 +178,9 @@ const Register = () => {
                     {
                         step == 3 && !isESPConnectedToWifi ?
                             <CustomWifiList
+                                ref={accessibleRef}
                                 sending={sending}
+                                setVisible={setVisible}
                                 sendCredentials={sendWifiCredentials}
                                 scanForWifi={scanForWifi}
                                 scanning={scanningWifi}
@@ -145,6 +193,7 @@ const Register = () => {
             </ScrollView>
             <View className="justify-center items-center pt-4">
                 <CustomButton
+                    ref={prosseguirRef}
                     handlePress={step == 3 ? salvar : nextStep}
                     title={step == 3 ? 'Salvar' : 'Prosseguir'}
                     constainerStyles={`w-56 mb-2 ${step != 2 && 'mb-8'}`} />
@@ -152,7 +201,7 @@ const Register = () => {
                     <>
                         <CustomButton
                             color={'bg-dark'}
-                            handlePress={scanForDevices}
+                            handlePress={scanBLE}
                             title='Procurar'
                             constainerStyles='w-56 mb-2' />
                         <CustomButton

@@ -47,7 +47,12 @@ const Menu = ({ setOpen }) => {
             }}>
             <View className="flex-row h-1/6 mt-6 items-center justify-around">
                 <View>
-                    <TouchableOpacity className="py-2 px-1" onPress={handleClose}>
+                    <TouchableOpacity
+                        accessibilityRole="button"
+                        accessibilityLabel="Fechar menu principal"
+                        accessibilityHint="Toque duas vezes para fechar o menu principal"
+                        className="py-2 px-1"
+                        onPress={handleClose}>
                         <MaterialCommunityIcons name="close" size={24} color="white" />
                     </TouchableOpacity>
                 </View>
@@ -58,8 +63,15 @@ const Menu = ({ setOpen }) => {
                     {
                         authState.user &&
                         <View>
-                            <Text className="text-white text-2xl font-semibold">{authState.user.usuario}</Text>
-                            <Text className="text-white text-base">{authState.user.nome}</Text>
+                            <Text
+                                accessibilityLabel={`Usuário: ${authState.user.usuario}`}
+                                className="text-white text-2xl font-semibold">
+                                {authState.user.usuario}
+                            </Text>
+                            <Text
+                                accessibilityLabel={`Nome do usuário: ${authState.user.nome}`}
+                                className="text-white text-base"
+                            >{authState.user.nome}</Text>
                         </View>
                     }
                 </View>
@@ -75,7 +87,7 @@ const Menu = ({ setOpen }) => {
                     <Text className="text-3xl text-white font-semibold">h2orta.agr.br</Text>
                 </TouchableOpacity>
             </View>
-        </MotiView>
+        </MotiView >
     );
 }
 

@@ -15,6 +15,8 @@ const CameraIcon = () => {
     return (
         <TouchableOpacity
             accessible={false}
+            importantForAccessibility='no-hide-descendants'
+            accessibilityElementsHidden={true}
             onPress={onPress}
             className="p-12 mt-3 mb-6 bg-secondary rounded-3xl">
             <Feather name="camera" size={28} color="#555" />

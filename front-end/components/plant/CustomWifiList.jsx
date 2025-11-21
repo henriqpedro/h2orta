@@ -1,10 +1,18 @@
 import { FlatList, Text, View } from 'react-native'
 import CustomEmptyList from '../CustomEmptyList'
-import { useEffect } from 'react'
+import { forwardRef, useEffect } from 'react'
 import CustomWifiConnection from './CustomWifiConnection'
 import Loading from '../Loading'
 
-const CustomWifiList = ({ scanning, sending, scanForWifi, allNetworks, currentSSID, sendCredentials }) => {
+const CustomWifiList = forwardRef(({
+    scanning,
+    sending,
+    scanForWifi,
+    setVisible,
+    allNetworks,
+    currentSSID,
+    sendCredentials
+}, ref) => {
 
     useEffect(() => {
         scanForWifi();
@@ -13,7 +21,7 @@ const CustomWifiList = ({ scanning, sending, scanForWifi, allNetworks, currentSS
     return (
         <View className="w-full mb-4 justify-center items-center">
             <Loading loading={sending}>
-                <Text className="text-center text-base mt-6 mb-6 mx-10">Informe as credenciais WI-FI para seu vasinho se conectar a Internet:</Text>
+                <Text ref={ref} className="text-center text-base mt-6 mb-6 mx-10">Informe as credenciais WI-FI para seu vasinho se conectar a Internet:</Text>
                 <FlatList
                     data={allNetworks}
                     extraData={allNetworks}
@@ -25,15 +33,16 @@ const CustomWifiList = ({ scanning, sending, scanForWifi, allNetworks, currentSS
                     contentContainerStyle={{ marginTop: scanning ? 80 : 0 }}
                     renderItem={({ item, index }) =>
                         <CustomWifiConnection
+                            setVisible={setVisible}
                             connected={item.SSID == currentSSID}
                             sendCredentials={sendCredentials}
                             disabled={false}
                             wifi={item}
                             index={index} />} />
             </Loading>
-            { sending && <Text className="text-base mt-4">Conectando...</Text> }
+            {sending && <Text className="text-base mt-4">Conectando...</Text>}
         </View>
     )
-}
+})
 
 export default CustomWifiList

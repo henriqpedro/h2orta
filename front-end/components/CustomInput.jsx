@@ -14,6 +14,7 @@ const CustomInput = ({ title, hide, date, select, placeholder, value, handleChan
 
     const getAccessibilityHint = () => {
         if (hide) return !showHidden ? 'Senha oculta' : 'Senha visível';
+        if (select) return "Toque duas vezes para abrir o modal de seleção";
         return undefined;
     }
 
@@ -26,10 +27,11 @@ const CustomInput = ({ title, hide, date, select, placeholder, value, handleChan
         <View className={`min-w-[80%] my-2`}>
             {title && <Text className={`${labelStyles ?? 'text-primary text-base font-bold'} mb-2 ml-4`}>{title}</Text>}
             <TouchableOpacity
-                accessible={select}
                 onPress={onPressInput}
                 className={`${inputStyles} rounded-full w-full px-4 items-center flex-row`}>
                 <TextInput
+                    accessibilityRole={select ? 'button' : null}
+                    accessibilityState={select ? { disabled: false } : null}
                     onPress={onPressInput}
                     className={`${inputStyles} flex-1 rounded-full text-black h-12 text-base`}
                     multiline={!hide}
@@ -57,7 +59,10 @@ const CustomInput = ({ title, hide, date, select, placeholder, value, handleChan
                     </TouchableOpacity>
                 }
                 {select &&
-                    <TouchableOpacity accessible={true} accessibilityLabel='Abrir modal de plantas' className="w-12 h-12 items-end justify-center" onPress={onPressInput}>
+                    <TouchableOpacity accessible={false}
+                        importantForAccessibility='no-hide-descendants'
+                        className="w-12 h-12 items-end justify-center"
+                        onPress={onPressInput}>
                         <Feather name="chevron-down" size={24} color="#555" />
                     </TouchableOpacity>
                 }

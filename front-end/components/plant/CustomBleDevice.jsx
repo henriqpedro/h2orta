@@ -23,7 +23,13 @@ const CustomBleDevice = ({ device, index, connected, handlePress, disabled }) =>
             className={`w-full bg-secondary justify-between items-center flex-row rounded-3xl min-h-[48px] p-5 mt-4 ${isLoading ? 'opacity-50' : ''}`}>
             <View>
                 <Text className={`font-semibold text-gray text-lg`}>{device.name}</Text>
-                <Text className={`'text-black`}>{device.id}</Text>
+                <Text
+                    accessible={false}
+                    importantForAccessibility='no'
+                    accessibilityElementsHidden={true}
+                    className={`'text-black`}>
+                    {device.id}
+                </Text>
             </View>
             {connected ? <Text className="italic text-xs">Conectado</Text> :
                 <Loading loading={isLoading}>

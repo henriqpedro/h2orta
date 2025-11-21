@@ -43,13 +43,12 @@ const EmptyCard = ({ index }) => {
     )
 }
 
-const CustomCard = ({ apelido, item, addr, index, deletar }) => {
+const CustomCard = ({ apelido, item, addr, index, deletar, visible, setVisible }) => {
 
     const [deleting, setDeleting] = useState(false)
     const [watering, setWatering] = useState(false)
     const [showMenu, setShowMenu] = useState(false)
     const [plantData, setPlantData] = useState({ humidity: -1, tank: -1, air_humidity: -1, temperature: -1 })
-    const [deleteConfirmModalVisible, setDeleteConfirmModalVisible] = useState(false)
 
     const client = new Paho.Client(MQTT_BROKER, 9001, `client-${Math.random() * 1000}`)
 
@@ -194,7 +193,7 @@ const CustomCard = ({ apelido, item, addr, index, deletar }) => {
                                     disabled={deleting}
                                     handlePress={async () => {
                                         if (item.id > 0) {
-                                            setDeleteConfirmModalVisible(true)
+                                            setVisible(true)
                                             setShowMenu(false)
                                         } else
                                             Toast.show({
@@ -259,21 +258,22 @@ const CustomCard = ({ apelido, item, addr, index, deletar }) => {
                 </View>
             </TouchableOpacity>
             <CustomConfirmModal
-                visible={deleteConfirmModalVisible}
+                visible={visible}
                 action={`Deseja realmente deletar ${apelido} da sua estufa?`}
                 onConfirm={async () => {
                     setDeleting(true)
                     await deletar()
                     setDeleting(false)
+                    setVisible(false)
                 }}
-                onClose={() => setDeleteConfirmModalVisible(false)} />
+                onClose={() => setVisible(false)} />
         </>
     )
 }
 
-const PlantCard = ({ vaso, index, deletar }) => {
+const PlantCard = ({ vaso, index, deletar, visible, setVisible }) => {
     return vaso ?
-        <CustomCard deletar={deletar} apelido={vaso.apelido} item={vaso.planta} index={index} addr={vaso.arduino} />
+        <CustomCard visible={visible} setVisible={setVisible} deletar={deletar} apelido={vaso.apelido} item={vaso.planta} index={index} addr={vaso.arduino} />
         : <EmptyCard />
 }
 

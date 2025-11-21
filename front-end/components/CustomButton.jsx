@@ -1,7 +1,16 @@
 import { Text, TouchableOpacity } from 'react-native'
 import Loading from './Loading'
+import { forwardRef } from 'react';
 
-const CustomTextButtom = ({ title, color, handlePress, constainerStyles, textStyles, isLoading, disabled }) => {
+const CustomTextButtom = forwardRef(({
+    title,
+    color,
+    handlePress,
+    constainerStyles,
+    textStyles,
+    isLoading,
+    disabled
+}, ref) => {
 
     const getColor = () => {
         if (disabled) return 'bg-light';
@@ -10,6 +19,7 @@ const CustomTextButtom = ({ title, color, handlePress, constainerStyles, textSty
 
     return (
         <TouchableOpacity
+            ref={ref}
             accessibilityState={{ busy: isLoading }}
             onPress={handlePress}
             activeOpacity={0.7}
@@ -21,9 +31,16 @@ const CustomTextButtom = ({ title, color, handlePress, constainerStyles, textSty
             </Loading>
         </TouchableOpacity>
     )
-}
+})
 
-const CustomIconButtom = ({ children, color, handlePress, constainerStyles, isLoading, disabled }) => {
+const CustomIconButtom = forwardRef(({
+    children,
+    color,
+    handlePress,
+    constainerStyles,
+    isLoading,
+    disabled
+}, ref) => {
 
     const getColor = () => {
         if (disabled) return 'bg-light';
@@ -32,6 +49,7 @@ const CustomIconButtom = ({ children, color, handlePress, constainerStyles, isLo
 
     return (
         <TouchableOpacity
+            ref={ref}
             accessibilityState={{ busy: isLoading }}
             onPress={handlePress}
             activeOpacity={0.7}
@@ -43,12 +61,22 @@ const CustomIconButtom = ({ children, color, handlePress, constainerStyles, isLo
             </Loading>
         </TouchableOpacity>
     )
-}
+})
 
-const CustomButton = ({ title, color, children, handlePress, constainerStyles, textStyles, isLoading, disabled }) => {
+const CustomButton = forwardRef(({
+    title,
+    color,
+    children,
+    handlePress,
+    constainerStyles,
+    textStyles,
+    isLoading,
+    disabled
+}, ref) => {
     if (children)
         return (
             <CustomIconButtom
+                ref={ref}
                 handlePress={handlePress}
                 constainerStyles={constainerStyles}
                 isLoading={isLoading}
@@ -58,6 +86,7 @@ const CustomButton = ({ title, color, children, handlePress, constainerStyles, t
             </CustomIconButtom>
         );
     else return <CustomTextButtom
+        ref={ref}
         title={title}
         textStyles={textStyles}
         handlePress={handlePress}
@@ -66,6 +95,6 @@ const CustomButton = ({ title, color, children, handlePress, constainerStyles, t
         isLoading={isLoading}
         disabled={disabled} />
 
-}
+})
 
 export default CustomButton

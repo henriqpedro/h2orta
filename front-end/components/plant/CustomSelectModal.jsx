@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { View } from 'react-native';
+import { useEffect, useRef, useState } from 'react';
+import { AccessibilityInfo, findNodeHandle, Text, View } from 'react-native';
 import { Modal, Portal, Searchbar } from 'react-native-paper';
 import CustomCardList from '../home/CustomCardList';
 import CustomButton from '../CustomButton';
@@ -12,7 +12,9 @@ import { usePlantContext } from '../../context/PlantContext';
 const CustomModal = ({ plant, visible, onClose, onSelect }) => {
 
     const { getAll, data, setData } = usePlantContext();
+
     const screenReaderEnabled = useScreenReaderEnabled();
+    const accessibleRef = useRef(null);
 
     const [loading, setLoading] = useState(false)
     const [selectedItem, setSelectedItem] = useState({})
@@ -34,8 +36,17 @@ const CustomModal = ({ plant, visible, onClose, onSelect }) => {
             setPage(0);
             if (plant == prototype) setSelectedItem({});
             else setSelectedItem(plant);
+            if (screenReaderEnabled) {
+                setTimeout(() => {
+                    if (accessibleRef.current) {
+                        const node = findNodeHandle(accessibleRef.current);
+                        if (node)
+                            AccessibilityInfo.setAccessibilityFocus(node);
+                    }
+                }, 300);
+            }
         }
-    }, [visible]);
+    }, [visible, screenReaderEnabled]);
 
     const loadPlantas = async (page, search) => {
         setLoading(true);
@@ -65,8 +76,11 @@ const CustomModal = ({ plant, visible, onClose, onSelect }) => {
                 style={{ justifyContent: 'center', alignItems: 'center' }}
                 visible={visible}
                 onDismiss={() => onClose()}>
-                <View className="py-4 justify-center rounded-2xl items-center min-h-[80vh] w-[94vw] bg-primary">
+                <View
+                    className="py-4 justify-center rounded-2xl items-center min-h-[80vh] w-[94vw] bg-primary">
                     <Searchbar
+                        accessible
+                        focusable
                         className="bg-secondary mx-3 fixed"
                         cursorColor="black"
                         iconColor="black"
@@ -78,6 +92,10 @@ const CustomModal = ({ plant, visible, onClose, onSelect }) => {
                         accessibilityHint="Digite o nome da planta que deseja encontrar"
                         clearAccessibilityLabel="Limpar campo de busca"
                         searchAccessibilityLabel="Pesquisar" />
+                    {
+                        screenReaderEnabled &&
+                        <Text ref={accessibleRef} className='text-center mx-10 mt-6'>Selecione uma planta: use o campo de busca ou a lista abaixo.</Text>
+                    }
                     <CustomCardList
                         selectedPlant={plant}
                         loading={loading}
@@ -106,9 +124,7 @@ const CustomModal = ({ plant, visible, onClose, onSelect }) => {
     )
 }
 
-const CustomSelectModal = ({ getPlants, plant, data, onSelect }) => {
-
-    const [visible, setVisible] = useState(false);
+const CustomSelectModal = ({ getPlants, plant, data, onSelect, visible, setVisible }) => {
 
     const getPlaceHolder = () =>
         plant && plant.nome && plant.nome == prototype.nome ? "Selecione a planta." : plant.nome;
